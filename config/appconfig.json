@@ -1,0 +1,14 @@
+{
+  "services": [
+    {
+      "name": "Broker Health Checks",
+      "uri": "http://localhost:3000/apis/1",
+      "categories": ["DEV", "BROKER"]
+    },
+    {
+      "name": "CRM Service Health Checks",
+      "uri": "http://localhost:3000/apis/2",
+      "categories": ["DEV", "CRM"]
+    }
+  ]
+}
