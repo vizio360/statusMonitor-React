@@ -5,6 +5,7 @@
     "module": "commonjs",
     "jsx": "react",
     "resolveJsonModule": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "typeRoots": ["node_modules/@types", "custom_typings"]
   }
 }

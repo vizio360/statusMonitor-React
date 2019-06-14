@@ -10,6 +10,7 @@ interface IStatus {
 interface IService {
   name: string;
   uri: string;
+  timeout: number;
   categories: string[];
 }
 
@@ -55,7 +56,7 @@ class Fetch extends React.Component<IFetchProps, IState> {
             },
           });
         });
-    }, 1000);
+    }, this.service.timeout * 1000);
   }
 
   componentWillUnmount() {

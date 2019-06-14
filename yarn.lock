@@ -2791,6 +2791,14 @@ figures@^2.0.0:
   dependencies:
     escape-string-regexp "^1.0.5"
 
+file-loader@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/file-loader/-/file-loader-4.0.0.tgz#c3570783fefb6e1bc0978a856f4bf5825b966c2a"
+  integrity sha512-roAbL6IdSGczwfXxhMi6Zq+jD4IfUpL0jWHD7fvmjdOVb7xBfdRUHe4LpBgO23VtVK5AW1OlWZo0p34Jvx3iWg==
+  dependencies:
+    loader-utils "^1.2.2"
+    schema-utils "^1.0.0"
+
 fill-range@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/fill-range/-/fill-range-4.0.0.tgz#d544811d428f98eb06a63dc402d2403c328c38f7"
@@ -4071,6 +4079,18 @@ json5@^2.1.0:
   dependencies:
     minimist "^1.2.0"
 
+jsplumb-react@^0.0.27:
+  version "0.0.27"
+  resolved "https://registry.yarnpkg.com/jsplumb-react/-/jsplumb-react-0.0.27.tgz#f9660280ed24b7bf8ed03295b06be1a3453c8886"
+  integrity sha512-VnyIV7/IqO79rWDj0E4KM3k1+m582+yxxBvoHkR3qla1Wh4XysKv3l7FTafCPJioziTyWw424W1p8CtN9OS/0A==
+  dependencies:
+    react-pan-and-zoom-hoc "1.1.11"
+
+jsplumb@^2.10.0:
+  version "2.10.0"
+  resolved "https://registry.yarnpkg.com/jsplumb/-/jsplumb-2.10.0.tgz#f842acf02870114ba0b04f267e6a79aa2203c1d6"
+  integrity sha512-4AbaPnGFo3WYJzPa62iHpB6rq0P6bj52SqY2I3KfqyMY+Of6VNZ5iUFwJ5401za75F7/SrX0IIMC7e9A08Xc8Q==
+
 jsprim@^1.2.2:
   version "1.4.1"
   resolved "https://registry.yarnpkg.com/jsprim/-/jsprim-1.4.1.tgz#313e66bc1e5cc06e438bc1b7499c2e5c56acb6a2"
@@ -4167,7 +4187,7 @@ loader-utils@^0.2.16:
     json5 "^0.5.0"
     object-assign "^4.0.1"
 
-loader-utils@^1.0.2, loader-utils@^1.1.0, loader-utils@^1.2.3:
+loader-utils@^1.0.2, loader-utils@^1.1.0, loader-utils@^1.2.2, loader-utils@^1.2.3:
   version "1.2.3"
   resolved "https://registry.yarnpkg.com/loader-utils/-/loader-utils-1.2.3.tgz#1ff5dc6911c9f0a062531a4c04b609406108c2c7"
   integrity sha512-fkpz8ejdnEMG3s37wGL07iSBDg99O9D5yflE9RGNH3hRdx9SOwYfnGYdZOUIZitN8E+E2vkq3MUMYMvPYl5ZZA==
@@ -5515,6 +5535,11 @@ react-is@^16.8.1:
   version "16.8.6"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.8.6.tgz#5bbc1e2d29141c9fbdfed456343fe2bc430a6a16"
   integrity sha512-aUk3bHfZ2bRSVFFbbeVS4i+lNPZr3/WM5jT2J5omUVV1zzcs1nAaf3l51ctA5FFvCRbhrH0bdAsRRQddFJZPtA==
+
+react-pan-and-zoom-hoc@1.1.11:
+  version "1.1.11"
+  resolved "https://registry.yarnpkg.com/react-pan-and-zoom-hoc/-/react-pan-and-zoom-hoc-1.1.11.tgz#7217fdd6bcac50a0b62aab104dee33cf2591723a"
+  integrity sha512-YjOHwqfr5mEGHQyXBrkvC/7oVuFPQqigzUZg4Kreb/5eo0hzEQe9Wdo9nzuH2jsw9ebJVNFRgfY+tjeqSJ9wtA==
 
 react@^16.8.6:
   version "16.8.6"
