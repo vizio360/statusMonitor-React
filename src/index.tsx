@@ -3,94 +3,123 @@ import * as ReactDOM from 'react-dom';
 import appConfig from '../config/appconfig.json';
 import {Fetch, IStatus, IService} from './fetchData';
 import serverImage from '../images/Home-Server-icon.png';
-import {EndpointOptions, Defaults, jsPlumb, jsPlumbInstance} from 'jsPlumb';
+import {
+  DragEventCallbackOptions,
+  EndpointOptions,
+  Defaults,
+  jsPlumb,
+  jsPlumbInstance,
+} from 'jsPlumb';
+import CRMNode from './components/node/crmNode';
+import APINode from './components/node/apiNode';
+import DBNode from './components/node/dbNode';
+import {NodeType} from './components/node';
 
-class StatusTable extends React.Component {
+interface IDiagramState {
+  services: IService[];
+}
+
+class Diagram extends React.Component<{}, IDiagramState> {
+  jsPlumbInstance: jsPlumbInstance;
   services: IService[];
   constructor(props: any) {
     super(props);
-    this.services = appConfig.services;
+    this.state = {services: []};
   }
 
-  renderRows(services: IService[]) {
+  componentDidMount() {
+    fetch('/services')
+      .then(res => res.json())
+      .then(res => {
+        this.setState({services: res});
+      });
+  }
+
+  componentWillMount() {
+    let defaults: Defaults = {
+      Connector: 'Bezier',
+      Anchors: ['Left', 'BottomRight'],
+    };
+    this.jsPlumbInstance = jsPlumb.getInstance(defaults);
+    this.jsPlumbInstance.setContainer('hello');
+  }
+
+  onDragStop(params: DragEventCallbackOptions) {
+    console.log('params');
+    console.log(params);
+
+    let pos: number[] = params.pos;
+    let x: number = pos[0];
+    let y: number = pos[1];
+    let serviceToUpdate: IService = this.state.services.find(
+      (element: IService) => {
+        return element.id === params.el.id;
+      },
+    );
+    console.log('service');
+    console.log(serviceToUpdate);
+    serviceToUpdate.uiProps.top = y;
+    serviceToUpdate.uiProps.left = x;
+    this.setState(this.state);
+
+    console.log(JSON.stringify(this.state.services));
+    fetch('/services', {
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      method: 'PUT',
+      body: JSON.stringify(this.state),
+    });
+  }
+
+  createNodeBasedOnType(service: IService) {
+    let el: JSX.Element;
+    switch (service.type) {
+      case NodeType.CRM:
+        el = (
+          <CRMNode
+            service={service}
+            jsPlumb={this.jsPlumbInstance}
+            events={{stopDrag: this.onDragStop.bind(this)}}
+          />
+        );
+        break;
+      case NodeType.API:
+        el = (
+          <APINode
+            service={service}
+            jsPlumb={this.jsPlumbInstance}
+            events={{stopDrag: this.onDragStop.bind(this)}}
+          />
+        );
+        break;
+      case NodeType.DB:
+        el = (
+          <DBNode
+            service={service}
+            jsPlumb={this.jsPlumbInstance}
+            events={{stopDrag: this.onDragStop.bind(this)}}
+          />
+        );
+        break;
+    }
+
+    return el;
+  }
+
+  renderNodes(services: IService[]) {
     let id: number = 0;
-    let results: JSX.Element[] = services.map(service => (
-      <Fetch
-        service={service}
-        render={(status: IStatus) => (
-          <tr
-            className={status.status === 'Unhealthy' ? 'table-danger' : ''}
-            key={id++}>
-            <td>{service.name}</td>
-            <td>{status.status}</td>
-            <td>{status.totalDuration}</td>
-          </tr>
-        )}
-      />
-    ));
+    let results: JSX.Element[] = services.map(service => {
+      return this.createNodeBasedOnType(service);
+    });
     return results;
   }
 
   render() {
     return (
-      <table className="table table-borderless">
-        <thead>
-          <tr>
-            <th scope="col">name</th>
-            <th scope="col">status</th>
-            <th scope="col">duration</th>
-          </tr>
-        </thead>
-        <tbody>{this.renderRows(this.services)}</tbody>
-      </table>
-    );
-  }
-}
-
-ReactDOM.render(<StatusTable />, document.getElementById('root'));
-
-class Diagram extends React.Component {
-  jsPlumbInstance: jsPlumbInstance;
-
-  componentDidMount() {
-    let defaults: Defaults = {
-      Connector: 'Flowchart',
-      Anchors: ['Left', 'BottomRight'],
-    };
-    this.jsPlumbInstance = jsPlumb.getInstance(defaults);
-
-    this.jsPlumbInstance.setContainer('hello');
-
-    let endPointOptions: EndpointOptions = {
-      maxConnections: 1,
-      anchor: 'Bottom',
-      type: 'Dot',
-      id: 'oneC',
-      scope: 'dotEndPoint',
-      reattachConnections: true,
-      parameters: {},
-    };
-
-    this.jsPlumbInstance.addEndpoint('one', endPointOptions);
-    this.jsPlumbInstance.draggable(['one', 'two']);
-    this.jsPlumbInstance.connect({source: 'one', target: 'two'});
-  }
-
-  render() {
-    return (
       <div id="hello" style={{position: 'absolute'}}>
-        <div
-          id="one"
-          className="alert alert-primary"
-          style={{position: 'absolute', width: '100px', height: '100px'}}>
-          <img src={serverImage} width={100} height={100} />
-        </div>
-        <div
-          id="two"
-          className="alert alert-primary"
-          style={{position: 'absolute', width: '100px', height: '100px'}}>
-          <img src={serverImage} width={100} height={100} />
-        </div>
+        {this.renderNodes(this.state.services)}
       </div>
     );
   }
