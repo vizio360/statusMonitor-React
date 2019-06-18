@@ -1,9 +1,9 @@
 {
   "apis": [
     {
-      "id": 1,
+      "id": "1",
       "name": "crm",
-      "status": "Unhealthy",
+      "status": "Healthy",
       "totalDuration": "00:00:03.7527019",
       "entries": {
         "rabbitMQ": {
@@ -20,7 +20,7 @@
       }
     },
     {
-      "id": 2,
+      "id": "2",
       "name": "northgate",
       "status": "Healthy",
       "totalDuration": "00:00:03.7527019",

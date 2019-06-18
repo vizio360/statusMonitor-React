@@ -36,30 +36,6 @@ enum NodeType {
   DB = 'DB',
 }
 
-const inEndPointOptions: EndpointOptions = {
-  maxConnections: 10,
-  anchor: 'TopRight',
-  paintStyle: {fill: '#F00'},
-  type: 'Dot',
-  id: 'oneC',
-  scope: 'dotEndPoint',
-  reattachConnections: true,
-  parameters: {},
-  isTarget: true,
-};
-
-const outEndPointOptions: EndpointOptions = {
-  maxConnections: 10,
-  anchor: 'BottomRight',
-  paintStyle: {fill: '#00F'},
-  type: 'Dot',
-  id: 'oneC',
-  scope: 'dotEndPoint',
-  reattachConnections: true,
-  parameters: {},
-  isSource: true,
-};
-
 class Node extends React.Component<INodeProps> {
   jsPlumb: jsPlumbInstance;
   nodeEvents: INodeEvents;
@@ -68,7 +44,36 @@ class Node extends React.Component<INodeProps> {
     super(props);
     this.jsPlumb = props.jsPlumb;
     this.nodeEvents = props.events;
-    console.log(props.id);
+    this.onDragStop = this.onDragStop.bind(this);
+  }
+
+  getTargetEndPoint(id: string) {
+    let inEndPointOptions: EndpointOptions = {
+      maxConnections: 10,
+      anchor: 'Top',
+      paintStyle: {fill: '#F00'},
+      type: 'Dot',
+      id: id + 'target',
+      scope: 'dotEndPoint',
+      reattachConnections: true,
+      parameters: {},
+      isTarget: true,
+    };
+    return inEndPointOptions;
+  }
+  getSourceEndPoint(id: string) {
+    let outEndPointOptions: EndpointOptions = {
+      maxConnections: 10,
+      anchor: 'Bottom',
+      paintStyle: {fill: '#00F'},
+      type: 'Dot',
+      id: id + 'source',
+      scope: 'dotEndPoint',
+      reattachConnections: true,
+      parameters: {},
+      isSource: true,
+    };
+    return outEndPointOptions;
   }
 
   onDragStop(params: DragEventCallbackOptions) {
@@ -77,9 +82,15 @@ class Node extends React.Component<INodeProps> {
   }
 
   componentDidMount() {
-    this.jsPlumb.addEndpoint(this.props.id, inEndPointOptions);
-    this.jsPlumb.addEndpoint(this.props.id, outEndPointOptions);
-    this.jsPlumb.draggable(this.props.id, {stop: this.onDragStop.bind(this)});
+    this.jsPlumb.addEndpoint(
+      this.props.id,
+      this.getSourceEndPoint(this.props.id),
+    );
+    this.jsPlumb.addEndpoint(
+      this.props.id,
+      this.getTargetEndPoint(this.props.id),
+    );
+    this.jsPlumb.draggable(this.props.id, {stop: this.onDragStop});
   }
 
   render() {

@@ -4,6 +4,7 @@ import appConfig from '../config/appconfig.json';
 import {Fetch, IStatus, IService} from './fetchData';
 import serverImage from '../images/Home-Server-icon.png';
 import {
+  Connection,
   DragEventCallbackOptions,
   EndpointOptions,
   Defaults,
@@ -25,6 +26,7 @@ class Diagram extends React.Component<{}, IDiagramState> {
   constructor(props: any) {
     super(props);
     this.state = {services: []};
+    this.onDragStop = this.onDragStop.bind(this);
   }
 
   componentDidMount() {
@@ -32,12 +34,27 @@ class Diagram extends React.Component<{}, IDiagramState> {
       .then(res => res.json())
       .then(res => {
         this.setState({services: res});
+      })
+      .then(res => {
+        fetch('/connections')
+          .then(res => res.json())
+          .then(res => {
+            res.forEach((conn: any) => {
+              let source = this.jsPlumbInstance.getEndpoints(conn.sourceId)[0];
+              let target = this.jsPlumbInstance.getEndpoints(conn.targetId)[1];
+
+              this.jsPlumbInstance.connect({
+                source: source,
+                target: target,
+              });
+            });
+          });
       });
   }
 
   componentWillMount() {
     let defaults: Defaults = {
-      Connector: 'Bezier',
+      Connector: 'StateMachine',
       Anchors: ['Left', 'BottomRight'],
     };
     this.jsPlumbInstance = jsPlumb.getInstance(defaults);
@@ -56,20 +73,38 @@ class Diagram extends React.Component<{}, IDiagramState> {
         return element.id === params.el.id;
       },
     );
-    console.log('service');
-    console.log(serviceToUpdate);
     serviceToUpdate.uiProps.top = y;
     serviceToUpdate.uiProps.left = x;
     this.setState(this.state);
+    this.save();
+  }
 
+  save() {
+    console.log(this.jsPlumbInstance.getAllConnections());
     console.log(JSON.stringify(this.state.services));
     fetch('/services', {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      method: 'PUT',
+      method: 'POST',
       body: JSON.stringify(this.state),
+    });
+
+    let connections: any = this.jsPlumbInstance.getAllConnections();
+    connections = connections.map((c: Connection) => {
+      return {
+        sourceId: c.endpoints[0].getElement().id,
+        targetId: c.endpoints[1].getElement().id,
+      };
+    });
+    fetch('/connections', {
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      method: 'POST',
+      body: JSON.stringify({connections: connections}),
     });
   }
 
@@ -81,7 +116,7 @@ class Diagram extends React.Component<{}, IDiagramState> {
           <CRMNode
             service={service}
             jsPlumb={this.jsPlumbInstance}
-            events={{stopDrag: this.onDragStop.bind(this)}}
+            events={{stopDrag: this.onDragStop}}
           />
         );
         break;
@@ -90,7 +125,7 @@ class Diagram extends React.Component<{}, IDiagramState> {
           <APINode
             service={service}
             jsPlumb={this.jsPlumbInstance}
-            events={{stopDrag: this.onDragStop.bind(this)}}
+            events={{stopDrag: this.onDragStop}}
           />
         );
         break;
@@ -99,7 +134,7 @@ class Diagram extends React.Component<{}, IDiagramState> {
           <DBNode
             service={service}
             jsPlumb={this.jsPlumbInstance}
-            events={{stopDrag: this.onDragStop.bind(this)}}
+            events={{stopDrag: this.onDragStop}}
           />
         );
         break;

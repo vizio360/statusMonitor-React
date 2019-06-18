@@ -12,8 +12,6 @@ interface IAPINode {
 }
 
 class APINode extends React.Component<IAPINode> {
-  componentDidMount() {}
-
   render() {
     return (
       <Fetch

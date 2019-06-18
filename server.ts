@@ -26,11 +26,23 @@ app.get('/services', (req: any, res: any) => {
   data = JSON.parse(data);
   res.json(data.services);
 });
-app.put('/services', (req: any, res: any) => {
+app.get('/connections', (req: any, res: any) => {
+  let data = fs.readFileSync('./config/connections.json', {encoding: 'utf8'});
+  data = JSON.parse(data);
+  res.json(data.connections);
+});
+app.post('/services', (req: any, res: any) => {
   console.log(req.body);
   let data = req.body;
   console.log(data);
   fs.writeFileSync('./config/services.json', JSON.stringify(data));
+  res.sendStatus(200);
+});
+app.post('/connections', (req: any, res: any) => {
+  console.log(req.body);
+  let data = req.body;
+  console.log(data);
+  fs.writeFileSync('./config/connections.json', JSON.stringify(data));
   res.sendStatus(200);
 });
 
