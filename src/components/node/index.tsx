@@ -61,6 +61,7 @@ class Node extends React.Component<INodeProps> {
     };
     return inEndPointOptions;
   }
+
   getSourceEndPoint(id: string) {
     let outEndPointOptions: EndpointOptions = {
       maxConnections: 10,

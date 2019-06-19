@@ -3,6 +3,7 @@ import * as ReactDOM from 'react-dom';
 import appConfig from '../config/appconfig.json';
 import {Fetch, IStatus, IService} from './fetchData';
 import serverImage from '../images/Home-Server-icon.png';
+import NavBar from './navbar';
 import {
   Connection,
   DragEventCallbackOptions,
@@ -18,6 +19,7 @@ import {NodeType} from './components/node';
 
 interface IDiagramState {
   services: IService[];
+  dataChanged: boolean;
 }
 
 class Diagram extends React.Component<{}, IDiagramState> {
@@ -25,8 +27,9 @@ class Diagram extends React.Component<{}, IDiagramState> {
   services: IService[];
   constructor(props: any) {
     super(props);
-    this.state = {services: []};
+    this.state = {services: [], dataChanged: false};
     this.onDragStop = this.onDragStop.bind(this);
+    this.save = this.save.bind(this);
   }
 
   componentDidMount() {
@@ -76,7 +79,7 @@ class Diagram extends React.Component<{}, IDiagramState> {
     serviceToUpdate.uiProps.top = y;
     serviceToUpdate.uiProps.left = x;
     this.setState(this.state);
-    this.save();
+    this.setState({dataChanged: true});
   }
 
   save() {
@@ -106,6 +109,7 @@ class Diagram extends React.Component<{}, IDiagramState> {
       method: 'POST',
       body: JSON.stringify({connections: connections}),
     });
+    this.setState({dataChanged: false});
   }
 
   createNodeBasedOnType(service: IService) {
@@ -153,8 +157,11 @@ class Diagram extends React.Component<{}, IDiagramState> {
 
   render() {
     return (
-      <div id="hello" style={{position: 'absolute'}}>
-        {this.renderNodes(this.state.services)}
+      <div>
+        <NavBar dataChanged={this.state.dataChanged} onSave={this.save} />
+        <div id="hello" style={{position: 'absolute'}}>
+          {this.renderNodes(this.state.services)}
+        </div>
       </div>
     );
   }
