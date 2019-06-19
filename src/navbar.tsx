@@ -4,15 +4,21 @@ import * as ReactDOM from 'react-dom';
 interface ISaveDiagram {
   (): void;
 }
+
+interface IOnAddNode {
+  (): void;
+}
 interface INavBarProps {
   dataChanged: boolean;
   onSave?: ISaveDiagram;
+  onAddNode?: IOnAddNode;
 }
 
 export default class NavBar extends React.Component<INavBarProps, {}> {
   constructor(props: INavBarProps) {
     super(props);
     this.onSave = this.onSave.bind(this);
+    this.addNode = this.addNode.bind(this);
   }
 
   onSave(e: React.MouseEvent<HTMLElement>) {
@@ -20,6 +26,10 @@ export default class NavBar extends React.Component<INavBarProps, {}> {
     if (this.props.onSave) this.props.onSave();
   }
 
+  addNode(e: React.MouseEvent<HTMLElement>) {
+    e.preventDefault();
+    if (this.props.onAddNode) this.props.onAddNode();
+  }
   render() {
     return (
       <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -40,7 +50,10 @@ export default class NavBar extends React.Component<INavBarProps, {}> {
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav mr-auto">
             <li className="nav-item active">
-              <button className="btn btn-primary mr-sm-2" type="button">
+              <button
+                className="btn btn-primary mr-sm-2"
+                type="button"
+                onClick={this.addNode}>
                 Add Node
               </button>
             </li>

@@ -12,6 +12,7 @@ import fireImage from '../../../images/fire.gif';
 
 interface INodeEvents {
   stopDrag: (params: DragEventCallbackOptions) => void;
+  onDoubleClick: (id: string) => void;
 }
 
 interface INodeProps {
@@ -45,6 +46,7 @@ class Node extends React.Component<INodeProps> {
     this.jsPlumb = props.jsPlumb;
     this.nodeEvents = props.events;
     this.onDragStop = this.onDragStop.bind(this);
+    this.onDoubleClick = this.onDoubleClick.bind(this);
   }
 
   getTargetEndPoint(id: string) {
@@ -82,6 +84,11 @@ class Node extends React.Component<INodeProps> {
       this.nodeEvents.stopDrag(params);
   }
 
+  onDoubleClick(e: React.MouseEvent<HTMLElement>) {
+    if (this.nodeEvents && this.nodeEvents.onDoubleClick)
+      this.nodeEvents.onDoubleClick(this.props.id);
+  }
+
   componentDidMount() {
     this.jsPlumb.addEndpoint(
       this.props.id,
@@ -99,7 +106,8 @@ class Node extends React.Component<INodeProps> {
       <div
         id={this.props.id}
         className={this.props.className ? this.props.className : 'node'}
-        style={this.props.uiProps}>
+        style={this.props.uiProps}
+        onDoubleClick={this.onDoubleClick}>
         <img src={this.props.image} width="100%" height="100%" />
         {this.props.status === NodeStatus.UNHEALTHY ? (
           <img

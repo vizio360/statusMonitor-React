@@ -17,6 +17,16 @@ interface IService {
   uiProps: {top: number; left: number};
 }
 
+let EmptyService: IService = {
+  id: '',
+  name: '',
+  uri: '',
+  timeout: 20,
+  categories: [],
+  type: '',
+  uiProps: {top: 0, left: 0},
+};
+
 interface IRenderChild {
   (data: IStatus): any;
 }
@@ -71,4 +81,4 @@ class Fetch extends React.Component<IFetchProps, IState> {
   }
 }
 
-export {Fetch, IStatus, IService};
+export {Fetch, IStatus, IService, EmptyService};

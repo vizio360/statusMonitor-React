@@ -1,9 +1,12 @@
+import 'bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import appConfig from '../config/appconfig.json';
-import {Fetch, IStatus, IService} from './fetchData';
+import {Fetch, IStatus, IService, EmptyService} from './fetchData';
 import serverImage from '../images/Home-Server-icon.png';
 import NavBar from './navbar';
+import NodeEditor from './nodeEditor';
 import {
   Connection,
   DragEventCallbackOptions,
@@ -20,6 +23,8 @@ import {NodeType} from './components/node';
 interface IDiagramState {
   services: IService[];
   dataChanged: boolean;
+  amendNode: boolean;
+  selectedNode: IService;
 }
 
 class Diagram extends React.Component<{}, IDiagramState> {
@@ -27,9 +32,21 @@ class Diagram extends React.Component<{}, IDiagramState> {
   services: IService[];
   constructor(props: any) {
     super(props);
-    this.state = {services: [], dataChanged: false};
+    this.state = {
+      services: [],
+      dataChanged: false,
+      amendNode: false,
+      selectedNode: EmptyService,
+    };
     this.onDragStop = this.onDragStop.bind(this);
+    this.onNodeDoubleClick = this.onNodeDoubleClick.bind(this);
     this.save = this.save.bind(this);
+    this.onAddNode = this.onAddNode.bind(this);
+  }
+
+  onAddNode() {
+    console.log('adding node');
+    this.setState({amendNode: true, selectedNode: EmptyService});
   }
 
   componentDidMount() {
@@ -82,6 +99,13 @@ class Diagram extends React.Component<{}, IDiagramState> {
     this.setState({dataChanged: true});
   }
 
+  onNodeDoubleClick(serviceId: string) {
+    let service: IService = this.state.services.find(
+      service => service.id == serviceId,
+    );
+    this.setState({amendNode: true, selectedNode: service});
+  }
+
   save() {
     console.log(this.jsPlumbInstance.getAllConnections());
     console.log(JSON.stringify(this.state.services));
@@ -120,7 +144,10 @@ class Diagram extends React.Component<{}, IDiagramState> {
           <CRMNode
             service={service}
             jsPlumb={this.jsPlumbInstance}
-            events={{stopDrag: this.onDragStop}}
+            events={{
+              stopDrag: this.onDragStop,
+              onDoubleClick: this.onNodeDoubleClick,
+            }}
           />
         );
         break;
@@ -129,7 +156,10 @@ class Diagram extends React.Component<{}, IDiagramState> {
           <APINode
             service={service}
             jsPlumb={this.jsPlumbInstance}
-            events={{stopDrag: this.onDragStop}}
+            events={{
+              stopDrag: this.onDragStop,
+              onDoubleClick: this.onNodeDoubleClick,
+            }}
           />
         );
         break;
@@ -138,7 +168,10 @@ class Diagram extends React.Component<{}, IDiagramState> {
           <DBNode
             service={service}
             jsPlumb={this.jsPlumbInstance}
-            events={{stopDrag: this.onDragStop}}
+            events={{
+              stopDrag: this.onDragStop,
+              onDoubleClick: this.onNodeDoubleClick,
+            }}
           />
         );
         break;
@@ -158,10 +191,19 @@ class Diagram extends React.Component<{}, IDiagramState> {
   render() {
     return (
       <div>
-        <NavBar dataChanged={this.state.dataChanged} onSave={this.save} />
+        <NavBar
+          dataChanged={this.state.dataChanged}
+          onSave={this.save}
+          onAddNode={this.onAddNode}
+        />
         <div id="hello" style={{position: 'absolute'}}>
           {this.renderNodes(this.state.services)}
         </div>
+        <NodeEditor
+          id="nodeEditor"
+          show={this.state.amendNode}
+          node={this.state.selectedNode}
+        />
       </div>
     );
   }
