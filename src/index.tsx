@@ -42,6 +42,20 @@ class Diagram extends React.Component<{}, IDiagramState> {
     this.onNodeDoubleClick = this.onNodeDoubleClick.bind(this);
     this.save = this.save.bind(this);
     this.onAddNode = this.onAddNode.bind(this);
+    this.onNodeChangeConfirm = this.onNodeChangeConfirm.bind(this);
+  }
+
+  onNodeChangeConfirm(service: IService) {
+    let services: IService[] = this.state.services;
+    if (service.id) {
+      let tmp: IService = services.find(s => s.id === service.id);
+      let index: number = services.indexOf(tmp);
+      services[index] = service;
+    } else {
+      service.id = '' + (services.length + 1);
+      services.push(service);
+    }
+    this.setState({services: services, dataChanged: true});
   }
 
   onAddNode() {
@@ -105,6 +119,8 @@ class Diagram extends React.Component<{}, IDiagramState> {
     let service: IService = this.state.services.find(
       service => service.id == serviceId,
     );
+    console.log('double click');
+    console.log(service);
     this.setState({amendNode: true, selectedNode: service});
   }
 
@@ -205,6 +221,7 @@ class Diagram extends React.Component<{}, IDiagramState> {
           id="nodeEditor"
           show={this.state.amendNode}
           node={this.state.selectedNode}
+          onConfirm={this.onNodeChangeConfirm}
         />
       </div>
     );

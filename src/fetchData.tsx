@@ -17,7 +17,7 @@ interface IService {
   uiProps: {top: number; left: number};
 }
 
-let EmptyService: IService = {
+const EmptyService: IService = {
   id: '',
   name: '',
   uri: '',
