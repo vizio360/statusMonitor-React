@@ -45,7 +45,6 @@ class Diagram extends React.Component<{}, IDiagramState> {
   }
 
   onAddNode() {
-    console.log('adding node');
     this.setState({amendNode: true, selectedNode: EmptyService});
   }
 
@@ -95,8 +94,11 @@ class Diagram extends React.Component<{}, IDiagramState> {
     );
     serviceToUpdate.uiProps.top = y;
     serviceToUpdate.uiProps.left = x;
-    this.setState(this.state);
-    this.setState({dataChanged: true});
+    this.setState({
+      services: this.state.services,
+      dataChanged: true,
+      amendNode: false,
+    });
   }
 
   onNodeDoubleClick(serviceId: string) {
