@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, {ReactNode} from 'react';
 import * as ReactDOM from 'react-dom';
 
 interface IStatus {
@@ -33,7 +33,7 @@ interface IRenderChild {
 
 interface IFetchProps {
   service: IService;
-  render: IRenderChild;
+  children: (api: IStatus) => ReactNode;
 }
 
 interface IState {
@@ -96,8 +96,8 @@ class Fetch extends React.Component<IFetchProps, IState> {
     window.clearInterval(this.interval);
   }
 
-  render(): any {
-    return this.props.render(this.state.status);
+  render(): ReactNode {
+    return this.props.children(this.state.status);
   }
 }
 

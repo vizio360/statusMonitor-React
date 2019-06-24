@@ -29,9 +29,8 @@ class CRMNode extends React.Component<ICRMNode> {
 
   render() {
     return (
-      <Fetch
-        service={this.props.service}
-        render={(status: IStatus) => (
+      <Fetch service={this.props.service}>
+        {(status: IStatus) => (
           <Node
             id={this.props.service.id}
             name={this.props.service.name}
@@ -46,7 +45,7 @@ class CRMNode extends React.Component<ICRMNode> {
             uiProps={this.props.service.uiProps}
           />
         )}
-      />
+      </Fetch>
     );
   }
 }

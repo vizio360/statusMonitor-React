@@ -25,6 +25,9 @@ module.exports = {
   },
   resolve: {
     extensions: ['.ts', '.tsx', '.js'],
+    alias: {
+      '@app': path.resolve(__dirname, 'src/'),
+    },
   },
   plugins: [new HWP({template: './src/index.html'})],
 };

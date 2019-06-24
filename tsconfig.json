@@ -6,6 +6,10 @@
     "jsx": "react",
     "resolveJsonModule": true,
     "esModuleInterop": true,
-    "typeRoots": ["node_modules/@types", "custom_typings"]
+    "typeRoots": ["node_modules/@types", "custom_typings"],
+    "baseUrl": "./src",
+    "paths": {
+      "@app/*": ["*"]
+    }
   }
 }

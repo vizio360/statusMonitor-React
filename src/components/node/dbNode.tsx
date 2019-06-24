@@ -16,9 +16,8 @@ class DBNode extends React.Component<IDBNode> {
 
   render() {
     return (
-      <Fetch
-        service={this.props.service}
-        render={(status: IStatus) => (
+      <Fetch service={this.props.service}>
+        {(status: IStatus) => (
           <Node
             id={this.props.service.id}
             name={this.props.service.name}
@@ -33,7 +32,7 @@ class DBNode extends React.Component<IDBNode> {
             uiProps={this.props.service.uiProps}
           />
         )}
-      />
+      </Fetch>
     );
   }
 }

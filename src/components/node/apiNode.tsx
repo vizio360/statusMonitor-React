@@ -14,9 +14,8 @@ interface IAPINode {
 class APINode extends React.Component<IAPINode> {
   render() {
     return (
-      <Fetch
-        service={this.props.service}
-        render={(status: IStatus) => (
+      <Fetch service={this.props.service}>
+        {(status: IStatus) => (
           <Node
             id={this.props.service.id}
             name={this.props.service.name}
@@ -31,7 +30,7 @@ class APINode extends React.Component<IAPINode> {
             uiProps={this.props.service.uiProps}
           />
         )}
-      />
+      </Fetch>
     );
   }
 }

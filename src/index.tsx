@@ -2,10 +2,10 @@ import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import {Fetch, IStatus, IService, EmptyService} from './fetchData';
+import {Fetch, IStatus, IService, EmptyService} from '@app/fetchData';
 import serverImage from '../images/Home-Server-icon.png';
-import NavBar from './navbar';
-import NodeEditor from './nodeEditor';
+import NavBar from '@app/navbar';
+import NodeEditor from '@app/nodeEditor';
 import {
   Connection,
   DragEventCallbackOptions,
@@ -14,10 +14,10 @@ import {
   jsPlumb,
   jsPlumbInstance,
 } from 'jsPlumb';
-import CRMNode from './components/node/crmNode';
-import APINode from './components/node/apiNode';
-import DBNode from './components/node/dbNode';
-import {NodeType} from './components/node';
+import CRMNode from '@app/components/node/crmNode';
+import APINode from '@app/components/node/apiNode';
+import DBNode from '@app/components/node/dbNode';
+import {NodeType} from '@app/components/node';
 
 interface IDiagramState {
   services: IService[];
@@ -93,6 +93,10 @@ class Diagram extends React.Component<{}, IDiagramState> {
     this.jsPlumbInstance = jsPlumb.getInstance(defaults);
     this.jsPlumbInstance.setContainer('hello');
     this.jsPlumbInstance.bind('connection', (info, originalEvent) => {
+      console.log(originalEvent);
+      if (originalEvent !== undefined) this.setState({dataChanged: true});
+    });
+    this.jsPlumbInstance.bind('connectionDetached', (info, originalEvent) => {
       console.log(originalEvent);
       if (originalEvent !== undefined) this.setState({dataChanged: true});
     });
