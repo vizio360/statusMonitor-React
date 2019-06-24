@@ -2,7 +2,6 @@ import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import appConfig from '../config/appconfig.json';
 import {Fetch, IStatus, IService, EmptyService} from './fetchData';
 import serverImage from '../images/Home-Server-icon.png';
 import NavBar from './navbar';
@@ -55,6 +54,7 @@ class Diagram extends React.Component<{}, IDiagramState> {
       service.id = '' + (services.length + 1);
       services.push(service);
     }
+    console.log(services);
     this.setState({services: services, dataChanged: true});
   }
 
@@ -92,12 +92,13 @@ class Diagram extends React.Component<{}, IDiagramState> {
     };
     this.jsPlumbInstance = jsPlumb.getInstance(defaults);
     this.jsPlumbInstance.setContainer('hello');
+    this.jsPlumbInstance.bind('connection', (info, originalEvent) => {
+      console.log(originalEvent);
+      if (originalEvent !== undefined) this.setState({dataChanged: true});
+    });
   }
 
   onDragStop(params: DragEventCallbackOptions) {
-    console.log('params');
-    console.log(params);
-
     let pos: number[] = params.pos;
     let x: number = pos[0];
     let y: number = pos[1];
@@ -119,8 +120,6 @@ class Diagram extends React.Component<{}, IDiagramState> {
     let service: IService = this.state.services.find(
       service => service.id == serviceId,
     );
-    console.log('double click');
-    console.log(service);
     this.setState({amendNode: true, selectedNode: service});
   }
 
@@ -133,7 +132,7 @@ class Diagram extends React.Component<{}, IDiagramState> {
         'Content-Type': 'application/json',
       },
       method: 'POST',
-      body: JSON.stringify(this.state),
+      body: JSON.stringify({services: this.state.services}),
     });
 
     let connections: any = this.jsPlumbInstance.getAllConnections();
@@ -151,7 +150,7 @@ class Diagram extends React.Component<{}, IDiagramState> {
       method: 'POST',
       body: JSON.stringify({connections: connections}),
     });
-    this.setState({dataChanged: false});
+    this.setState({amendNode: false, dataChanged: false});
   }
 
   createNodeBasedOnType(service: IService) {

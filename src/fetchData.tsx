@@ -56,7 +56,9 @@ class Fetch extends React.Component<IFetchProps, IState> {
     this.state = {status: defaultStatus};
   }
 
-  componentDidMount() {
+  setupInterval() {
+    if (this.interval) window.clearInterval(this.interval);
+
     this.interval = window.setInterval(() => {
       fetch('/forward?uri=' + this.service.uri)
         .then(res => res.json())
@@ -68,8 +70,26 @@ class Fetch extends React.Component<IFetchProps, IState> {
               totalDuration: results.totalDuration,
             },
           });
+        })
+        .catch(error => {
+          this.setState({
+            status: {
+              name: this.state.status.name,
+              status: 'Unhealthy',
+              totalDuration: -1,
+            },
+          });
         });
     }, this.service.timeout * 1000);
+  }
+
+  componentDidMount() {
+    this.setupInterval();
+  }
+
+  componentWillReceiveProps(newProps: IFetchProps) {
+    this.service = newProps.service;
+    this.setupInterval();
   }
 
   componentWillUnmount() {

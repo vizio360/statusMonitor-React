@@ -15,7 +15,17 @@ class CRMNode extends React.Component<ICRMNode> {
   constructor(props: ICRMNode) {
     super(props);
   }
-  componentDidMount() {}
+  componentDidMount() {
+    console.log('mounted!');
+  }
+
+  componentWillUnmount() {
+    console.log('umounted');
+  }
+
+  componentWillReceiveProps(props: ICRMNode) {
+    console.log(props);
+  }
 
   render() {
     return (

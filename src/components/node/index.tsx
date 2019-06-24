@@ -109,7 +109,7 @@ class Node extends React.Component<INodeProps> {
         style={this.props.uiProps}
         onDoubleClick={this.onDoubleClick}>
         <img src={this.props.image} width="100%" height="100%" />
-        {this.props.status === NodeStatus.UNHEALTHY ? (
+        {this.props.status !== NodeStatus.HEALTHY ? (
           <img
             className="nodeOverlay"
             src={fireImage}
