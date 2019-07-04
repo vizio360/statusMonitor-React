@@ -52,6 +52,7 @@ app.post('/services', (req: any, res: any) => {
   });
   res.sendStatus(200);
 });
+
 app.post('/connections', (req: any, res: any) => {
   console.log(req.body);
   let data = req.body;
@@ -61,6 +62,12 @@ app.post('/connections', (req: any, res: any) => {
   });
   res.sendStatus(200);
 });
+
+//read config services and connections
+//store config in data structure
+//set up timers for services
+//on service status changed broadcast message to clients
+//
 
 let port: number = 3333;
 app.listen(port);

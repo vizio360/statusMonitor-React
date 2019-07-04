@@ -7,9 +7,9 @@
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "typeRoots": ["node_modules/@types", "custom_typings"],
-    "baseUrl": "./src",
+    "baseUrl": "./client",
     "paths": {
-      "@app/*": ["*"]
+      "@app/*": ["src/*"]
     }
   }
 }

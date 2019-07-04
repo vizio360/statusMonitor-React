@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import {IService} from './fetchData';
+import {IService} from '@app/fetchData';
 import $ from 'jquery';
 
 interface IOnConfirm {

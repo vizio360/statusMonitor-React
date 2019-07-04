@@ -2,8 +2,8 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import {Node, NodeStatus, INodeEvents} from './';
 import {EndpointOptions, Defaults, jsPlumb, jsPlumbInstance} from 'jsPlumb';
-import dbImage from '../../../images/db.png';
-import {Fetch, IStatus, IService} from '../../fetchData';
+import dbImage from '@images/db.png';
+import {Fetch, IStatus, IService} from '@app/fetchData';
 
 interface IDBNode {
   jsPlumb: jsPlumbInstance;

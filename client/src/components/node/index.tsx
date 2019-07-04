@@ -8,7 +8,7 @@ import {
   jsPlumbInstance,
 } from 'jsPlumb';
 import './node.css';
-import fireImage from '../../../images/fire.gif';
+import fireImage from '@images/fire.gif';
 
 interface INodeEvents {
   stopDrag: (params: DragEventCallbackOptions) => void;

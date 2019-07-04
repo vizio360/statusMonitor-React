@@ -2,8 +2,8 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import {Node, NodeStatus, INodeEvents} from './';
 import {EndpointOptions, Defaults, jsPlumb, jsPlumbInstance} from 'jsPlumb';
-import apiImage from '../../../images/api.png';
-import {Fetch, IStatus, IService} from '../../fetchData';
+import apiImage from '@images/api.png';
+import {Fetch, IStatus, IService} from '@app/fetchData';
 
 interface IAPINode {
   jsPlumb: jsPlumbInstance;

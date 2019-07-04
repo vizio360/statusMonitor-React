@@ -2,8 +2,8 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import {INodeEvents, Node, NodeStatus} from './';
 import {EndpointOptions, Defaults, jsPlumb, jsPlumbInstance} from 'jsPlumb';
-import crmImage from '../../../images/crm.png';
-import {Fetch, IStatus, IService} from '../../fetchData';
+import crmImage from '@images/crm.png';
+import {Fetch, IStatus, IService} from '@app/fetchData';
 
 interface ICRMNode {
   jsPlumb: jsPlumbInstance;
