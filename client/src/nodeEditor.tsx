@@ -72,7 +72,6 @@ export default class NodeEditor extends React.Component<
   }
 
   render() {
-    console.log('rendered');
     return (
       <div
         className="modal fade"

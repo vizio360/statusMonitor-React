@@ -1,4 +1,5 @@
 # statusMonitor-React
+
 Learning React. Building a visual APIs status monitor.
 
 # npm install ts-node typescript json-server -g
@@ -6,10 +7,12 @@ Learning React. Building a visual APIs status monitor.
 # yarn install
 
 # build
+
 yarn build --watch
 
 # webserver
-ts-node server.ts
+
+ts-node -r tsconfig-paths/register server/src/runner.ts
 
 #mock apis server
 json-server --watch mocks/hc.json
