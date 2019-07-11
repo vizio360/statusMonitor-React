@@ -8,5 +8,6 @@ module.exports = {
   moduleNameMapper: {
     '^@app(.*)$': '<rootDir>/client/src/$1',
     '^@server(.*)$': '<rootDir>/server/src/$1',
+    '^@dataTypes$': '<rootDir>/lib/types/dataTypes.ts',
   },
 };

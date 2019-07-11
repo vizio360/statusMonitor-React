@@ -10,7 +10,8 @@
     "baseUrl": ".",
     "paths": {
       "@app/*": ["client/src/*"],
-      "@server/*": ["server/src/*"]
+      "@server/*": ["server/src/*"],
+      "@dataTypes": ["lib/types/dataTypes"]
     }
   }
 }

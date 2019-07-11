@@ -1,8 +1,10 @@
 import server from '@server/server';
 import WebSocket from 'ws';
 import * as express from 'express';
+import * as DataTypes from '@dataTypes';
 const enableDestroy = require('server-destroy');
 
+const connectionString: string = 'ws://localhost:4000/channel';
 let instance: any = null;
 beforeEach(done => {
   instance = server.listen(4000, () => {
@@ -15,13 +17,13 @@ afterEach(() => {
   instance.destroy();
 });
 
-test('sends services and connections config on websocket connection', done => {
-  const ws: WebSocket = new WebSocket('ws://localhost:4000/channel');
+test('sends services config on websocket connection', done => {
+  const ws: WebSocket = new WebSocket(connectionString);
   ws.on('message', (data: string) => {
-    expect(data).toBe('hello');
+    expect(JSON.parse(data)).toMatchSnapshot();
     done();
   });
   ws.on('open', () => {
-    ws.send('hello');
+    ws.send('GET_SERVICES');
   });
 });

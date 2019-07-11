@@ -26,6 +26,7 @@ module.exports = {
   resolve: {
     extensions: ['.ts', '.tsx', '.js'],
     alias: {
+      '@dataTypes': path.resolve(__dirname, 'lib/types/dataTypes.ts'),
       '@app': path.resolve(__dirname, 'client/src/'),
       '@images': path.resolve(__dirname, 'images'),
     },

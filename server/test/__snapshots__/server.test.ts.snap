@@ -1,0 +1,97 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`sends services config on websocket connection 1`] = `
+Object {
+  "content": Object {
+    "services": Array [
+      Object {
+        "categories": Array [],
+        "id": "1",
+        "name": "ascsadasdcasd",
+        "timeout": 20,
+        "type": "",
+        "uiProps": Object {
+          "left": 7,
+          "top": 68,
+        },
+        "uri": "casdcasdc",
+      },
+      Object {
+        "categories": Array [
+          "cascdasdc",
+        ],
+        "id": "2",
+        "name": "CRM",
+        "timeout": 20,
+        "type": "CRM",
+        "uiProps": Object {
+          "left": 712,
+          "top": 441,
+        },
+        "uri": "http://localhost:3000/apis/1",
+      },
+      Object {
+        "categories": Array [],
+        "id": "3",
+        "name": "DataHub",
+        "timeout": 20,
+        "type": "API",
+        "uiProps": Object {
+          "left": 218,
+          "top": 75,
+        },
+        "uri": "http://localhost:3000/apis/2",
+      },
+      Object {
+        "categories": Array [],
+        "id": "4",
+        "name": "Broker",
+        "timeout": 20,
+        "type": "API",
+        "uiProps": Object {
+          "left": 472,
+          "top": 569,
+        },
+        "uri": "http://localhost:3000/apis/1",
+      },
+      Object {
+        "categories": Array [],
+        "id": "5",
+        "name": "DataHub ",
+        "timeout": 20,
+        "type": "API",
+        "uiProps": Object {
+          "left": 377,
+          "top": 267,
+        },
+        "uri": "http://localhost:3000/apis/1",
+      },
+      Object {
+        "categories": Array [],
+        "id": "6",
+        "name": "Northgate",
+        "timeout": 30,
+        "type": "DB",
+        "uiProps": Object {
+          "left": 220,
+          "top": 443,
+        },
+        "uri": "http://localhost:3000/apis/2",
+      },
+      Object {
+        "categories": Array [],
+        "id": "7",
+        "name": "steve",
+        "timeout": 20,
+        "type": "API",
+        "uiProps": Object {
+          "left": 582,
+          "top": 248,
+        },
+        "uri": "http://localhost:3000/apis/2",
+      },
+    ],
+  },
+  "reply": "SERVICES",
+}
+`;
