@@ -19,6 +19,12 @@ enum Reply {
 
 enum Command {
   GET_SERVICES = 'GET_SERVICES',
+  GET_CONNECTIONS = 'GET_CONNECTIONS',
+}
+
+enum ConfigPaths {
+  SERVICES = '/services',
+  CONNECTIONS = '/connections',
 }
 
 interface IMessage {
@@ -56,8 +62,8 @@ class StatusMonitoringServer {
     this.configApiUrl = configApiUrl;
     return axios
       .all([
-        axios.get(this.configApiUrl + '/services'),
-        axios.get(this.configApiUrl + '/connections'),
+        axios.get(this.configApiUrl + ConfigPaths.SERVICES),
+        axios.get(this.configApiUrl + ConfigPaths.CONNECTIONS),
       ])
       .then((values: any[]) => {
         this.services = values[0].data;
@@ -73,13 +79,13 @@ class StatusMonitoringServer {
       ws.on('message', (command: string) => {
         let msg: IMessage;
         switch (command) {
-          case 'GET_SERVICES':
+          case Command.GET_SERVICES:
             msg = {
               reply: Reply.SERVICES,
               content: this.services,
             };
             break;
-          case 'GET_CONNECTIONS':
+          case Command.GET_CONNECTIONS:
             msg = {
               reply: Reply.CONNECTIONS,
               content: this.connections,
