@@ -1,0 +1,29 @@
+[
+  {
+    "id": "1",
+    "name": "serviceTest",
+    "uri": "casdcasdc",
+    "timeout": 20,
+    "categories": [],
+    "type": "",
+    "uiProps": {"top": 68, "left": 7}
+  },
+  {
+    "id": "2",
+    "name": "CRM",
+    "uri": "http://localhost:3000/apis/1",
+    "timeout": 20,
+    "categories": ["cascdasdc"],
+    "type": "CRM",
+    "uiProps": {"top": 441, "left": 712}
+  },
+  {
+    "id": "3",
+    "name": "DataHub",
+    "uri": "http://localhost:3000/apis/2",
+    "timeout": 20,
+    "categories": [],
+    "type": "API",
+    "uiProps": {"top": 75, "left": 218}
+  }
+]

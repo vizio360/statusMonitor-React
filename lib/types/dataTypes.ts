@@ -8,4 +8,9 @@ interface IService {
   uiProps: {top: number; left: number};
 }
 
-export {IService};
+interface IConnection {
+  sourceId: number;
+  targetId: number;
+}
+
+export {IService, IConnection};
