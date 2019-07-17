@@ -1,10 +1,16 @@
+enum ServiceType {
+  CRM = 'CRM',
+  API = 'API',
+  DB = 'DB',
+}
+
 interface IService {
   id: string;
   name: string;
   uri: string;
   timeout: number;
   categories: string[];
-  type: string;
+  type: ServiceType;
   uiProps: {top: number; left: number};
 }
 
@@ -13,4 +19,4 @@ interface IConnection {
   targetId: number;
 }
 
-export {IService, IConnection};
+export {IService, IConnection, ServiceType};

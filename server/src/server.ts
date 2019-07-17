@@ -28,21 +28,24 @@ enum ConfigPaths {
 }
 
 interface IMessage {
-  reply: Reply;
-  content?: DataTypes.IService[] | DataTypes.IConnection[];
+  reply: Reply | string;
+  content?: DataTypes.IService[] | DataTypes.IConnection[] | string;
 }
 
 class StatusMonitoringServer {
   app: express.Application;
   serverInstance: any;
   appws: expressWS.Application;
+  websocketServer: WebSocket.Server;
   services: DataTypes.IService[] = [];
   connections: DataTypes.IConnection[] = [];
   private configApiUrl: string;
   private port: number;
   constructor() {
     this.app = express();
-    this.appws = expressWS(this.app).app;
+    const expWS = expressWS(this.app);
+    this.websocketServer = expWS.getWss();
+    this.appws = expWS.app;
     this.app.use(bodyParser.json());
     this.app.use(express.static(path.join(__dirname, '../../dist')));
   }
@@ -69,6 +72,19 @@ class StatusMonitoringServer {
         this.services = values[0].data;
         this.connections = values[1].data;
       });
+  }
+
+  private setupWatchdog(services: DataTypes.IService[]) {
+    //for each service
+    //setup interval
+    //
+    //
+  }
+
+  public broadcastMessage(msg: IMessage) {
+    this.websocketServer.clients.forEach(client => {
+      client.send(JSON.stringify(msg));
+    });
   }
 
   private setUpWebSockets() {
@@ -104,5 +120,5 @@ class StatusMonitoringServer {
     if (this.serverInstance) this.serverInstance.destroy();
   }
 }
-
-export default new StatusMonitoringServer();
+const server = new StatusMonitoringServer();
+export {server, IMessage};
