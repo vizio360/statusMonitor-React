@@ -1,6 +1,5 @@
 import express from 'express';
 import http from 'http';
-import httpProxy from 'http-proxy';
 import path from 'path';
 import fs from 'fs';
 import WebSocket from 'ws';
