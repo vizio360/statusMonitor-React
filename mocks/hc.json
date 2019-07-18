@@ -1,4 +1,32 @@
 {
+  "services": [
+    {
+      "id": "1",
+      "name": "serviceTest",
+      "uri": "http://localhost:3000/apis/1",
+      "timeout": 120,
+      "categories": [],
+      "type": "",
+      "uiProps": {"top": 68, "left": 7}
+    },
+    {
+      "id": "2",
+      "name": "CRM",
+      "uri": "http://localhost:3000/apis/2",
+      "timeout": 60,
+      "categories": ["cascdasdc"],
+      "type": "CRM",
+      "uiProps": {"top": 441, "left": 712}
+    }
+  ],
+  "connections": [
+    {"sourceId": "3", "targetId": "5"},
+    {"sourceId": "5", "targetId": "4"},
+    {"sourceId": "6", "targetId": "4"},
+    {"sourceId": "2", "targetId": "4"},
+    {"sourceId": "7", "targetId": "4"},
+    {"sourceId": "7", "targetId": "2"}
+  ],
   "apis": [
     {
       "id": "1",

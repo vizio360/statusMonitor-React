@@ -78,6 +78,10 @@ class StatusMonitoringServer {
       });
   }
 
+  public getServicesStatus() {
+    return Object.assign({}, this.servicesStatus);
+  }
+
   private pollHealthcheck(service: DataTypes.IService): void {
     let t: NodeJS.Timer = setTimeout(() => {
       axios
@@ -90,6 +94,7 @@ class StatusMonitoringServer {
               reply: Reply.UPDATE,
               content: 'hello!!!',
             };
+            this.servicesStatus[service.id] = healthy;
             this.broadcastMessage(msg);
           }
         })
@@ -102,9 +107,10 @@ class StatusMonitoringServer {
   }
 
   private setupWatchdogs(services: DataTypes.IService[]): void {
-    let service: DataTypes.IService = services[0];
-    this.servicesStatus[service.id] = true;
-    this.pollHealthcheck(service);
+    services.forEach(service => {
+      this.servicesStatus[service.id] = true;
+      this.pollHealthcheck(service);
+    });
   }
 
   public broadcastMessage(msg: IMessage): void {

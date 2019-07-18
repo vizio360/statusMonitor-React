@@ -218,7 +218,10 @@ describe('Status Monitoring Server', () => {
         const wsc1: WebSocketClient = new WebSocketClient();
         wsc1.onMessage = data => {
           let msg: IMessage = JSON.parse(data);
-          if (msg.reply == 'UPDATE') done();
+          if (msg.reply == 'UPDATE') {
+            expect(server.getServicesStatus()[firstService.id]).toBe(false);
+            done();
+          }
         };
         wsc1.connect(connectionString).then(result => {
           nock.cleanAll();
@@ -229,5 +232,14 @@ describe('Status Monitoring Server', () => {
         fail(error);
         done();
       });
+  });
+
+  test('returns a readonly copy of the services statuses', () => {
+    let services: DataTypes.IService[] = getFileContentAsJSON(
+      './mocks/services.json',
+    );
+    let firstService: DataTypes.IService = services[0];
+    let servicesStatus = server.getServicesStatus();
+    expect(servicesStatus).not.toBe(server.getServicesStatus());
   });
 });

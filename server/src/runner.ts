@@ -1,5 +1,7 @@
-import server from '@server/server';
+import {server} from '@server/server';
 
 let port: number = 3333;
-server.listen(port);
-console.log('Listening to ' + port);
+server.init(port);
+server.start('http://localhost:3000').then(result => {
+  console.log('Listening to ' + port);
+});
