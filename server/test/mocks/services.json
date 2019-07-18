@@ -2,8 +2,8 @@
   {
     "id": "1",
     "name": "serviceTest",
-    "uri": "casdcasdc",
-    "timeout": 20,
+    "uri": "http://service1/healthcheck",
+    "timeout": 0.5,
     "categories": [],
     "type": "",
     "uiProps": {"top": 68, "left": 7}
@@ -11,7 +11,7 @@
   {
     "id": "2",
     "name": "CRM",
-    "uri": "http://localhost:3000/apis/1",
+    "uri": "http://service2/healthcheck",
     "timeout": 20,
     "categories": ["cascdasdc"],
     "type": "CRM",
@@ -20,7 +20,7 @@
   {
     "id": "3",
     "name": "DataHub",
-    "uri": "http://localhost:3000/apis/2",
+    "uri": "http://service3/healthcheck",
     "timeout": 20,
     "categories": [],
     "type": "API",

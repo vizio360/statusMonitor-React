@@ -45,13 +45,13 @@ Object {
       "categories": Array [],
       "id": "1",
       "name": "serviceTest",
-      "timeout": 20,
+      "timeout": 0.5,
       "type": "",
       "uiProps": Object {
         "left": 7,
         "top": 68,
       },
-      "uri": "casdcasdc",
+      "uri": "http://service1/healthcheck",
     },
     Object {
       "categories": Array [
@@ -65,7 +65,7 @@ Object {
         "left": 712,
         "top": 441,
       },
-      "uri": "http://localhost:3000/apis/1",
+      "uri": "http://service2/healthcheck",
     },
     Object {
       "categories": Array [],
@@ -77,7 +77,7 @@ Object {
         "left": 218,
         "top": 75,
       },
-      "uri": "http://localhost:3000/apis/2",
+      "uri": "http://service3/healthcheck",
     },
   ],
   "reply": "SERVICES",

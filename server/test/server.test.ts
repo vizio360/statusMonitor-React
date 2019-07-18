@@ -97,7 +97,7 @@ describe('Status Monitoring Server', () => {
     expect(() => server.init(1234)).toThrow();
   });
 
-  test('it can broadcast message to all connected clients', done => {
+  test('it can broadcast a message to all connected clients', done => {
     let numberOfCalls: number = 2;
     let callback = (data: string) => {
       numberOfCalls--;
@@ -168,14 +168,65 @@ describe('Status Monitoring Server', () => {
   });
 
   test('handles not existing commands', done => {
-    setupServicesAndConnectionsMocks(200, 200);
-    sendCommand('SOME_UNKOWN_COMMAND')
+    setupServicesAndConnectionsMocks();
+    sendCommand('SOME_UNKNOWN_COMMAND')
       .then((data: string) => {
         expect(data).toMatchSnapshot();
         done();
       })
       .catch(error => {
         fail();
+        done();
+      });
+  });
+
+  let setupServiceHealthcheckMock = (
+    url: URL,
+    statusCode: number,
+    responseBody: any,
+  ) => {
+    nock(url.origin)
+      .persist()
+      .get(url.pathname)
+      .reply(statusCode, responseBody);
+  };
+
+  let setMocksForServices = (
+    services: DataTypes.IService[],
+    responseBody: any,
+  ) => {
+    services.forEach((service: DataTypes.IService) => {
+      let url: URL = new URL(service.uri);
+      setupServiceHealthcheckMock(url, 200, responseBody);
+    });
+  };
+
+  test('broadcasts message if one of the services has changed state', done => {
+    setupServicesAndConnectionsMocks();
+
+    let services: DataTypes.IService[] = getFileContentAsJSON(
+      './mocks/services.json',
+    );
+
+    setMocksForServices(services, {status: 'Healthy'});
+
+    let firstService: DataTypes.IService = services[0];
+
+    server
+      .start(CONFIG_URI)
+      .then(result => {
+        const wsc1: WebSocketClient = new WebSocketClient();
+        wsc1.onMessage = data => {
+          let msg: IMessage = JSON.parse(data);
+          if (msg.reply == 'UPDATE') done();
+        };
+        wsc1.connect(connectionString).then(result => {
+          nock.cleanAll();
+          setMocksForServices(services, {status: 'Unhealthy'});
+        });
+      })
+      .catch(error => {
+        fail(error);
         done();
       });
   });

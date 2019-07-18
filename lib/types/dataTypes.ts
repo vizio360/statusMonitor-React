@@ -19,4 +19,9 @@ interface IConnection {
   targetId: number;
 }
 
-export {IService, IConnection, ServiceType};
+enum ServiceStatus {
+  HEALTHY,
+  UNHEALTHY,
+}
+
+export {IService, IConnection, ServiceType, ServiceStatus};

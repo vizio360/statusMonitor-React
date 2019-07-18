@@ -14,6 +14,7 @@ const enableDestroy = require('server-destroy');
 enum Reply {
   SERVICES = 'SERVICES',
   CONNECTIONS = 'CONNECTIONS',
+  UPDATE = 'UPDATE',
   NOT_RECOGNIZED = 'COMMAND NOT RECOGNIZED',
 }
 
@@ -38,6 +39,8 @@ class StatusMonitoringServer {
   appws: expressWS.Application;
   websocketServer: WebSocket.Server;
   services: DataTypes.IService[] = [];
+  servicesStatus: {[serviceId: string]: boolean} = {};
+  timeouts: {[serviceId: string]: NodeJS.Timer} = {};
   connections: DataTypes.IConnection[] = [];
   private configApiUrl: string;
   private port: number;
@@ -51,12 +54,12 @@ class StatusMonitoringServer {
   }
 
   init(listeningPort: number) {
-    this.port = listeningPort;
-    this.listen();
+    this.listen(listeningPort);
     this.setUpWebSockets();
   }
 
-  private listen() {
+  private listen(listeningPort: number) {
+    this.port = listeningPort;
     this.serverInstance = this.app.listen(this.port);
     enableDestroy(this.serverInstance);
   }
@@ -71,23 +74,46 @@ class StatusMonitoringServer {
       .then((values: any[]) => {
         this.services = values[0].data;
         this.connections = values[1].data;
+        this.setupWatchdogs(this.services);
       });
   }
 
-  private setupWatchdog(services: DataTypes.IService[]) {
-    //for each service
-    //setup interval
-    //
-    //
+  private pollHealthcheck(service: DataTypes.IService): void {
+    let t: NodeJS.Timer = setTimeout(() => {
+      axios
+        .get(service.uri)
+        .then(response => {
+          let healthy: boolean = response.data.status == 'Healthy';
+          console.log('service ', service.uri);
+          if (this.servicesStatus[service.id] != healthy) {
+            let msg: IMessage = {
+              reply: Reply.UPDATE,
+              content: 'hello!!!',
+            };
+            this.broadcastMessage(msg);
+          }
+        })
+        .catch()
+        .finally(() => {
+          this.pollHealthcheck(service);
+        });
+    }, service.timeout * 1000);
+    this.timeouts[service.id] = t;
   }
 
-  public broadcastMessage(msg: IMessage) {
+  private setupWatchdogs(services: DataTypes.IService[]): void {
+    let service: DataTypes.IService = services[0];
+    this.servicesStatus[service.id] = true;
+    this.pollHealthcheck(service);
+  }
+
+  public broadcastMessage(msg: IMessage): void {
     this.websocketServer.clients.forEach(client => {
       client.send(JSON.stringify(msg));
     });
   }
 
-  private setUpWebSockets() {
+  private setUpWebSockets(): void {
     this.appws.ws('/channel', (ws: WebSocket, req: any) => {
       ws.on('connection', () => {
         console.log('connected!');
@@ -116,7 +142,16 @@ class StatusMonitoringServer {
       });
     });
   }
-  destroy() {
+
+  private clearAnyRunningTimeout() {
+    for (let key in this.timeouts) {
+      clearTimeout(this.timeouts[key]);
+    }
+    this.timeouts = {};
+  }
+
+  public destroy(): void {
+    this.clearAnyRunningTimeout();
     if (this.serverInstance) this.serverInstance.destroy();
   }
 }
