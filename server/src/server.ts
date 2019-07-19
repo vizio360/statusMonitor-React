@@ -159,7 +159,7 @@ class StatusMonitoringServer {
     });
   }
 
-  private clearAnyRunningTimeout() {
+  private clearAnyRunningTimeouts() {
     for (let key in this.timeouts) {
       clearTimeout(this.timeouts[key]);
     }
@@ -167,7 +167,7 @@ class StatusMonitoringServer {
   }
 
   public destroy(cb: any): void {
-    this.clearAnyRunningTimeout();
+    this.clearAnyRunningTimeouts();
     this.disconnectAllClients();
     if (this.serverInstance) {
       this.serverInstance.destroy(cb);

@@ -281,7 +281,6 @@ describe('Status Monitoring Server', () => {
     let services: DataTypes.IService[] = getFileContentAsJSON(
       './mocks/services.json',
     );
-    let firstService: DataTypes.IService = services[0];
     let servicesStatus = server.getServicesStatus();
     expect(servicesStatus).not.toBe(server.getServicesStatus());
   });
