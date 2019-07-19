@@ -12,7 +12,7 @@
     {
       "id": "2",
       "name": "CRM",
-      "uri": "http://localhost:3000/apis/2",
+      "uri": "http://localhost:3000/apit/2",
       "timeout": 60,
       "categories": ["cascdasdc"],
       "type": "CRM",

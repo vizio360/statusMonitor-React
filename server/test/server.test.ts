@@ -1,4 +1,4 @@
-import {server, IMessage} from '@server/server';
+import {StatusMonitoringServer, IMessage} from '@server/server';
 import WebSocket from 'ws';
 import * as express from 'express';
 import * as DataTypes from '@dataTypes';
@@ -30,13 +30,20 @@ describe('Status Monitoring Server', () => {
       .reply(statusCode, responseBody);
   };
 
-  let instance: any = null;
+  let server: StatusMonitoringServer = null;
+  let activeWebSocketClients: WebSocketClient[] = [];
+
   beforeEach(() => {
+    activeWebSocketClients = [];
+    server = new StatusMonitoringServer();
     server.init(listeningPort);
   });
 
-  afterEach(() => {
-    server.destroy();
+  afterEach(done => {
+    activeWebSocketClients.forEach(wsc => {
+      wsc.destroy();
+    });
+    server.destroy(done);
   });
 
   let setupServicesAndConnectionsMocks = (
@@ -61,6 +68,8 @@ describe('Status Monitoring Server', () => {
     onMessage: (data: string) => void;
     public connect(connection: string) {
       this.ws = new WebSocket(connection);
+      activeWebSocketClients.push(this);
+
       return new Promise((resolve, reject) => {
         this.ws.on('open', () => {
           resolve('open');
@@ -74,9 +83,13 @@ describe('Status Monitoring Server', () => {
     public send(command: string) {
       this.ws.send(command);
     }
+
+    public destroy() {
+      this.ws.removeAllListeners();
+    }
   }
 
-  let sendCommand = (command: string) => {
+  let connectAndSendCommand = (command: string) => {
     return new Promise((resolve, reject) => {
       server
         .start(CONFIG_URI)
@@ -101,7 +114,9 @@ describe('Status Monitoring Server', () => {
     let numberOfCalls: number = 2;
     let callback = (data: string) => {
       numberOfCalls--;
-      if (numberOfCalls == 0) done();
+      if (numberOfCalls == 0) {
+        done();
+      }
     };
 
     const wsc1: WebSocketClient = new WebSocketClient();
@@ -124,7 +139,7 @@ describe('Status Monitoring Server', () => {
 
   test('sends services config', done => {
     setupServicesAndConnectionsMocks();
-    sendCommand('GET_SERVICES')
+    connectAndSendCommand('GET_SERVICES')
       .then((data: string) => {
         expect(data).toMatchSnapshot();
         done();
@@ -137,7 +152,7 @@ describe('Status Monitoring Server', () => {
 
   test('sends connections config', done => {
     setupServicesAndConnectionsMocks();
-    sendCommand('GET_CONNECTIONS')
+    connectAndSendCommand('GET_CONNECTIONS')
       .then((data: string) => {
         expect(data).toMatchSnapshot();
         done();
@@ -150,14 +165,14 @@ describe('Status Monitoring Server', () => {
 
   test('start fails if cannot get services data', done => {
     setupServicesAndConnectionsMocks(500);
-    sendCommand('GET_SERVICES').catch(error => {
+    connectAndSendCommand('GET_SERVICES').catch(error => {
       done();
     });
   });
 
   test('start fails if cannot get connections data', done => {
     setupServicesAndConnectionsMocks(200, 500);
-    sendCommand('GET_CONNECTIONS')
+    connectAndSendCommand('GET_CONNECTIONS')
       .then((data: string) => {
         fail();
         done();
@@ -169,7 +184,7 @@ describe('Status Monitoring Server', () => {
 
   test('handles not existing commands', done => {
     setupServicesAndConnectionsMocks();
-    sendCommand('SOME_UNKNOWN_COMMAND')
+    connectAndSendCommand('SOME_UNKNOWN_COMMAND')
       .then((data: string) => {
         expect(data).toMatchSnapshot();
         done();
@@ -227,6 +242,34 @@ describe('Status Monitoring Server', () => {
           nock.cleanAll();
           setMocksForServices(services, {status: 'Unhealthy'});
         });
+      })
+      .catch(error => {
+        fail(error);
+        done();
+      });
+  });
+
+  test('marks service as unhealthy if healthcheck request fails', done => {
+    setupServicesAndConnectionsMocks();
+
+    let services: DataTypes.IService[] = getFileContentAsJSON(
+      './mocks/services.json',
+    );
+
+    let firstService: DataTypes.IService = services[0];
+
+    server
+      .start(CONFIG_URI)
+      .then(result => {
+        const wsc1: WebSocketClient = new WebSocketClient();
+        wsc1.onMessage = data => {
+          let msg: IMessage = JSON.parse(data);
+          if (msg.reply == 'UPDATE') {
+            expect(server.getServicesStatus()[firstService.id]).toBe(false);
+            done();
+          }
+        };
+        wsc1.connect(connectionString);
       })
       .catch(error => {
         fail(error);

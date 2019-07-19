@@ -81,23 +81,30 @@ class StatusMonitoringServer {
     return Object.assign({}, this.servicesStatus);
   }
 
+  private notifyIfServiceStatusUpdated(id: string, healthy: boolean) {
+    if (this.servicesStatus[id] != healthy) {
+      let msg: IMessage = {
+        reply: Reply.UPDATE,
+        content: 'hello!!!',
+      };
+      this.servicesStatus[id] = healthy;
+      this.broadcastMessage(msg);
+    }
+  }
+
   private pollHealthcheck(service: DataTypes.IService): void {
     let t: NodeJS.Timer = setTimeout(() => {
       axios
         .get(service.uri)
         .then(response => {
-          let healthy: boolean = response.data.status == 'Healthy';
-          console.log('service ', service.uri);
-          if (this.servicesStatus[service.id] != healthy) {
-            let msg: IMessage = {
-              reply: Reply.UPDATE,
-              content: 'hello!!!',
-            };
-            this.servicesStatus[service.id] = healthy;
-            this.broadcastMessage(msg);
-          }
+          this.notifyIfServiceStatusUpdated(
+            service.id,
+            response.data.status == 'Healthy',
+          );
         })
-        .catch()
+        .catch(error => {
+          this.notifyIfServiceStatusUpdated(service.id, false);
+        })
         .finally(() => {
           this.pollHealthcheck(service);
         });
@@ -118,11 +125,15 @@ class StatusMonitoringServer {
     });
   }
 
+  private disconnectAllClients(): void {
+    this.websocketServer.clients.forEach(client => {
+      client.removeAllListeners();
+      client.close();
+    });
+  }
+
   private setUpWebSockets(): void {
     this.appws.ws('/channel', (ws: WebSocket, req: any) => {
-      ws.on('connection', () => {
-        console.log('connected!');
-      });
       ws.on('message', (command: string) => {
         let msg: IMessage;
         switch (command) {
@@ -155,10 +166,13 @@ class StatusMonitoringServer {
     this.timeouts = {};
   }
 
-  public destroy(): void {
+  public destroy(cb: any): void {
     this.clearAnyRunningTimeout();
-    if (this.serverInstance) this.serverInstance.destroy();
+    this.disconnectAllClients();
+    if (this.serverInstance) {
+      this.serverInstance.destroy(cb);
+    }
   }
 }
-const server = new StatusMonitoringServer();
-export {server, IMessage};
+
+export {StatusMonitoringServer, IMessage};
