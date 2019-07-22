@@ -97,16 +97,16 @@ class StatusMonitoringServer {
 
   private notifyIfServiceStatusUpdated(
     id: string,
-    healthy: DataTypes.Status,
+    newStatus: DataTypes.Status,
     responseBody: string,
   ) {
     const ss: DataTypes.IServiceStatus = _.findWhere(this.servicesStatus, {
       serviceId: id,
     });
-    if (ss.status != healthy) {
+    if (ss.status != newStatus) {
       const statusReport: DataTypes.IServiceStatus = {
         serviceId: id,
-        status: healthy,
+        status: newStatus,
         responseBody: responseBody,
       };
       let msg: IMessage = {
