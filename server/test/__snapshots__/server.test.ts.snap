@@ -44,6 +44,9 @@ Object {
     Object {
       "categories": Array [],
       "id": "1",
+      "matcher": Object {
+        "status": "Healthy",
+      },
       "name": "serviceTest",
       "timeout": 0.5,
       "type": "",
@@ -58,6 +61,9 @@ Object {
         "cascdasdc",
       ],
       "id": "2",
+      "matcher": Object {
+        "status": "Healthy",
+      },
       "name": "CRM",
       "timeout": 20,
       "type": "CRM",
@@ -70,6 +76,9 @@ Object {
     Object {
       "categories": Array [],
       "id": "3",
+      "matcher": Object {
+        "status": "Healthy",
+      },
       "name": "DataHub",
       "timeout": 20,
       "type": "API",

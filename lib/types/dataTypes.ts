@@ -12,6 +12,7 @@ interface IService {
   categories: string[];
   type: ServiceType;
   uiProps: {top: number; left: number};
+  matcher?: {[key: string]: any};
 }
 
 interface IConnection {

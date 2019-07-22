@@ -238,6 +238,8 @@ describe('Status Monitoring Server', () => {
             expect(server.getServicesStatus()[firstService.id]).toBe(
               DataTypes.Status.UNHEALTHY,
             );
+            const content: DataTypes.IServiceStatus = msg.content as DataTypes.IServiceStatus;
+            expect(content.status).toBe(DataTypes.Status.UNHEALTHY);
             done();
           }
         };
@@ -271,6 +273,8 @@ describe('Status Monitoring Server', () => {
             expect(server.getServicesStatus()[firstService.id]).toBe(
               DataTypes.Status.UNHEALTHY,
             );
+            const content: DataTypes.IServiceStatus = msg.content as DataTypes.IServiceStatus;
+            expect(content.status).toBe(DataTypes.Status.UNHEALTHY);
             done();
           }
         };

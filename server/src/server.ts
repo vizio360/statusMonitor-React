@@ -8,6 +8,7 @@ import bodyParser from 'body-parser';
 import expressWS from 'express-ws';
 import axios from 'axios';
 import * as DataTypes from '@dataTypes';
+import ObjectMatcher from '@server/ObjectMatcher';
 const enableDestroy = require('server-destroy');
 
 enum Reply {
@@ -110,13 +111,14 @@ class StatusMonitoringServer {
       axios
         .get(service.uri)
         .then(response => {
-          //TODO: run service regexp against response.data to evaluate status
           const responseBody = response.data;
-          const st: DataTypes.Status =
-            response.data.status == 'Healthy'
-              ? DataTypes.Status.HEALTHY
-              : DataTypes.Status.UNHEALTHY;
-          this.notifyIfServiceStatusUpdated(service.id, st, responseBody);
+          const state: DataTypes.Status = ObjectMatcher(
+            responseBody,
+            service.matcher,
+          )
+            ? DataTypes.Status.HEALTHY
+            : DataTypes.Status.UNHEALTHY;
+          this.notifyIfServiceStatusUpdated(service.id, state, responseBody);
         })
         .catch(error => {
           this.notifyIfServiceStatusUpdated(
