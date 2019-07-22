@@ -19,9 +19,18 @@ interface IConnection {
   targetId: number;
 }
 
-enum ServiceStatus {
+interface IServiceStatus {
+  serviceId: string;
+  status: Status;
+  responseBody: string;
+}
+
+const HEALTHY = true;
+const UNHEALTHY = false;
+
+enum Status {
   HEALTHY,
   UNHEALTHY,
 }
 
-export {IService, IConnection, ServiceType, ServiceStatus};
+export {IService, IConnection, ServiceType, Status, IServiceStatus};

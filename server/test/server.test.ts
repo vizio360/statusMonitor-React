@@ -1,4 +1,4 @@
-import {StatusMonitoringServer, IMessage} from '@server/server';
+import {StatusMonitoringServer, IMessage, Reply} from '@server/server';
 import WebSocket from 'ws';
 import * as express from 'express';
 import * as DataTypes from '@dataTypes';
@@ -129,9 +129,10 @@ describe('Status Monitoring Server', () => {
       wsc1.connect(connectionString),
       wsc2.connect(connectionString),
     ]).then(values => {
+      let s: DataTypes.IService[] = [];
       let msg = {
-        reply: 'some ms',
-        content: 'come content',
+        reply: Reply.SERVICES,
+        content: s,
       };
       server.broadcastMessage(msg);
     });
@@ -234,7 +235,9 @@ describe('Status Monitoring Server', () => {
         wsc1.onMessage = data => {
           let msg: IMessage = JSON.parse(data);
           if (msg.reply == 'UPDATE') {
-            expect(server.getServicesStatus()[firstService.id]).toBe(false);
+            expect(server.getServicesStatus()[firstService.id]).toBe(
+              DataTypes.Status.UNHEALTHY,
+            );
             done();
           }
         };
@@ -265,7 +268,9 @@ describe('Status Monitoring Server', () => {
         wsc1.onMessage = data => {
           let msg: IMessage = JSON.parse(data);
           if (msg.reply == 'UPDATE') {
-            expect(server.getServicesStatus()[firstService.id]).toBe(false);
+            expect(server.getServicesStatus()[firstService.id]).toBe(
+              DataTypes.Status.UNHEALTHY,
+            );
             done();
           }
         };

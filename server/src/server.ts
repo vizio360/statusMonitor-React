@@ -28,8 +28,11 @@ enum ConfigPaths {
 }
 
 interface IMessage {
-  reply: Reply | string;
-  content?: DataTypes.IService[] | DataTypes.IConnection[] | string;
+  reply: Reply;
+  content?:
+    | DataTypes.IService[]
+    | DataTypes.IConnection[]
+    | DataTypes.IServiceStatus;
 }
 
 class StatusMonitoringServer {
@@ -38,11 +41,12 @@ class StatusMonitoringServer {
   appws: expressWS.Application;
   websocketServer: WebSocket.Server;
   services: DataTypes.IService[] = [];
-  servicesStatus: {[serviceId: string]: boolean} = {};
+  servicesStatus: {[serviceId: string]: DataTypes.Status} = {};
   timeouts: {[serviceId: string]: NodeJS.Timer} = {};
   connections: DataTypes.IConnection[] = [];
   private configApiUrl: string;
   private port: number;
+
   constructor() {
     this.app = express();
     const expWS = expressWS(this.app);
@@ -63,7 +67,7 @@ class StatusMonitoringServer {
     enableDestroy(this.serverInstance);
   }
 
-  start(configApiUrl: string): Promise<any> {
+  public start(configApiUrl: string): Promise<any> {
     this.configApiUrl = configApiUrl;
     return axios
       .all([
@@ -81,11 +85,20 @@ class StatusMonitoringServer {
     return Object.assign({}, this.servicesStatus);
   }
 
-  private notifyIfServiceStatusUpdated(id: string, healthy: boolean) {
+  private notifyIfServiceStatusUpdated(
+    id: string,
+    healthy: DataTypes.Status,
+    responseBody: string,
+  ) {
     if (this.servicesStatus[id] != healthy) {
+      const statusReport: DataTypes.IServiceStatus = {
+        serviceId: id,
+        status: healthy,
+        responseBody: responseBody,
+      };
       let msg: IMessage = {
         reply: Reply.UPDATE,
-        content: 'hello!!!',
+        content: statusReport,
       };
       this.servicesStatus[id] = healthy;
       this.broadcastMessage(msg);
@@ -97,13 +110,20 @@ class StatusMonitoringServer {
       axios
         .get(service.uri)
         .then(response => {
-          this.notifyIfServiceStatusUpdated(
-            service.id,
-            response.data.status == 'Healthy',
-          );
+          //TODO: run service regexp against response.data to evaluate status
+          const responseBody = response.data;
+          const st: DataTypes.Status =
+            response.data.status == 'Healthy'
+              ? DataTypes.Status.HEALTHY
+              : DataTypes.Status.UNHEALTHY;
+          this.notifyIfServiceStatusUpdated(service.id, st, responseBody);
         })
         .catch(error => {
-          this.notifyIfServiceStatusUpdated(service.id, false);
+          this.notifyIfServiceStatusUpdated(
+            service.id,
+            DataTypes.Status.UNHEALTHY,
+            error,
+          );
         })
         .finally(() => {
           this.pollHealthcheck(service);
@@ -114,7 +134,7 @@ class StatusMonitoringServer {
 
   private setupWatchdogs(services: DataTypes.IService[]): void {
     services.forEach(service => {
-      this.servicesStatus[service.id] = true;
+      this.servicesStatus[service.id] = DataTypes.Status.HEALTHY;
       this.pollHealthcheck(service);
     });
   }
@@ -175,4 +195,4 @@ class StatusMonitoringServer {
   }
 }
 
-export {StatusMonitoringServer, IMessage};
+export {StatusMonitoringServer, IMessage, Reply};
