@@ -6,6 +6,29 @@ Object {
 }
 `;
 
+exports[`Status Monitoring Server sends all services status 1`] = `
+Object {
+  "content": Array [
+    Object {
+      "responseBody": "NOT YET VERIFIED",
+      "serviceId": "1",
+      "status": 0,
+    },
+    Object {
+      "responseBody": "NOT YET VERIFIED",
+      "serviceId": "2",
+      "status": 0,
+    },
+    Object {
+      "responseBody": "NOT YET VERIFIED",
+      "serviceId": "3",
+      "status": 0,
+    },
+  ],
+  "reply": "CURRENT_STATES",
+}
+`;
+
 exports[`Status Monitoring Server sends connections config 1`] = `
 Object {
   "content": Array [

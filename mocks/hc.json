@@ -7,16 +7,22 @@
       "timeout": 120,
       "categories": [],
       "type": "",
-      "uiProps": {"top": 68, "left": 7}
+      "uiProps": {"top": 68, "left": 7},
+      "matcher": {
+        "status": "Healthy"
+      }
     },
     {
       "id": "2",
       "name": "CRM",
-      "uri": "http://localhost:3000/apit/2",
+      "uri": "http://localhost:3000/apis/2",
       "timeout": 60,
       "categories": ["cascdasdc"],
       "type": "CRM",
-      "uiProps": {"top": 441, "left": 712}
+      "uiProps": {"top": 441, "left": 712},
+      "matcher": {
+        "status": "Up"
+      }
     }
   ],
   "connections": [
@@ -50,7 +56,7 @@
     {
       "id": "2",
       "name": "northgate",
-      "status": "Healthy",
+      "status": "Up",
       "totalDuration": "00:00:03.7527019",
       "entries": {
         "rabbitMQ": {

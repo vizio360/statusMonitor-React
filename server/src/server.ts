@@ -9,18 +9,21 @@ import expressWS from 'express-ws';
 import axios from 'axios';
 import * as DataTypes from '@dataTypes';
 import ObjectMatcher from '@server/ObjectMatcher';
+import _ from 'underscore';
 const enableDestroy = require('server-destroy');
 
 enum Reply {
   SERVICES = 'SERVICES',
   CONNECTIONS = 'CONNECTIONS',
   UPDATE = 'UPDATE',
+  CURRENT_STATES = 'CURRENT_STATES',
   NOT_RECOGNIZED = 'COMMAND NOT RECOGNIZED',
 }
 
 enum Command {
   GET_SERVICES = 'GET_SERVICES',
   GET_CONNECTIONS = 'GET_CONNECTIONS',
+  GET_CURRENT_STATES = 'GET_CURRENT_STATES',
 }
 
 enum ConfigPaths {
@@ -33,7 +36,8 @@ interface IMessage {
   content?:
     | DataTypes.IService[]
     | DataTypes.IConnection[]
-    | DataTypes.IServiceStatus;
+    | DataTypes.IServiceStatus
+    | DataTypes.IServiceStatus[];
 }
 
 class StatusMonitoringServer {
@@ -42,7 +46,7 @@ class StatusMonitoringServer {
   appws: expressWS.Application;
   websocketServer: WebSocket.Server;
   services: DataTypes.IService[] = [];
-  servicesStatus: {[serviceId: string]: DataTypes.Status} = {};
+  servicesStatus: DataTypes.IServiceStatus[] = [];
   timeouts: {[serviceId: string]: NodeJS.Timer} = {};
   connections: DataTypes.IConnection[] = [];
   private configApiUrl: string;
@@ -82,8 +86,13 @@ class StatusMonitoringServer {
       });
   }
 
-  public getServicesStatus() {
-    return Object.assign({}, this.servicesStatus);
+  public getServicesStatus(): DataTypes.IServiceStatus[] {
+    return _.map(this.servicesStatus, _.clone);
+  }
+
+  public getServicesStatusById(id: string): DataTypes.IServiceStatus {
+    const index: number = _.findIndex(this.servicesStatus, {serviceId: id});
+    return Object.assign({}, this.servicesStatus[index]);
   }
 
   private notifyIfServiceStatusUpdated(
@@ -91,7 +100,10 @@ class StatusMonitoringServer {
     healthy: DataTypes.Status,
     responseBody: string,
   ) {
-    if (this.servicesStatus[id] != healthy) {
+    const ss: DataTypes.IServiceStatus = _.findWhere(this.servicesStatus, {
+      serviceId: id,
+    });
+    if (ss.status != healthy) {
       const statusReport: DataTypes.IServiceStatus = {
         serviceId: id,
         status: healthy,
@@ -101,7 +113,8 @@ class StatusMonitoringServer {
         reply: Reply.UPDATE,
         content: statusReport,
       };
-      this.servicesStatus[id] = healthy;
+      const index: number = _.findIndex(this.servicesStatus, {serviceId: id});
+      this.servicesStatus[index] = statusReport;
       this.broadcastMessage(msg);
     }
   }
@@ -136,7 +149,12 @@ class StatusMonitoringServer {
 
   private setupWatchdogs(services: DataTypes.IService[]): void {
     services.forEach(service => {
-      this.servicesStatus[service.id] = DataTypes.Status.HEALTHY;
+      const statusReport: DataTypes.IServiceStatus = {
+        serviceId: service.id,
+        status: DataTypes.Status.HEALTHY,
+        responseBody: 'NOT YET VERIFIED',
+      };
+      this.servicesStatus.push(statusReport);
       this.pollHealthcheck(service);
     });
   }
@@ -169,6 +187,12 @@ class StatusMonitoringServer {
             msg = {
               reply: Reply.CONNECTIONS,
               content: this.connections,
+            };
+            break;
+          case Command.GET_CURRENT_STATES:
+            msg = {
+              reply: Reply.CURRENT_STATES,
+              content: this.getServicesStatus(),
             };
             break;
           default:

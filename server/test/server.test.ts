@@ -141,7 +141,7 @@ describe('Status Monitoring Server', () => {
   test('sends services config', done => {
     setupServicesAndConnectionsMocks();
     connectAndSendCommand('GET_SERVICES')
-      .then((data: string) => {
+      .then((data: IMessage) => {
         expect(data).toMatchSnapshot();
         done();
       })
@@ -154,7 +154,7 @@ describe('Status Monitoring Server', () => {
   test('sends connections config', done => {
     setupServicesAndConnectionsMocks();
     connectAndSendCommand('GET_CONNECTIONS')
-      .then((data: string) => {
+      .then((data: IMessage) => {
         expect(data).toMatchSnapshot();
         done();
       })
@@ -174,7 +174,7 @@ describe('Status Monitoring Server', () => {
   test('start fails if cannot get connections data', done => {
     setupServicesAndConnectionsMocks(200, 500);
     connectAndSendCommand('GET_CONNECTIONS')
-      .then((data: string) => {
+      .then((data: IMessage) => {
         fail();
         done();
       })
@@ -186,12 +186,26 @@ describe('Status Monitoring Server', () => {
   test('handles not existing commands', done => {
     setupServicesAndConnectionsMocks();
     connectAndSendCommand('SOME_UNKNOWN_COMMAND')
-      .then((data: string) => {
+      .then((data: IMessage) => {
         expect(data).toMatchSnapshot();
         done();
       })
       .catch(error => {
         fail();
+        done();
+      });
+  });
+
+  test('sends all services status', done => {
+    setupServicesAndConnectionsMocks();
+    connectAndSendCommand('GET_CURRENT_STATES')
+      .then((data: IMessage) => {
+        expect(data.reply).toBe('CURRENT_STATES');
+        expect(data).toMatchSnapshot();
+        done();
+      })
+      .catch(error => {
+        fail(error);
         done();
       });
   });
@@ -235,11 +249,11 @@ describe('Status Monitoring Server', () => {
         wsc1.onMessage = data => {
           let msg: IMessage = JSON.parse(data);
           if (msg.reply == 'UPDATE') {
-            expect(server.getServicesStatus()[firstService.id]).toBe(
-              DataTypes.Status.UNHEALTHY,
-            );
             const content: DataTypes.IServiceStatus = msg.content as DataTypes.IServiceStatus;
             expect(content.status).toBe(DataTypes.Status.UNHEALTHY);
+            expect(server.getServicesStatusById(firstService.id)).toEqual(
+              content,
+            );
             done();
           }
         };
@@ -270,11 +284,11 @@ describe('Status Monitoring Server', () => {
         wsc1.onMessage = data => {
           let msg: IMessage = JSON.parse(data);
           if (msg.reply == 'UPDATE') {
-            expect(server.getServicesStatus()[firstService.id]).toBe(
-              DataTypes.Status.UNHEALTHY,
-            );
             const content: DataTypes.IServiceStatus = msg.content as DataTypes.IServiceStatus;
             expect(content.status).toBe(DataTypes.Status.UNHEALTHY);
+            expect(server.getServicesStatusById(firstService.id)).toEqual(
+              content,
+            );
             done();
           }
         };
@@ -292,5 +306,14 @@ describe('Status Monitoring Server', () => {
     );
     let servicesStatus = server.getServicesStatus();
     expect(servicesStatus).not.toBe(server.getServicesStatus());
+  });
+
+  test('returns a readonly copy of a services status', () => {
+    let services: DataTypes.IService[] = getFileContentAsJSON(
+      './mocks/services.json',
+    );
+    let firstService: DataTypes.IService = services[0];
+    let servicesStatus = server.getServicesStatusById(firstService.id);
+    expect(servicesStatus).not.toBe(firstService);
   });
 });
