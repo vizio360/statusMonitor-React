@@ -17,6 +17,8 @@ enum Reply {
   CONNECTIONS = 'CONNECTIONS',
   UPDATE = 'UPDATE',
   CURRENT_STATES = 'CURRENT_STATES',
+  RELOADED = 'RELOADED',
+  RELOAD_ERROR = 'RELOAD_ERROR',
   NOT_RECOGNIZED = 'COMMAND NOT RECOGNIZED',
 }
 
@@ -63,7 +65,27 @@ class StatusMonitoringServer {
 
   init(listeningPort: number) {
     this.listen(listeningPort);
-    this.setUpWebSockets();
+    this.setupWebSockets();
+    this.setupRestAPI();
+  }
+
+  private setupRestAPI() {
+    this.app.post('/reload', (req, res) => {
+      this.start(this.configApiUrl)
+        .then(result => {
+          const msg: IMessage = {
+            reply: Reply.RELOADED,
+          };
+          this.broadcastMessage(msg);
+        })
+        .catch(error => {
+          const msg: IMessage = {
+            reply: Reply.RELOAD_ERROR,
+          };
+          this.broadcastMessage(msg);
+        });
+      res.send(200);
+    });
   }
 
   private listen(listeningPort: number) {
@@ -74,6 +96,7 @@ class StatusMonitoringServer {
 
   public start(configApiUrl: string): Promise<any> {
     this.configApiUrl = configApiUrl;
+    this.clearAnyRunningTimeouts();
     return axios
       .all([
         axios.get(this.configApiUrl + ConfigPaths.SERVICES),
@@ -96,16 +119,16 @@ class StatusMonitoringServer {
   }
 
   private notifyIfServiceStatusUpdated(
-    id: string,
+    serviceId: string,
     newStatus: DataTypes.Status,
     responseBody: string,
   ) {
     const ss: DataTypes.IServiceStatus = _.findWhere(this.servicesStatus, {
-      serviceId: id,
+      serviceId: serviceId,
     });
     if (ss.status != newStatus) {
       const statusReport: DataTypes.IServiceStatus = {
-        serviceId: id,
+        serviceId: serviceId,
         status: newStatus,
         responseBody: responseBody,
       };
@@ -113,7 +136,9 @@ class StatusMonitoringServer {
         reply: Reply.UPDATE,
         content: statusReport,
       };
-      const index: number = _.findIndex(this.servicesStatus, {serviceId: id});
+      const index: number = _.findIndex(this.servicesStatus, {
+        serviceId: serviceId,
+      });
       this.servicesStatus[index] = statusReport;
       this.broadcastMessage(msg);
     }
@@ -172,7 +197,7 @@ class StatusMonitoringServer {
     });
   }
 
-  private setUpWebSockets(): void {
+  private setupWebSockets(): void {
     this.appws.ws('/channel', (ws: WebSocket, req: any) => {
       ws.on('message', (command: string) => {
         let msg: IMessage;

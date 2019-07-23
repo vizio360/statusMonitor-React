@@ -5,11 +5,13 @@ import * as DataTypes from '@dataTypes';
 import nock from 'nock';
 import fs from 'fs';
 import path from 'path';
+import axios from 'axios';
 
 describe('Status Monitoring Server', () => {
   const CONFIG_URI: string = 'http://configapi';
   const listeningPort: number = 4000;
   const connectionString: string = `ws://localhost:${listeningPort}/channel`;
+  const LOCAL_SERVER: string = `http://localhost:${listeningPort}`;
 
   let getFileContentAsJSON = function(file: string) {
     let content: string = 'File does not exist';
@@ -49,17 +51,19 @@ describe('Status Monitoring Server', () => {
   let setupServicesAndConnectionsMocks = (
     servicesStatus: number = 200,
     connectionsStatus: number = 200,
+    servicesFile: string = 'services.json',
+    connectionsFile: string = 'connections.json',
   ) => {
     setupMockConfigAPI(
       '/services',
       servicesStatus,
-      getFileContentAsJSON('./mocks/services.json'),
+      getFileContentAsJSON(`./mocks/${servicesFile}`),
     );
 
     setupMockConfigAPI(
       '/connections',
       connectionsStatus,
-      getFileContentAsJSON('./mocks/connections.json'),
+      getFileContentAsJSON(`./mocks/${connectionsFile}`),
     );
   };
 
@@ -308,12 +312,44 @@ describe('Status Monitoring Server', () => {
     expect(servicesStatus).not.toBe(server.getServicesStatus());
   });
 
-  test('returns a readonly copy of a services status', () => {
+  test('returns a readonly copy of a service status', () => {
     let services: DataTypes.IService[] = getFileContentAsJSON(
       './mocks/services.json',
     );
     let firstService: DataTypes.IService = services[0];
     let servicesStatus = server.getServicesStatusById(firstService.id);
     expect(servicesStatus).not.toBe(firstService);
+  });
+
+  test('reloads services and connections config on demand', done => {
+    setupServicesAndConnectionsMocks();
+    server
+      .start(CONFIG_URI)
+      .then(result => {
+        const wsc1: WebSocketClient = new WebSocketClient();
+        wsc1.onMessage = data => {
+          let msg: IMessage = JSON.parse(data);
+          console.log(msg);
+          if (msg.reply == 'RELOADED') {
+            done();
+          }
+        };
+        wsc1.connect(connectionString).then(result => {
+          setupServicesAndConnectionsMocks(
+            200,
+            200,
+            'reloadServices.json',
+            'reloadConnections.json',
+          );
+          axios.post(`${LOCAL_SERVER}/reload`).catch(error => {
+            fail(error);
+            done();
+          });
+        });
+      })
+      .catch(error => {
+        fail(error);
+        done();
+      });
   });
 });
