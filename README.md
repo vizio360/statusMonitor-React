@@ -28,11 +28,11 @@ response:
 
 ```json
 {
-  "content": Array [
-    Object {
-      "categories": Array [],
+  "content": [
+    {
+      "categories": [],
       "id": "1",
-      "matcher": Object {
+      "matcher": {
         "status": "Healthy",
       },
       "name": "serviceTest",
@@ -53,9 +53,9 @@ cmd: `GET_CONNECTIONS`
 response:
 
 ```json
-Object {
-  "content": Array [
-    Object {
+{
+  "content": [
+    {
       "sourceId": "3",
       "targetId": "5",
     }
@@ -68,9 +68,9 @@ cmd: `GET_CURRENT_STATES`
 response:
 
 ```json
-Object {
-  "content": Array [
-    Object {
+{
+  "content": [
+    {
       "responseBody": "NOT YET VERIFIED",
       "serviceId": "1",
       "status": 0,
