@@ -93,7 +93,7 @@ If a service changes status the server will broadcast the following message to a
 }
 ```
 
-it is also possible to force a reload of the services and connections configuration by hitting issuing a POST request to the following endpoint:
+it is also possible to force a reload of the services and connections configuration by issuing a POST request to the following endpoint:
 
 `http://yourstatusmonitoringserver/reload`
 
