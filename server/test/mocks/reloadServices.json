@@ -1,0 +1,38 @@
+[
+  {
+    "id": "1",
+    "name": "serviceTestReloaded",
+    "uri": "http://service1reloaded/healthcheck",
+    "timeout": 100,
+    "categories": [],
+    "type": "",
+    "uiProps": {"top": 68, "left": 7},
+    "matcher": {
+      "status": "Healthy"
+    }
+  },
+  {
+    "id": "2",
+    "name": "CRMReloaded",
+    "uri": "http://service2reloaded/healthcheck",
+    "timeout": 200,
+    "categories": ["cascdasdc"],
+    "type": "CRM",
+    "uiProps": {"top": 441, "left": 712},
+    "matcher": {
+      "status": "Healthy"
+    }
+  },
+  {
+    "id": "3",
+    "name": "DataHubReloaded",
+    "uri": "http://service3reloaded/healthcheck",
+    "timeout": 200,
+    "categories": [],
+    "type": "API",
+    "uiProps": {"top": 75, "left": 218},
+    "matcher": {
+      "status": "Healthy"
+    }
+  }
+]

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, {ReactNode} from 'react';
 import * as ReactDOM from 'react-dom';
 
 interface IStatus {
@@ -8,10 +8,24 @@ interface IStatus {
 }
 
 interface IService {
+  id: string;
   name: string;
   uri: string;
+  timeout: number;
   categories: string[];
+  type: string;
+  uiProps: {top: number; left: number};
 }
+
+const EmptyService: IService = {
+  id: '',
+  name: '',
+  uri: '',
+  timeout: 20,
+  categories: [],
+  type: '',
+  uiProps: {top: 0, left: 0},
+};
 
 interface IRenderChild {
   (data: IStatus): any;
@@ -19,7 +33,7 @@ interface IRenderChild {
 
 interface IFetchProps {
   service: IService;
-  render: IRenderChild;
+  children: (api: IStatus) => ReactNode;
 }
 
 interface IState {
@@ -42,7 +56,9 @@ class Fetch extends React.Component<IFetchProps, IState> {
     this.state = {status: defaultStatus};
   }
 
-  componentDidMount() {
+  setupInterval() {
+    if (this.interval) window.clearInterval(this.interval);
+
     this.interval = window.setInterval(() => {
       fetch('/forward?uri=' + this.service.uri)
         .then(res => res.json())
@@ -54,17 +70,35 @@ class Fetch extends React.Component<IFetchProps, IState> {
               totalDuration: results.totalDuration,
             },
           });
+        })
+        .catch(error => {
+          this.setState({
+            status: {
+              name: this.state.status.name,
+              status: 'Unhealthy',
+              totalDuration: -1,
+            },
+          });
         });
-    }, 1000);
+    }, this.service.timeout * 1000);
+  }
+
+  componentDidMount() {
+    this.setupInterval();
+  }
+
+  componentWillReceiveProps(newProps: IFetchProps) {
+    this.service = newProps.service;
+    this.setupInterval();
   }
 
   componentWillUnmount() {
     window.clearInterval(this.interval);
   }
 
-  render(): any {
-    return this.props.render(this.state.status);
+  render(): ReactNode {
+    return this.props.children(this.state.status);
   }
 }
 
-export {Fetch, IStatus, IService};
+export {Fetch, IStatus, IService, EmptyService};

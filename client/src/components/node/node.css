@@ -1,0 +1,13 @@
+.node {
+  width: 100px;
+  height: 100px;
+  position: absolute;
+  text-align: center;
+}
+.nodeOverlay {
+  top: 0;
+  left: 0;
+  width: 100px;
+  height: 100px;
+  position: absolute;
+}

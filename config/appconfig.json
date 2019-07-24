@@ -3,12 +3,24 @@
     {
       "name": "Broker Health Checks",
       "uri": "http://localhost:3000/apis/1",
-      "categories": ["DEV", "BROKER"]
+      "timeout": 30,
+      "categories": ["DEV", "BROKER"],
+      "type": "CRM",
+      "uiProps": {
+        "top": 0,
+        "left": 0
+      }
     },
     {
       "name": "CRM Service Health Checks",
       "uri": "http://localhost:3000/apis/2",
-      "categories": ["DEV", "CRM"]
+      "timeout": 30,
+      "categories": ["DEV", "CRM"],
+      "type": "API",
+      "uiProps": {
+        "top": 0,
+        "left": 0
+      }
     }
   ]
 }

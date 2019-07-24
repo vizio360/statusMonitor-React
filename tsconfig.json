@@ -5,6 +5,13 @@
     "module": "commonjs",
     "jsx": "react",
     "resolveJsonModule": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "typeRoots": ["node_modules/@types", "custom_typings"],
+    "baseUrl": ".",
+    "paths": {
+      "@app/*": ["client/src/*"],
+      "@server/*": ["server/src/*"],
+      "@dataTypes": ["lib/types/dataTypes"]
+    }
   }
 }

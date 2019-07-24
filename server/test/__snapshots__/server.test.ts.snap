@@ -1,0 +1,117 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Status Monitoring Server handles not existing commands 1`] = `
+Object {
+  "reply": "COMMAND NOT RECOGNIZED",
+}
+`;
+
+exports[`Status Monitoring Server sends all services status 1`] = `
+Object {
+  "content": Array [
+    Object {
+      "responseBody": "NOT YET VERIFIED",
+      "serviceId": "1",
+      "status": 0,
+    },
+    Object {
+      "responseBody": "NOT YET VERIFIED",
+      "serviceId": "2",
+      "status": 0,
+    },
+    Object {
+      "responseBody": "NOT YET VERIFIED",
+      "serviceId": "3",
+      "status": 0,
+    },
+  ],
+  "reply": "CURRENT_STATES",
+}
+`;
+
+exports[`Status Monitoring Server sends connections config 1`] = `
+Object {
+  "content": Array [
+    Object {
+      "sourceId": "3",
+      "targetId": "5",
+    },
+    Object {
+      "sourceId": "5",
+      "targetId": "4",
+    },
+    Object {
+      "sourceId": "6",
+      "targetId": "4",
+    },
+    Object {
+      "sourceId": "2",
+      "targetId": "4",
+    },
+    Object {
+      "sourceId": "7",
+      "targetId": "4",
+    },
+    Object {
+      "sourceId": "7",
+      "targetId": "2",
+    },
+  ],
+  "reply": "CONNECTIONS",
+}
+`;
+
+exports[`Status Monitoring Server sends services config 1`] = `
+Object {
+  "content": Array [
+    Object {
+      "categories": Array [],
+      "id": "1",
+      "matcher": Object {
+        "status": "Healthy",
+      },
+      "name": "serviceTest",
+      "timeout": 0.5,
+      "type": "",
+      "uiProps": Object {
+        "left": 7,
+        "top": 68,
+      },
+      "uri": "http://service1/healthcheck",
+    },
+    Object {
+      "categories": Array [
+        "cascdasdc",
+      ],
+      "id": "2",
+      "matcher": Object {
+        "status": "Healthy",
+      },
+      "name": "CRM",
+      "timeout": 20,
+      "type": "CRM",
+      "uiProps": Object {
+        "left": 712,
+        "top": 441,
+      },
+      "uri": "http://service2/healthcheck",
+    },
+    Object {
+      "categories": Array [],
+      "id": "3",
+      "matcher": Object {
+        "status": "Healthy",
+      },
+      "name": "DataHub",
+      "timeout": 20,
+      "type": "API",
+      "uiProps": Object {
+        "left": 218,
+        "top": 75,
+      },
+      "uri": "http://service3/healthcheck",
+    },
+  ],
+  "reply": "SERVICES",
+}
+`;
