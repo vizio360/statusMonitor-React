@@ -38,7 +38,7 @@ response:
       "name": "serviceTest",
       "timeout": 0.5,
       "type": "",
-      "uiProps": Object {
+      "uiProps": {
         "left": 7,
         "top": 68,
       },
