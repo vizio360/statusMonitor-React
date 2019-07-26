@@ -2,7 +2,7 @@ import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import {Fetch, IStatus, IService, EmptyService} from '@app/fetchData';
+import {ServiceType, IService, EmptyService} from '@dataTypes';
 import serverImage from '../images/Home-Server-icon.png';
 import NavBar from '@app/navbar';
 import NodeEditor from '@app/nodeEditor';
@@ -17,7 +17,6 @@ import {
 import CRMNode from '@app/components/node/crmNode';
 import APINode from '@app/components/node/apiNode';
 import DBNode from '@app/components/node/dbNode';
-import {NodeType} from '@app/components/node';
 
 interface IDiagramState {
   services: IService[];
@@ -28,7 +27,6 @@ interface IDiagramState {
 
 class Diagram extends React.Component<{}, IDiagramState> {
   jsPlumbInstance: jsPlumbInstance;
-  services: IService[];
   constructor(props: any) {
     super(props);
     this.state = {
@@ -63,43 +61,31 @@ class Diagram extends React.Component<{}, IDiagramState> {
   }
 
   componentDidMount() {
-    fetch('/services')
-      .then(res => res.json())
-      .then(res => {
-        this.setState({services: res});
-      })
-      .then(res => {
-        fetch('/connections')
-          .then(res => res.json())
-          .then(res => {
-            res.forEach((conn: any) => {
-              let source = this.jsPlumbInstance.getEndpoints(conn.sourceId)[0];
-              let target = this.jsPlumbInstance.getEndpoints(conn.targetId)[1];
-
-              this.jsPlumbInstance.connect({
-                source: source,
-                target: target,
-              });
-            });
-          });
-      });
+    // this.setState({services: res});
+    //     res.forEach((conn: any) => {
+    //       let source = this.jsPlumbInstance.getEndpoints(conn.sourceId)[0];
+    //       let target = this.jsPlumbInstance.getEndpoints(conn.targetId)[1];
+    //       this.jsPlumbInstance.connect({
+    //         source: source,
+    //         target: target,
+    //       });
   }
 
   componentWillMount() {
-    let defaults: Defaults = {
-      Connector: 'StateMachine',
-      Anchors: ['Left', 'BottomRight'],
-    };
-    this.jsPlumbInstance = jsPlumb.getInstance(defaults);
-    this.jsPlumbInstance.setContainer('hello');
-    this.jsPlumbInstance.bind('connection', (info, originalEvent) => {
-      console.log(originalEvent);
-      if (originalEvent !== undefined) this.setState({dataChanged: true});
-    });
-    this.jsPlumbInstance.bind('connectionDetached', (info, originalEvent) => {
-      console.log(originalEvent);
-      if (originalEvent !== undefined) this.setState({dataChanged: true});
-    });
+    //let defaults: Defaults = {
+    //  Connector: 'StateMachine',
+    //  Anchors: ['Left', 'BottomRight'],
+    //};
+    //this.jsPlumbInstance = jsPlumb.getInstance(defaults);
+    //this.jsPlumbInstance.setContainer('hello');
+    //this.jsPlumbInstance.bind('connection', (info, originalEvent) => {
+    //  console.log(originalEvent);
+    //  if (originalEvent !== undefined) this.setState({dataChanged: true});
+    //});
+    //this.jsPlumbInstance.bind('connectionDetached', (info, originalEvent) => {
+    //  console.log(originalEvent);
+    //  if (originalEvent !== undefined) this.setState({dataChanged: true});
+    //});
   }
 
   onDragStop(params: DragEventCallbackOptions) {
@@ -128,6 +114,7 @@ class Diagram extends React.Component<{}, IDiagramState> {
   }
 
   save() {
+    return;
     console.log(this.jsPlumbInstance.getAllConnections());
     console.log(JSON.stringify(this.state.services));
     fetch('/services', {
@@ -160,7 +147,7 @@ class Diagram extends React.Component<{}, IDiagramState> {
   createNodeBasedOnType(service: IService) {
     let el: JSX.Element;
     switch (service.type) {
-      case NodeType.CRM:
+      case ServiceType.CRM:
         el = (
           <CRMNode
             service={service}
@@ -172,7 +159,7 @@ class Diagram extends React.Component<{}, IDiagramState> {
           />
         );
         break;
-      case NodeType.API:
+      case ServiceType.API:
         el = (
           <APINode
             service={service}
@@ -184,7 +171,7 @@ class Diagram extends React.Component<{}, IDiagramState> {
           />
         );
         break;
-      case NodeType.DB:
+      case ServiceType.DB:
         el = (
           <DBNode
             service={service}

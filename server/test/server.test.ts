@@ -329,7 +329,6 @@ describe('Status Monitoring Server', () => {
         const wsc1: WebSocketClient = new WebSocketClient();
         wsc1.onMessage = data => {
           let msg: IMessage = JSON.parse(data);
-          console.log(msg);
           if (msg.reply == 'RELOADED') {
             done();
           }

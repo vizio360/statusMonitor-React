@@ -9,5 +9,6 @@ module.exports = {
     '^@app(.*)$': '<rootDir>/client/src/$1',
     '^@server(.*)$': '<rootDir>/server/src/$1',
     '^@dataTypes$': '<rootDir>/lib/types/dataTypes.ts',
+    '^@mocks(.*)$': '<rootDir>/mocks/$1',
   },
 };

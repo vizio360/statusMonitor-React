@@ -7,39 +7,22 @@ import {URL} from 'url';
 import bodyParser from 'body-parser';
 import expressWS from 'express-ws';
 import axios from 'axios';
-import * as DataTypes from '@dataTypes';
+import {
+  Command,
+  IMessage,
+  Reply,
+  IService,
+  IServiceStatus,
+  IConnection,
+  Status,
+} from '@dataTypes';
 import ObjectMatcher from '@server/ObjectMatcher';
 import _ from 'underscore';
 const enableDestroy = require('server-destroy');
 
-enum Reply {
-  SERVICES = 'SERVICES',
-  CONNECTIONS = 'CONNECTIONS',
-  UPDATE = 'UPDATE',
-  CURRENT_STATES = 'CURRENT_STATES',
-  RELOADED = 'RELOADED',
-  RELOAD_ERROR = 'RELOAD_ERROR',
-  NOT_RECOGNIZED = 'COMMAND NOT RECOGNIZED',
-}
-
-enum Command {
-  GET_SERVICES = 'GET_SERVICES',
-  GET_CONNECTIONS = 'GET_CONNECTIONS',
-  GET_CURRENT_STATES = 'GET_CURRENT_STATES',
-}
-
 enum ConfigPaths {
   SERVICES = '/services',
   CONNECTIONS = '/connections',
-}
-
-interface IMessage {
-  reply: Reply;
-  content?:
-    | DataTypes.IService[]
-    | DataTypes.IConnection[]
-    | DataTypes.IServiceStatus
-    | DataTypes.IServiceStatus[];
 }
 
 class StatusMonitoringServer {
@@ -47,10 +30,10 @@ class StatusMonitoringServer {
   serverInstance: any;
   appws: expressWS.Application;
   websocketServer: WebSocket.Server;
-  services: DataTypes.IService[] = [];
-  servicesStatus: DataTypes.IServiceStatus[] = [];
+  services: IService[] = [];
+  servicesStatus: IServiceStatus[] = [];
   timeouts: {[serviceId: string]: NodeJS.Timer} = {};
-  connections: DataTypes.IConnection[] = [];
+  connections: IConnection[] = [];
   private configApiUrl: string;
   private port: number;
 
@@ -84,7 +67,7 @@ class StatusMonitoringServer {
           };
           this.broadcastMessage(msg);
         });
-      res.send(200);
+      res.sendStatus(200);
     });
   }
 
@@ -109,25 +92,25 @@ class StatusMonitoringServer {
       });
   }
 
-  public getServicesStatus(): DataTypes.IServiceStatus[] {
+  public getServicesStatus(): IServiceStatus[] {
     return _.map(this.servicesStatus, _.clone);
   }
 
-  public getServicesStatusById(id: string): DataTypes.IServiceStatus {
+  public getServicesStatusById(id: string): IServiceStatus {
     const index: number = _.findIndex(this.servicesStatus, {serviceId: id});
     return Object.assign({}, this.servicesStatus[index]);
   }
 
   private notifyIfServiceStatusUpdated(
     serviceId: string,
-    newStatus: DataTypes.Status,
+    newStatus: Status,
     responseBody: string,
   ) {
-    const ss: DataTypes.IServiceStatus = _.findWhere(this.servicesStatus, {
+    const ss: IServiceStatus = _.findWhere(this.servicesStatus, {
       serviceId: serviceId,
     });
     if (ss.status != newStatus) {
-      const statusReport: DataTypes.IServiceStatus = {
+      const statusReport: IServiceStatus = {
         serviceId: serviceId,
         status: newStatus,
         responseBody: responseBody,
@@ -144,24 +127,21 @@ class StatusMonitoringServer {
     }
   }
 
-  private pollHealthcheck(service: DataTypes.IService): void {
+  private pollHealthcheck(service: IService): void {
     let t: NodeJS.Timer = setTimeout(() => {
       axios
         .get(service.uri)
         .then(response => {
           const responseBody = response.data;
-          const state: DataTypes.Status = ObjectMatcher(
-            responseBody,
-            service.matcher,
-          )
-            ? DataTypes.Status.HEALTHY
-            : DataTypes.Status.UNHEALTHY;
+          const state: Status = ObjectMatcher(responseBody, service.matcher)
+            ? Status.HEALTHY
+            : Status.UNHEALTHY;
           this.notifyIfServiceStatusUpdated(service.id, state, responseBody);
         })
         .catch(error => {
           this.notifyIfServiceStatusUpdated(
             service.id,
-            DataTypes.Status.UNHEALTHY,
+            Status.UNHEALTHY,
             error,
           );
         })
@@ -172,11 +152,11 @@ class StatusMonitoringServer {
     this.timeouts[service.id] = t;
   }
 
-  private setupWatchdogs(services: DataTypes.IService[]): void {
+  private setupWatchdogs(services: IService[]): void {
     services.forEach(service => {
-      const statusReport: DataTypes.IServiceStatus = {
+      const statusReport: IServiceStatus = {
         serviceId: service.id,
-        status: DataTypes.Status.HEALTHY,
+        status: Status.HEALTHY,
         responseBody: 'NOT YET VERIFIED',
       };
       this.servicesStatus.push(statusReport);

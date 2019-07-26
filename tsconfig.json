@@ -11,7 +11,8 @@
     "paths": {
       "@app/*": ["client/src/*"],
       "@server/*": ["server/src/*"],
-      "@dataTypes": ["lib/types/dataTypes"]
+      "@dataTypes": ["lib/types/dataTypes"],
+      "@mocks/*": ["mocks/*"]
     }
   }
 }
