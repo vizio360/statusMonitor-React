@@ -32,6 +32,8 @@ describe('Status Monitor WebSocket Client', () => {
         };
         break;
     }
+
+    ws.nextMessage.then(manageMessages);
     ws.send(JSON.stringify(response));
   };
   const setupServerMocks = () => {
@@ -40,6 +42,7 @@ describe('Status Monitor WebSocket Client', () => {
 
   beforeEach(() => {
     setupServerMocks();
+    ws.nextMessage.then(manageMessages);
     client = StatusMonitorClient.getInstance();
   });
 
@@ -48,23 +51,17 @@ describe('Status Monitor WebSocket Client', () => {
   });
 
   it('can get all the services and connections configuration monitored', async () => {
-    ws.nextMessage.then(manageMessages);
-    ws.nextMessage.then(manageMessages);
     await client.connect(serverUri);
     expect(client.getServices()).toEqual(servicesMock);
     expect(client.getConnections()).toEqual(connectionsMock);
   });
 
   it('throws an error if trying to connect more than once', async () => {
-    ws.nextMessage.then(manageMessages);
-    ws.nextMessage.then(manageMessages);
     await client.connect(serverUri);
     expect(() => client.connect(serverUri)).toThrow();
   });
 
   it('emits an update event if a service has changed status', done => {
-    ws.nextMessage.then(manageMessages);
-    ws.nextMessage.then(manageMessages);
     const statusReport: IServiceStatus = {
       serviceId: servicesMock[0].id,
       status: Status.UNHEALTHY,
@@ -85,8 +82,6 @@ describe('Status Monitor WebSocket Client', () => {
   });
 
   it('emits a reload event if a service has changed status after getting services and connections again', done => {
-    ws.nextMessage.then(manageMessages);
-    ws.nextMessage.then(manageMessages);
     client.on('reloaded', () => {
       done();
     });
@@ -95,15 +90,11 @@ describe('Status Monitor WebSocket Client', () => {
       msg = {
         reply: Reply.RELOADED,
       };
-      ws.nextMessage.then(manageMessages);
-      ws.nextMessage.then(manageMessages);
       ws.send(JSON.stringify(msg));
     });
   });
 
   it('emits an error event if reload fails', done => {
-    ws.nextMessage.then(manageMessages);
-    ws.nextMessage.then(manageMessages);
     client.on('error', error => {
       done();
     });
