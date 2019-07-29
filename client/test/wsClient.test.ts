@@ -1,12 +1,19 @@
-import ServiceMonitorClient from '@app/wsClient';
+import {StatusMonitorClient, IStatusMonitorClient} from '@app/wsClient';
 import WS from 'jest-websocket-mock';
 import servicesMock from '@mocks/services.json';
 import connectionsMock from '@mocks/connections.json';
-import {Reply, IMessage, IService, IConnection} from '@dataTypes';
+import {
+  Status,
+  IServiceStatus,
+  Reply,
+  IMessage,
+  IService,
+  IConnection,
+} from '@dataTypes';
 
 describe('Status Monitor WebSocket Client', () => {
   let ws: WS;
-  let client: ServiceMonitorClient;
+  let client: IStatusMonitorClient;
   const serverUri: string = 'ws://localhost:1234';
 
   const manageMessages = (msg: string) => {
@@ -33,7 +40,7 @@ describe('Status Monitor WebSocket Client', () => {
 
   beforeEach(() => {
     setupServerMocks();
-    client = ServiceMonitorClient.getInstance();
+    client = StatusMonitorClient.getInstance();
   });
 
   afterEach(() => {
@@ -53,5 +60,59 @@ describe('Status Monitor WebSocket Client', () => {
     ws.nextMessage.then(manageMessages);
     await client.connect(serverUri);
     expect(() => client.connect(serverUri)).toThrow();
+  });
+
+  it('emits an update event if a service has changed status', done => {
+    ws.nextMessage.then(manageMessages);
+    ws.nextMessage.then(manageMessages);
+    const statusReport: IServiceStatus = {
+      serviceId: servicesMock[0].id,
+      status: Status.UNHEALTHY,
+      responseBody: 'some body here',
+    };
+    let msg: IMessage;
+    msg = {
+      reply: Reply.UPDATE,
+      content: statusReport,
+    };
+    client.on('update', serviceStatus => {
+      expect(serviceStatus).toEqual(statusReport);
+      done();
+    });
+    client.connect(serverUri).then(() => {
+      ws.send(JSON.stringify(msg));
+    });
+  });
+
+  it('emits a reload event if a service has changed status after getting services and connections again', done => {
+    ws.nextMessage.then(manageMessages);
+    ws.nextMessage.then(manageMessages);
+    client.on('reloaded', () => {
+      done();
+    });
+    client.connect(serverUri).then(() => {
+      let msg: IMessage;
+      msg = {
+        reply: Reply.RELOADED,
+      };
+      ws.nextMessage.then(manageMessages);
+      ws.nextMessage.then(manageMessages);
+      ws.send(JSON.stringify(msg));
+    });
+  });
+
+  it('emits an error event if reload fails', done => {
+    ws.nextMessage.then(manageMessages);
+    ws.nextMessage.then(manageMessages);
+    client.on('error', error => {
+      done();
+    });
+    client.connect(serverUri).then(() => {
+      let msg: IMessage;
+      msg = {
+        reply: Reply.RELOAD_ERROR,
+      };
+      ws.send(JSON.stringify(msg));
+    });
   });
 });
