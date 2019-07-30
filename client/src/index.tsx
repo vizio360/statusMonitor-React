@@ -2,10 +2,11 @@ import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import {ServiceType, IService, EmptyService} from '@dataTypes';
+import {IConnection, ServiceType, IService, EmptyService} from '@dataTypes';
 import serverImage from '../images/Home-Server-icon.png';
 import NavBar from '@app/navbar';
 import NodeEditor from '@app/nodeEditor';
+import {IStatusMonitorClient} from '@app/wsClient';
 import {
   Connection,
   DragEventCallbackOptions,
@@ -15,8 +16,6 @@ import {
   jsPlumbInstance,
 } from 'jsPlumb';
 import CRMNode from '@app/components/node/crmNode';
-import APINode from '@app/components/node/apiNode';
-import DBNode from '@app/components/node/dbNode';
 
 interface IDiagramState {
   services: IService[];
@@ -25,21 +24,33 @@ interface IDiagramState {
   selectedNode: IService;
 }
 
-class Diagram extends React.Component<{}, IDiagramState> {
+interface IDiagramProps {
+  wsClient: IStatusMonitorClient;
+}
+
+const SERVER_URI: string = 'ws://someUrl';
+
+export default class Diagram extends React.Component<
+  IDiagramProps,
+  IDiagramState
+> {
   jsPlumbInstance: jsPlumbInstance;
+  wsClient: IStatusMonitorClient;
   constructor(props: any) {
     super(props);
+    this.wsClient = props.wsClient;
     this.state = {
       services: [],
       dataChanged: false,
       amendNode: false,
       selectedNode: EmptyService,
     };
-    this.onDragStop = this.onDragStop.bind(this);
-    this.onNodeDoubleClick = this.onNodeDoubleClick.bind(this);
-    this.save = this.save.bind(this);
-    this.onAddNode = this.onAddNode.bind(this);
-    this.onNodeChangeConfirm = this.onNodeChangeConfirm.bind(this);
+    //this.onDragStop = this.onDragStop.bind(this);
+    //this.onNodeDoubleClick = this.onNodeDoubleClick.bind(this);
+    //this.save = this.save.bind(this);
+    //this.onAddNode = this.onAddNode.bind(this);
+    //this.onNodeChangeConfirm = this.onNodeChangeConfirm.bind(this);
+    this.setupJsPlumb();
   }
 
   onNodeChangeConfirm(service: IService) {
@@ -52,7 +63,6 @@ class Diagram extends React.Component<{}, IDiagramState> {
       service.id = '' + (services.length + 1);
       services.push(service);
     }
-    console.log(services);
     this.setState({services: services, dataChanged: true});
   }
 
@@ -60,32 +70,41 @@ class Diagram extends React.Component<{}, IDiagramState> {
     this.setState({amendNode: true, selectedNode: EmptyService});
   }
 
-  componentDidMount() {
-    // this.setState({services: res});
-    //     res.forEach((conn: any) => {
-    //       let source = this.jsPlumbInstance.getEndpoints(conn.sourceId)[0];
-    //       let target = this.jsPlumbInstance.getEndpoints(conn.targetId)[1];
-    //       this.jsPlumbInstance.connect({
-    //         source: source,
-    //         target: target,
-    //       });
+  async componentDidMount() {
+    await this.wsClient.connect(SERVER_URI);
+    this.setState({
+      services: this.wsClient.getServices(),
+    });
+    this.createConnections(this.wsClient.getConnections());
   }
 
-  componentWillMount() {
-    //let defaults: Defaults = {
-    //  Connector: 'StateMachine',
-    //  Anchors: ['Left', 'BottomRight'],
-    //};
-    //this.jsPlumbInstance = jsPlumb.getInstance(defaults);
-    //this.jsPlumbInstance.setContainer('hello');
-    //this.jsPlumbInstance.bind('connection', (info, originalEvent) => {
-    //  console.log(originalEvent);
-    //  if (originalEvent !== undefined) this.setState({dataChanged: true});
-    //});
-    //this.jsPlumbInstance.bind('connectionDetached', (info, originalEvent) => {
-    //  console.log(originalEvent);
-    //  if (originalEvent !== undefined) this.setState({dataChanged: true});
-    //});
+  createConnections(connections: IConnection[]) {
+    connections.forEach((conn: any) => {
+      let source = this.jsPlumbInstance.getEndpoints(conn.sourceId)[0];
+      let target = this.jsPlumbInstance.getEndpoints(conn.targetId)[1];
+      this.jsPlumbInstance.connect({
+        source: source,
+        target: target,
+      });
+    });
+  }
+
+  setupJsPlumb() {
+    let defaults: Defaults = {
+      Connector: 'StateMachine',
+      Anchors: ['Left', 'BottomRight'],
+    };
+    this.jsPlumbInstance = jsPlumb.getInstance(defaults);
+    console.log('calling setContainer');
+    this.jsPlumbInstance.setContainer('hello');
+    this.jsPlumbInstance.bind('connection', (info, originalEvent) => {
+      console.log(originalEvent);
+      if (originalEvent !== undefined) this.setState({dataChanged: true});
+    });
+    this.jsPlumbInstance.bind('connectionDetached', (info, originalEvent) => {
+      console.log(originalEvent);
+      if (originalEvent !== undefined) this.setState({dataChanged: true});
+    });
   }
 
   onDragStop(params: DragEventCallbackOptions) {
@@ -146,10 +165,23 @@ class Diagram extends React.Component<{}, IDiagramState> {
 
   createNodeBasedOnType(service: IService) {
     let el: JSX.Element;
+    el = (
+      <CRMNode
+        key={service.id}
+        service={service}
+        jsPlumb={this.jsPlumbInstance}
+        events={{
+          stopDrag: this.onDragStop,
+          onDoubleClick: this.onNodeDoubleClick,
+        }}
+      />
+    );
+    /*
     switch (service.type) {
       case ServiceType.CRM:
         el = (
           <CRMNode
+            key={service.id}
             service={service}
             jsPlumb={this.jsPlumbInstance}
             events={{
@@ -162,6 +194,7 @@ class Diagram extends React.Component<{}, IDiagramState> {
       case ServiceType.API:
         el = (
           <APINode
+            key={service.id}
             service={service}
             jsPlumb={this.jsPlumbInstance}
             events={{
@@ -174,6 +207,7 @@ class Diagram extends React.Component<{}, IDiagramState> {
       case ServiceType.DB:
         el = (
           <DBNode
+            key={service.id}
             service={service}
             jsPlumb={this.jsPlumbInstance}
             events={{
@@ -184,7 +218,7 @@ class Diagram extends React.Component<{}, IDiagramState> {
         );
         break;
     }
-
+*/
     return el;
   }
 
@@ -218,4 +252,4 @@ class Diagram extends React.Component<{}, IDiagramState> {
   }
 }
 
-ReactDOM.render(<Diagram />, document.getElementById('diagram'));
+//ReactDOM.render(<Diagram />, document.getElementById('diagram'));

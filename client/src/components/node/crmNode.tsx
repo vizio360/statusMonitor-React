@@ -29,23 +29,15 @@ class CRMNode extends React.Component<ICRMNode> {
 
   render() {
     return (
-      <Fetch service={this.props.service}>
-        {(status: IStatus) => (
-          <Node
-            id={this.props.service.id}
-            name={this.props.service.name}
-            jsPlumb={this.props.jsPlumb}
-            image={crmImage}
-            status={
-              status.status === 'Unhealthy'
-                ? NodeStatus.UNHEALTHY
-                : NodeStatus.HEALTHY
-            }
-            events={this.props.events}
-            uiProps={this.props.service.uiProps}
-          />
-        )}
-      </Fetch>
+      <Node
+        id={this.props.service.id}
+        name={this.props.service.name}
+        jsPlumb={this.props.jsPlumb}
+        image={crmImage}
+        status={NodeStatus.UNHEALTHY}
+        events={this.props.events}
+        uiProps={this.props.service.uiProps}
+      />
     );
   }
 }

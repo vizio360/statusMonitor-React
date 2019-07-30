@@ -1,8 +1,5 @@
 [
-  {"sourceId": "3", "targetId": "5"},
-  {"sourceId": "5", "targetId": "4"},
-  {"sourceId": "6", "targetId": "4"},
-  {"sourceId": "2", "targetId": "4"},
-  {"sourceId": "7", "targetId": "4"},
-  {"sourceId": "7", "targetId": "2"}
+  {"sourceId": "1", "targetId": "2"},
+  {"sourceId": "2", "targetId": "3"},
+  {"sourceId": "3", "targetId": "1"}
 ]

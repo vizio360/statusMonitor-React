@@ -1,0 +1,312 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Diagram test can be instatiated 1`] = `
+<div>
+  <nav
+    className="navbar navbar-expand-lg navbar-light bg-light"
+  >
+    <a
+      className="navbar-brand"
+      href="#"
+    >
+      Monitor
+    </a>
+    <button
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+      className="navbar-toggler"
+      data-target="#navbarSupportedContent"
+      data-toggle="collapse"
+      type="button"
+    >
+      <span
+        className="navbar-toggler-icon"
+      />
+    </button>
+    <div
+      className="collapse navbar-collapse"
+      id="navbarSupportedContent"
+    >
+      <ul
+        className="navbar-nav mr-auto"
+      >
+        <li
+          className="nav-item active"
+        >
+          <button
+            className="btn btn-primary mr-sm-2"
+            onClick={[Function]}
+            type="button"
+          >
+            Add Node
+          </button>
+        </li>
+        <li
+          className="nav-item"
+        >
+          <button
+            className="btn btn-primary mr-sm-2"
+            disabled={true}
+            onClick={[Function]}
+            type="button"
+          >
+            Save
+          </button>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <div
+    id="hello"
+    style={
+      Object {
+        "position": "absolute",
+      }
+    }
+  >
+    <div
+      className="node"
+      id="1"
+      onDoubleClick={[Function]}
+      style={
+        Object {
+          "left": 7,
+          "top": 68,
+        }
+      }
+    >
+      <img
+        height="100%"
+        src="test-file-stub"
+        width="100%"
+      />
+      <img
+        className="nodeOverlay"
+        height="100%"
+        src="test-file-stub"
+        width="100%"
+      />
+      <p>
+        serviceTest
+      </p>
+    </div>
+    <div
+      className="node"
+      id="2"
+      onDoubleClick={[Function]}
+      style={
+        Object {
+          "left": 712,
+          "top": 441,
+        }
+      }
+    >
+      <img
+        height="100%"
+        src="test-file-stub"
+        width="100%"
+      />
+      <img
+        className="nodeOverlay"
+        height="100%"
+        src="test-file-stub"
+        width="100%"
+      />
+      <p>
+        CRM
+      </p>
+    </div>
+    <div
+      className="node"
+      id="3"
+      onDoubleClick={[Function]}
+      style={
+        Object {
+          "left": 218,
+          "top": 75,
+        }
+      }
+    >
+      <img
+        height="100%"
+        src="test-file-stub"
+        width="100%"
+      />
+      <img
+        className="nodeOverlay"
+        height="100%"
+        src="test-file-stub"
+        width="100%"
+      />
+      <p>
+        DataHub
+      </p>
+    </div>
+  </div>
+  <div
+    aria-hidden="true"
+    aria-labelledby="exampleModalLabel"
+    className="modal fade"
+    id="nodeEditor"
+    role="dialog"
+    tabIndex={-1}
+  >
+    <div
+      className="modal-dialog"
+      role="document"
+    >
+      <div
+        className="modal-content"
+      >
+        <div
+          className="modal-header"
+        >
+          <h5
+            className="modal-title"
+            id="exampleModalLabel"
+          >
+            Add Node
+          </h5>
+          <button
+            aria-label="Close"
+            className="close"
+            data-dismiss="modal"
+            type="button"
+          >
+            <span
+              aria-hidden="true"
+            >
+              ×
+            </span>
+          </button>
+        </div>
+        <div
+          className="modal-body"
+        >
+          <form>
+            <div
+              className="form-group"
+            >
+              <label
+                className="col-form-label"
+                htmlFor="name"
+              >
+                Name:
+              </label>
+              <input
+                className="form-control"
+                id="name"
+                onChange={[Function]}
+                type="text"
+                value=""
+              />
+            </div>
+            <div
+              className="form-group"
+            >
+              <label
+                className="col-form-label"
+                htmlFor="uri"
+              >
+                Uri:
+              </label>
+              <input
+                className="form-control"
+                id="uri"
+                onChange={[Function]}
+                type="text"
+                value=""
+              />
+            </div>
+            <div
+              className="form-group"
+            >
+              <label
+                className="col-form-label"
+                htmlFor="timeout"
+              >
+                Timeout:
+              </label>
+              <input
+                className="form-control"
+                id="timeout"
+                onChange={[Function]}
+                type="text"
+                value={20}
+              />
+            </div>
+            <div
+              className="form-group"
+            >
+              <label
+                className="col-form-label"
+                htmlFor="categories"
+              >
+                Categories:
+              </label>
+              <input
+                className="form-control"
+                id="categories"
+                onChange={[Function]}
+                type="text"
+                value={Array []}
+              />
+            </div>
+            <div
+              className="form-group"
+            >
+              <label
+                className="col-form-label"
+                htmlFor="type"
+              >
+                Type:
+              </label>
+              <select
+                className="form-control"
+                id="type"
+                onChange={[Function]}
+                value="EMPTY"
+              >
+                <option
+                  value="CRM"
+                >
+                  CRM
+                </option>
+                <option
+                  value="DB"
+                >
+                  DB
+                </option>
+                <option
+                  value="API"
+                >
+                  API
+                </option>
+              </select>
+            </div>
+          </form>
+        </div>
+        <div
+          className="modal-footer"
+        >
+          <button
+            className="btn btn-secondary"
+            data-dismiss="modal"
+            type="button"
+          >
+            Cancel
+          </button>
+          <button
+            className="btn btn-primary"
+            onClick={[Function]}
+            type="button"
+          >
+            Ok
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

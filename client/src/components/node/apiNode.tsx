@@ -14,23 +14,15 @@ interface IAPINode {
 class APINode extends React.Component<IAPINode> {
   render() {
     return (
-      <Fetch service={this.props.service}>
-        {(status: IStatus) => (
-          <Node
-            id={this.props.service.id}
-            name={this.props.service.name}
-            jsPlumb={this.props.jsPlumb}
-            image={apiImage}
-            status={
-              status.status === 'Unhealthy'
-                ? NodeStatus.UNHEALTHY
-                : NodeStatus.HEALTHY
-            }
-            events={this.props.events}
-            uiProps={this.props.service.uiProps}
-          />
-        )}
-      </Fetch>
+      <Node
+        id={this.props.service.id}
+        name={this.props.service.name}
+        jsPlumb={this.props.jsPlumb}
+        image={apiImage}
+        status={NodeStatus.HEALTHY}
+        events={this.props.events}
+        uiProps={this.props.service.uiProps}
+      />
     );
   }
 }
