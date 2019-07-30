@@ -133,12 +133,7 @@ exports[`Diagram test can be instatiated 1`] = `
         src="test-file-stub"
         width="100%"
       />
-      <img
-        className="nodeOverlay"
-        height="100%"
-        src="test-file-stub"
-        width="100%"
-      />
+      
       <p>
         DataHub
       </p>

@@ -7,7 +7,7 @@ import React from 'react';
 //@ts-ignore
 import {jsPlumb, setContainer, getInstance, bind} from 'jsPlumb';
 
-import Diagram from '@app/index';
+import Diagram from '@app/diagram';
 import renderer from 'react-test-renderer';
 import servicesMock from '@mocks/services.json';
 import connectionsMock from '@mocks/connections.json';
@@ -31,7 +31,7 @@ describe.only('Diagram test', () => {
     let d = await createComponent();
     let diagramJson = d.toJSON();
     expect(diagramJson).toMatchSnapshot();
-    expect(mockClient.connect).toHaveBeenCalledWith('ws://someUrl');
+    expect(mockClient.connect).toHaveBeenCalledWith('ws://localhost:3333/channel');
     expect(mockClient.getServices).toHaveBeenCalled();
     expect(mockClient.getConnections).toHaveBeenCalled();
 

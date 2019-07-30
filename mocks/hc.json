@@ -4,9 +4,9 @@
       "id": "1",
       "name": "serviceTest",
       "uri": "http://localhost:3000/apis/1",
-      "timeout": 120,
+      "timeout": 10,
       "categories": [],
-      "type": "",
+      "type": "DB",
       "uiProps": {"top": 68, "left": 7},
       "matcher": {
         "status": "Healthy"
@@ -16,7 +16,7 @@
       "id": "2",
       "name": "CRM",
       "uri": "http://localhost:3000/apis/2",
-      "timeout": 60,
+      "timeout": 5,
       "categories": ["cascdasdc"],
       "type": "CRM",
       "uiProps": {"top": 441, "left": 712},
