@@ -253,7 +253,7 @@ describe('Status Monitoring Server', () => {
         wsc1.onMessage = data => {
           let msg: IMessage = JSON.parse(data);
           if (msg.reply == 'UPDATE') {
-            const content: DataTypes.IServiceStatus = msg.content as DataTypes.IServiceStatus;
+            const content: DataTypes.IServiceLastKnownState = msg.content as DataTypes.IServiceLastKnownState;
             expect(content.status).toBe(DataTypes.Status.UNHEALTHY);
             expect(server.getServicesStatusById(firstService.id)).toEqual(
               content,
@@ -288,7 +288,7 @@ describe('Status Monitoring Server', () => {
         wsc1.onMessage = data => {
           let msg: IMessage = JSON.parse(data);
           if (msg.reply == 'UPDATE') {
-            const content: DataTypes.IServiceStatus = msg.content as DataTypes.IServiceStatus;
+            const content: DataTypes.IServiceLastKnownState = msg.content as DataTypes.IServiceLastKnownState;
             expect(content.status).toBe(DataTypes.Status.UNHEALTHY);
             expect(server.getServicesStatusById(firstService.id)).toEqual(
               content,

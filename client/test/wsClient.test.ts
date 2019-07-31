@@ -2,9 +2,10 @@ import {StatusMonitorClient, IStatusMonitorClient} from '@app/wsClient';
 import WS from 'jest-websocket-mock';
 import servicesMock from '@mocks/services.json';
 import connectionsMock from '@mocks/connections.json';
+import lastKnownStatesMock from '@mocks/lastKnownStates.json';
 import {
   Status,
-  IServiceStatus,
+  IServiceLastKnownState,
   Reply,
   IMessage,
   IService,
@@ -15,6 +16,22 @@ describe('Status Monitor WebSocket Client', () => {
   let ws: WS;
   let client: IStatusMonitorClient;
   const serverUri: string = 'ws://localhost:1234';
+
+  const getUpdateMessage = () => {
+    const statusReport: IServiceLastKnownState = {
+      serviceId: servicesMock[0].id,
+      status: Status.UNHEALTHY,
+      responseBody: 'some body here',
+    };
+    let msg: IMessage;
+    msg = {
+      reply: Reply.UPDATE,
+      content: statusReport,
+    };
+    return msg;
+  };
+
+  let sendUpdateWhileConnecting: boolean = false;
 
   const manageMessages = (msg: string) => {
     let response: IMessage;
@@ -29,6 +46,15 @@ describe('Status Monitor WebSocket Client', () => {
         response = {
           reply: Reply.CONNECTIONS,
           content: connectionsMock,
+        };
+        if (sendUpdateWhileConnecting) {
+          ws.send(JSON.stringify(getUpdateMessage()));
+        }
+        break;
+      case 'GET_CURRENT_STATES':
+        response = {
+          reply: Reply.CURRENT_STATES,
+          content: lastKnownStatesMock,
         };
         break;
     }
@@ -47,6 +73,7 @@ describe('Status Monitor WebSocket Client', () => {
   });
 
   afterEach(() => {
+    sendUpdateWhileConnecting = false;
     WS.clean();
   });
 
@@ -54,6 +81,7 @@ describe('Status Monitor WebSocket Client', () => {
     await client.connect(serverUri);
     expect(client.getServices()).toEqual(servicesMock);
     expect(client.getConnections()).toEqual(connectionsMock);
+    expect(client.getServicesLastKnownState()).toEqual(lastKnownStatesMock);
   });
 
   it('throws an error if trying to connect more than once', async () => {
@@ -62,18 +90,9 @@ describe('Status Monitor WebSocket Client', () => {
   });
 
   it('emits an update event if a service has changed status', done => {
-    const statusReport: IServiceStatus = {
-      serviceId: servicesMock[0].id,
-      status: Status.UNHEALTHY,
-      responseBody: 'some body here',
-    };
-    let msg: IMessage;
-    msg = {
-      reply: Reply.UPDATE,
-      content: statusReport,
-    };
-    client.on('update', serviceStatus => {
-      expect(serviceStatus).toEqual(statusReport);
+    let msg = getUpdateMessage();
+    client.onUpdate(serviceStatus => {
+      expect(serviceStatus).toEqual(msg.content);
       done();
     });
     client.connect(serverUri).then(() => {
@@ -82,7 +101,7 @@ describe('Status Monitor WebSocket Client', () => {
   });
 
   it('emits a reload event if a service has changed status after getting services and connections again', done => {
-    client.on('reloaded', () => {
+    client.onReload(() => {
       done();
     });
     client.connect(serverUri).then(() => {
@@ -95,7 +114,7 @@ describe('Status Monitor WebSocket Client', () => {
   });
 
   it('emits an error event if reload fails', done => {
-    client.on('error', error => {
+    client.onError(error => {
       done();
     });
     client.connect(serverUri).then(() => {
@@ -104,6 +123,16 @@ describe('Status Monitor WebSocket Client', () => {
         reply: Reply.RELOAD_ERROR,
       };
       ws.send(JSON.stringify(msg));
+    });
+  });
+
+  it('ignores UPDATE messages if not yet connected', done => {
+    sendUpdateWhileConnecting = true;
+    client.onUpdate(serviceStatus => {
+      fail();
+    });
+    client.connect(serverUri).then(() => {
+      done();
     });
   });
 });

@@ -12,7 +12,7 @@ import {
   IMessage,
   Reply,
   IService,
-  IServiceStatus,
+  IServiceLastKnownState,
   IConnection,
   Status,
 } from '@dataTypes';
@@ -31,7 +31,7 @@ class StatusMonitoringServer {
   appws: expressWS.Application;
   websocketServer: WebSocket.Server;
   services: IService[] = [];
-  servicesStatus: IServiceStatus[] = [];
+  servicesStatus: IServiceLastKnownState[] = [];
   timeouts: {[serviceId: string]: NodeJS.Timer} = {};
   connections: IConnection[] = [];
   private configApiUrl: string;
@@ -92,11 +92,11 @@ class StatusMonitoringServer {
       });
   }
 
-  public getServicesStatus(): IServiceStatus[] {
+  public getServicesStatus(): IServiceLastKnownState[] {
     return _.map(this.servicesStatus, _.clone);
   }
 
-  public getServicesStatusById(id: string): IServiceStatus {
+  public getServicesStatusById(id: string): IServiceLastKnownState {
     const index: number = _.findIndex(this.servicesStatus, {serviceId: id});
     return Object.assign({}, this.servicesStatus[index]);
   }
@@ -106,11 +106,11 @@ class StatusMonitoringServer {
     newStatus: Status,
     responseBody: string,
   ) {
-    const ss: IServiceStatus = _.findWhere(this.servicesStatus, {
+    const ss: IServiceLastKnownState = _.findWhere(this.servicesStatus, {
       serviceId: serviceId,
     });
     if (ss.status != newStatus) {
-      const statusReport: IServiceStatus = {
+      const statusReport: IServiceLastKnownState = {
         serviceId: serviceId,
         status: newStatus,
         responseBody: responseBody,
@@ -154,7 +154,7 @@ class StatusMonitoringServer {
 
   private setupWatchdogs(services: IService[]): void {
     services.forEach(service => {
-      const statusReport: IServiceStatus = {
+      const statusReport: IServiceLastKnownState = {
         serviceId: service.id,
         status: Status.HEALTHY,
         responseBody: 'NOT YET VERIFIED',

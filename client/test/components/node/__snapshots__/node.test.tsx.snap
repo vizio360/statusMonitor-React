@@ -1,0 +1,78 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Node renders a DB node 1`] = `
+<div
+  className="node"
+  id="1"
+  onDoubleClick={[Function]}
+  style={
+    Object {
+      "left": 10,
+      "top": 10,
+    }
+  }
+>
+  <img
+    height="100%"
+    src="test-file-stub"
+    width="100%"
+  />
+  
+  <p>
+    A_SERVICE
+  </p>
+</div>
+`;
+
+exports[`Node updates a node if service status changes 1`] = `
+<div
+  className="node"
+  id="1"
+  onDoubleClick={[Function]}
+  style={
+    Object {
+      "left": 10,
+      "top": 10,
+    }
+  }
+>
+  <img
+    height="100%"
+    src="test-file-stub"
+    width="100%"
+  />
+  
+  <p>
+    A_SERVICE
+  </p>
+</div>
+`;
+
+exports[`Node updates a node if service status changes 2`] = `
+<div
+  className="node"
+  id="1"
+  onDoubleClick={[Function]}
+  style={
+    Object {
+      "left": 10,
+      "top": 10,
+    }
+  }
+>
+  <img
+    height="100%"
+    src="test-file-stub"
+    width="100%"
+  />
+  <img
+    className="nodeOverlay"
+    height="100%"
+    src="test-file-stub"
+    width="100%"
+  />
+  <p>
+    A_SERVICE
+  </p>
+</div>
+`;

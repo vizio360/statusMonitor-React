@@ -23,7 +23,7 @@ export interface IConnection {
   targetId: number;
 }
 
-export interface IServiceStatus {
+export interface IServiceLastKnownState {
   serviceId: string;
   status: Status;
   responseBody: string;
@@ -73,5 +73,5 @@ export enum Reply {
 
 export interface IMessage {
   reply: Reply;
-  content?: IService[] | IConnection[] | IServiceStatus | IServiceStatus[];
+  content?: IService[] | IConnection[] | IServiceLastKnownState | IServiceLastKnownState[];
 }

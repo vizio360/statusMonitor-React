@@ -2,7 +2,13 @@ import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import {IConnection, ServiceType, IService, EmptyService} from '@dataTypes';
+import {
+  IServiceLastKnownState,
+  IConnection,
+  ServiceType,
+  IService,
+  EmptyService,
+} from '@dataTypes';
 import serverImage from '../images/Home-Server-icon.png';
 import NavBar from '@app/navbar';
 import NodeEditor from '@app/nodeEditor';
@@ -15,12 +21,11 @@ import {
   jsPlumb,
   jsPlumbInstance,
 } from 'jsPlumb';
-import CRMNode from '@app/components/node/crmNode';
-import APINode from '@app/components/node/apiNode';
-import DBNode from '@app/components/node/dbNode';
+import {Node} from '@app/components/node';
 
 interface IDiagramState {
   services: IService[];
+  lastKnownStates: IServiceLastKnownState[];
   dataChanged: boolean;
   amendNode: boolean;
   selectedNode: IService;
@@ -43,16 +48,30 @@ export default class Diagram extends React.Component<
     this.wsClient = props.wsClient;
     this.state = {
       services: [],
+      lastKnownStates: [],
       dataChanged: false,
       amendNode: false,
       selectedNode: EmptyService,
     };
-    //this.onDragStop = this.onDragStop.bind(this);
-    //this.onNodeDoubleClick = this.onNodeDoubleClick.bind(this);
+    this.wsClient.onUpdate(this.onUpdateReceived.bind(this));
+    this.onDragStop = this.onDragStop.bind(this);
+    this.onNodeDoubleClick = this.onNodeDoubleClick.bind(this);
     //this.save = this.save.bind(this);
     //this.onAddNode = this.onAddNode.bind(this);
     //this.onNodeChangeConfirm = this.onNodeChangeConfirm.bind(this);
     this.setupJsPlumb();
+  }
+
+  onUpdateReceived(state: IServiceLastKnownState) {
+    let lastKnownStates: IServiceLastKnownState[] = this.state.lastKnownStates;
+    let tmp: IServiceLastKnownState = lastKnownStates.find(
+      s => s.serviceId === state.serviceId,
+    );
+    let index: number = lastKnownStates.indexOf(tmp);
+    lastKnownStates[index] = state;
+    this.setState({
+      lastKnownStates: lastKnownStates,
+    });
   }
 
   onNodeChangeConfirm(service: IService) {
@@ -76,8 +95,54 @@ export default class Diagram extends React.Component<
     await this.wsClient.connect(SERVER_URI);
     this.setState({
       services: this.wsClient.getServices(),
+      lastKnownStates: this.wsClient.getServicesLastKnownState(),
     });
+    this.createJsPlumbEndPoints(this.state.services);
     this.createConnections(this.wsClient.getConnections());
+  }
+
+  getTargetEndPoint(id: string) {
+    let inEndPointOptions: EndpointOptions = {
+      maxConnections: 10,
+      anchor: 'Top',
+      paintStyle: {fill: '#F00'},
+      type: 'Dot',
+      id: id + 'target',
+      scope: 'dotEndPoint',
+      reattachConnections: true,
+      parameters: {},
+      isTarget: true,
+    };
+    return inEndPointOptions;
+  }
+
+  getSourceEndPoint(id: string) {
+    let outEndPointOptions: EndpointOptions = {
+      maxConnections: 10,
+      anchor: 'Bottom',
+      paintStyle: {fill: '#00F'},
+      type: 'Dot',
+      id: id + 'source',
+      scope: 'dotEndPoint',
+      reattachConnections: true,
+      parameters: {},
+      isSource: true,
+    };
+    return outEndPointOptions;
+  }
+
+  createJsPlumbEndPoints(services: IService[]) {
+    services.forEach((service: IService) => {
+      this.jsPlumbInstance.addEndpoint(
+        service.id,
+        this.getSourceEndPoint(service.id),
+      );
+      this.jsPlumbInstance.addEndpoint(
+        service.id,
+        this.getTargetEndPoint(service.id),
+      );
+      this.jsPlumbInstance.draggable(service.id, {stop: this.onDragStop});
+    });
   }
 
   createConnections(connections: IConnection[]) {
@@ -97,14 +162,11 @@ export default class Diagram extends React.Component<
       Anchors: ['Left', 'BottomRight'],
     };
     this.jsPlumbInstance = jsPlumb.getInstance(defaults);
-    console.log('calling setContainer');
     this.jsPlumbInstance.setContainer('hello');
     this.jsPlumbInstance.bind('connection', (info, originalEvent) => {
-      console.log(originalEvent);
       if (originalEvent !== undefined) this.setState({dataChanged: true});
     });
     this.jsPlumbInstance.bind('connectionDetached', (info, originalEvent) => {
-      console.log(originalEvent);
       if (originalEvent !== undefined) this.setState({dataChanged: true});
     });
   }
@@ -136,8 +198,6 @@ export default class Diagram extends React.Component<
 
   save() {
     return;
-    console.log(this.jsPlumbInstance.getAllConnections());
-    console.log(JSON.stringify(this.state.services));
     fetch('/services', {
       headers: {
         Accept: 'application/json',
@@ -165,56 +225,31 @@ export default class Diagram extends React.Component<
     this.setState({amendNode: false, dataChanged: false});
   }
 
-  createNodeBasedOnType(service: IService) {
+  createNode(service: IService) {
+    let state: IServiceLastKnownState = this.state.lastKnownStates.find(
+      element => {
+        return service.id == element.serviceId;
+      },
+    );
     let el: JSX.Element;
-    switch (service.type) {
-      case ServiceType.CRM:
-        el = (
-          <CRMNode
-            key={service.id}
-            service={service}
-            jsPlumb={this.jsPlumbInstance}
-            events={{
-              stopDrag: this.onDragStop,
-              onDoubleClick: this.onNodeDoubleClick,
-            }}
-          />
-        );
-        break;
-      case ServiceType.API:
-        el = (
-          <APINode
-            key={service.id}
-            service={service}
-            jsPlumb={this.jsPlumbInstance}
-            events={{
-              stopDrag: this.onDragStop,
-              onDoubleClick: this.onNodeDoubleClick,
-            }}
-          />
-        );
-        break;
-      case ServiceType.DB:
-        el = (
-          <DBNode
-            key={service.id}
-            service={service}
-            jsPlumb={this.jsPlumbInstance}
-            events={{
-              stopDrag: this.onDragStop,
-              onDoubleClick: this.onNodeDoubleClick,
-            }}
-          />
-        );
-        break;
-    }
+
+    el = (
+      <Node
+        key={service.id}
+        service={service}
+        serviceState={state}
+        events={{
+          onDoubleClick: this.onNodeDoubleClick,
+        }}
+      />
+    );
     return el;
   }
 
   renderNodes(services: IService[]) {
     let id: number = 0;
     let results: JSX.Element[] = services.map(service => {
-      return this.createNodeBasedOnType(service);
+      return this.createNode(service);
     });
     return results;
   }
@@ -240,4 +275,3 @@ export default class Diagram extends React.Component<
     );
   }
 }
-

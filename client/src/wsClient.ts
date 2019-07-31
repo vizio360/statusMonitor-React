@@ -1,20 +1,29 @@
 import {
-  IServiceStatus,
+  IServiceLastKnownState,
   Command,
   Reply,
   IService,
   IConnection,
   IMessage,
 } from '@dataTypes';
-interface Callback {
-  (service: IServiceStatus): void;
-}
 
+interface UpdateCallback {
+  (service: IServiceLastKnownState): void;
+}
+interface ErrorCallback {
+  (error: string): void;
+}
+interface ReloadCallback {
+  (): void;
+}
 interface IStatusMonitorClient {
   getServices(): IService[];
   getConnections(): IConnection[];
+  getServicesLastKnownState(): IServiceLastKnownState[];
   connect(url: string): Promise<any>;
-  on(eventName: string, callback: Callback): void;
+  onUpdate(callback: UpdateCallback): void;
+  onError(callback: ErrorCallback): void;
+  onReload(callback: ReloadCallback): void;
 }
 
 class StatusMonitorClient implements IStatusMonitorClient {
@@ -22,14 +31,16 @@ class StatusMonitorClient implements IStatusMonitorClient {
 
   _services: IService[];
   _connections: IConnection[];
+  _lastKnownStates: IServiceLastKnownState[];
   resolveConnection: any;
   gotServices: boolean;
   gotConnections: boolean;
+  gotLastKnownStates: boolean;
   connected: boolean;
   reloaded: boolean;
-  updateListeners: Callback[];
-  reloadListeners: Callback[];
-  errorListeners: Callback[];
+  updateListeners: UpdateCallback[];
+  reloadListeners: ReloadCallback[];
+  errorListeners: ErrorCallback[];
 
   private constructor() {
     this.connected = false;
@@ -44,6 +55,7 @@ class StatusMonitorClient implements IStatusMonitorClient {
 
     this.gotConnections = false;
     this.gotServices = false;
+    this.gotLastKnownStates = false;
     this.ws = new WebSocket(uri);
     this.ws.onmessage = event => {
       const msg: IMessage = JSON.parse(event.data);
@@ -56,35 +68,42 @@ class StatusMonitorClient implements IStatusMonitorClient {
           this._connections = msg.content as IConnection[];
           this.gotConnections = true;
           break;
+        case Reply.CURRENT_STATES:
+          this._lastKnownStates = msg.content as IServiceLastKnownState[];
+          this.gotLastKnownStates = true;
+          break;
         case Reply.UPDATE:
-          const statusReport: IServiceStatus = msg.content as IServiceStatus;
-          this.updateListeners.forEach((callback: Callback) => {
-            callback.call(null, statusReport);
-          });
+          if (this.connected) {
+            const statusReport: IServiceLastKnownState = msg.content as IServiceLastKnownState;
+            this.updateListeners.forEach((callback: UpdateCallback) => {
+              callback(statusReport);
+            });
+          }
           break;
         case Reply.RELOADED:
           this.ws.send(Command.GET_SERVICES);
           this.ws.send(Command.GET_CONNECTIONS);
+          this.ws.send(Command.GET_CURRENT_STATES);
           this.reloaded = true;
           break;
         case Reply.RELOAD_ERROR:
-          this.errorListeners.forEach((callback: Callback) => {
-            callback.call(null, 'An error occurred while reloading');
+          this.errorListeners.forEach((callback: ErrorCallback) => {
+            callback('An error occurred while reloading');
           });
           break;
       }
 
-      if (this.gotServices && this.gotConnections) {
+      if (this.gotServices && this.gotConnections && this.gotLastKnownStates) {
         if (this.reloaded) {
-          this.gotServices = this.gotConnections = false;
+          this.gotServices = this.gotConnections = this.gotLastKnownStates = false;
           this.reloaded = false;
-          this.reloadListeners.forEach((callback: Callback) => {
-            callback.call(null);
+          this.reloadListeners.forEach((callback: ReloadCallback) => {
+            callback();
           });
         }
 
         if (!this.connected) {
-          this.gotServices = this.gotConnections = false;
+          this.gotServices = this.gotConnections = this.gotLastKnownStates = false;
           this.connected = true;
           this.resolveConnection();
         }
@@ -95,6 +114,7 @@ class StatusMonitorClient implements IStatusMonitorClient {
       this.ws.onopen = () => {
         this.ws.send(Command.GET_SERVICES);
         this.ws.send(Command.GET_CONNECTIONS);
+        this.ws.send(Command.GET_CURRENT_STATES);
       };
       this.ws.onerror = error => {
         reject(error);
@@ -110,18 +130,18 @@ class StatusMonitorClient implements IStatusMonitorClient {
     return this._connections;
   }
 
-  public on(eventName: string, callback: Callback) {
-    switch (eventName) {
-      case 'update':
-        this.updateListeners.push(callback);
-        break;
-      case 'reloaded':
-        this.reloadListeners.push(callback);
-        break;
-      case 'error':
-        this.errorListeners.push(callback);
-        break;
-    }
+  public getServicesLastKnownState(): IServiceLastKnownState[] {
+    return this._lastKnownStates;
+  }
+
+  public onUpdate(callback: UpdateCallback) {
+    this.updateListeners.push(callback);
+  }
+  public onError(callback: ErrorCallback) {
+    this.errorListeners.push(callback);
+  }
+  public onReload(callback: ReloadCallback) {
+    this.reloadListeners.push(callback);
   }
 
   static getInstance(): IStatusMonitorClient {

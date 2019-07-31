@@ -2,7 +2,7 @@
   "services": [
     {
       "id": "1",
-      "name": "serviceTest",
+      "name": "dataHubBroker",
       "uri": "http://localhost:3000/apis/1",
       "timeout": 10,
       "categories": [],
@@ -23,15 +23,23 @@
       "matcher": {
         "status": "Up"
       }
+    },
+    {
+      "id": "3",
+      "name": "API",
+      "uri": "http://localhost:3000/apis/2",
+      "timeout": 5,
+      "categories": ["cascdasdc"],
+      "type": "API",
+      "uiProps": {"top": 441, "left": 712},
+      "matcher": {
+        "status": "Up"
+      }
     }
   ],
   "connections": [
-    {"sourceId": "3", "targetId": "5"},
-    {"sourceId": "5", "targetId": "4"},
-    {"sourceId": "6", "targetId": "4"},
-    {"sourceId": "2", "targetId": "4"},
-    {"sourceId": "7", "targetId": "4"},
-    {"sourceId": "7", "targetId": "2"}
+    {"sourceId": "1", "targetId": "2"},
+    {"sourceId": "1", "targetId": "3"}
   ],
   "apis": [
     {
