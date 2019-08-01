@@ -4,19 +4,20 @@ import React from 'react';
 //export more symbols than the original jsPlumb
 //these symbols are used to have quick access
 //to all jsPlumb function mocks
-//@ts-ignore
 import {
+  jsPlumb,
   //@ts-ignore
   draggable,
   //@ts-ignore
   addEndpoint,
-  jsPlumb,
   //@ts-ignore
   setContainer,
   //@ts-ignore
   getInstance,
   //@ts-ignore
   bind,
+  //@ts-ignore
+  reset,
 } from 'jsPlumb';
 
 import Diagram from '@app/diagram';
@@ -25,18 +26,30 @@ import servicesMock from '@mocks/services.json';
 import connectionsMock from '@mocks/connections.json';
 import lastKnownStatesMock from '@mocks/lastKnownStates.json';
 import {IStatusMonitorClient} from '@app/wsClient';
-import {Status, IServiceLastKnownState} from '@dataTypes';
+import {IService, Status, IServiceLastKnownState} from '@dataTypes';
+import _ from 'underscore';
 
-describe.only('Diagram', () => {
+describe('Diagram', () => {
+  const clone = (array: any) => {
+    return _.map(array, _.clone);
+  };
   const mockClient: any = {
     connect: jest.fn().mockResolvedValue(''),
-    getServices: jest.fn().mockReturnValue(servicesMock),
-    getConnections: jest.fn().mockReturnValue(connectionsMock),
-    getServicesLastKnownState: jest.fn().mockReturnValue(lastKnownStatesMock),
+    getServices: jest.fn().mockImplementation(() => {
+      return clone(servicesMock);
+    }),
+    getConnections: jest.fn().mockImplementation(() => {
+      return clone(connectionsMock);
+    }),
+    getServicesLastKnownState: jest.fn().mockImplementation(() => {
+      return clone(lastKnownStatesMock);
+    }),
     onUpdate: jest.fn().mockImplementation(cb => {}),
+    onReload: jest.fn().mockImplementation(cb => {}),
+    onError: jest.fn().mockImplementation(cb => {}),
   };
 
-  let createComponent = async () => {
+  let createDiagramComponent = async () => {
     const cdmSpy = jest.spyOn(Diagram.prototype, 'componentDidMount');
     let d = renderer.create(<Diagram wsClient={mockClient} />);
     await cdmSpy.mock.results[0].value;
@@ -47,18 +60,7 @@ describe.only('Diagram', () => {
     jest.clearAllMocks();
   });
 
-  it('can be instatiated', async () => {
-    let d = await createComponent();
-    let diagramJson = d.toJSON();
-    expect(diagramJson).toMatchSnapshot();
-    expect(mockClient.connect).toHaveBeenCalledWith(
-      'ws://localhost:3333/channel',
-    );
-    expect(mockClient.getServices).toHaveBeenCalled();
-    expect(mockClient.getConnections).toHaveBeenCalled();
-    expect(mockClient.getServicesLastKnownState).toHaveBeenCalled();
-
-    //JSPLUMB checks
+  const checkJSPlumbInit = (serv: IService[]) => {
     expect(getInstance).toHaveBeenCalledWith({
       Connector: 'StateMachine',
       Anchors: ['Left', 'BottomRight'],
@@ -72,11 +74,25 @@ describe.only('Diagram', () => {
     );
     expect(addEndpoint.mock.calls.length).toBe(servicesMock.length * 2);
     expect(draggable.mock.calls.length).toBe(servicesMock.length);
+  };
+
+  it('can be instatiated', async () => {
+    let diagram = await createDiagramComponent();
+    let diagramJson = diagram.toJSON();
+    expect(diagramJson).toMatchSnapshot();
+    expect(mockClient.connect).toHaveBeenCalledWith(
+      'ws://localhost:3333/channel',
+    );
+    expect(mockClient.getServices).toHaveBeenCalled();
+    expect(mockClient.getConnections).toHaveBeenCalled();
+    expect(mockClient.getServicesLastKnownState).toHaveBeenCalled();
+
+    checkJSPlumbInit(servicesMock as IService[]);
   });
 
   it('updates when an update state is received', async () => {
-    let d = await createComponent();
-    let diagramJson = d.toJSON();
+    let diagram = await createDiagramComponent();
+    let diagramJson = diagram.toJSON();
     expect(diagramJson).toMatchSnapshot();
     const updateCallback = mockClient.onUpdate.mock.calls[0][0];
     const state: IServiceLastKnownState = {
@@ -85,8 +101,29 @@ describe.only('Diagram', () => {
       responseBody: 'casjcnaksd',
     };
     updateCallback(state);
+    diagramJson = diagram.toJSON();
+    expect(diagramJson).toMatchSnapshot();
+  });
 
-    diagramJson = d.toJSON();
+  it('reloads when a reload message is received', async () => {
+    let diagram = await createDiagramComponent();
+    let diagramJson = diagram.toJSON();
+    expect(diagramJson).toMatchSnapshot();
+    const reloadCallback = mockClient.onReload.mock.calls[0][0];
+
+    mockClient.getServices.mockImplementationOnce(() => {
+      return clone(servicesMock.slice(2));
+    });
+    mockClient.getConnections.mockImplementationOnce(() => {
+      return clone(connectionsMock.slice(2));
+    });
+    mockClient.getServicesLastKnownState.mockImplementationOnce(() => {
+      return clone(lastKnownStatesMock.slice(2));
+    });
+
+    reloadCallback();
+    expect(reset).toHaveBeenCalled();
+    diagramJson = diagram.toJSON();
     expect(diagramJson).toMatchSnapshot();
   });
 });

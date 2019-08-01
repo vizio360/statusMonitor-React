@@ -35,6 +35,7 @@ interface IDiagramProps {
   wsClient: IStatusMonitorClient;
 }
 
+//this needs to be read from a config file
 const SERVER_URI: string = 'ws://localhost:3333/channel';
 
 export default class Diagram extends React.Component<
@@ -54,12 +55,18 @@ export default class Diagram extends React.Component<
       selectedNode: EmptyService,
     };
     this.wsClient.onUpdate(this.onUpdateReceived.bind(this));
+    this.wsClient.onReload(this.onReloadReceived.bind(this));
     this.onDragStop = this.onDragStop.bind(this);
     this.onNodeDoubleClick = this.onNodeDoubleClick.bind(this);
     //this.save = this.save.bind(this);
     //this.onAddNode = this.onAddNode.bind(this);
     //this.onNodeChangeConfirm = this.onNodeChangeConfirm.bind(this);
     this.setupJsPlumb();
+  }
+
+  onReloadReceived() {
+    this.jsPlumbInstance.reset();
+    this.init();
   }
 
   onUpdateReceived(state: IServiceLastKnownState) {
@@ -91,14 +98,18 @@ export default class Diagram extends React.Component<
     this.setState({amendNode: true, selectedNode: EmptyService});
   }
 
-  async componentDidMount() {
-    await this.wsClient.connect(SERVER_URI);
+  init() {
     this.setState({
       services: this.wsClient.getServices(),
       lastKnownStates: this.wsClient.getServicesLastKnownState(),
     });
     this.createJsPlumbEndPoints(this.state.services);
     this.createConnections(this.wsClient.getConnections());
+  }
+
+  async componentDidMount() {
+    await this.wsClient.connect(SERVER_URI);
+    this.init();
   }
 
   getTargetEndPoint(id: string) {
