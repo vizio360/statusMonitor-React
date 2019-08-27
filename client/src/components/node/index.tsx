@@ -1,12 +1,5 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import {
-  DragEventCallbackOptions,
-  EndpointOptions,
-  Defaults,
-  jsPlumb,
-  jsPlumbInstance,
-} from 'jsPlumb';
 import './node.css';
 import fireImage from '@images/fire.gif';
 import {

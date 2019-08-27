@@ -321,6 +321,13 @@ describe('Status Monitoring Server', () => {
     expect(servicesStatus).not.toBe(firstService);
   });
 
+  const issueReloadRequest = (done: any) => {
+    axios.post(`${LOCAL_SERVER}/reload`).catch(error => {
+      fail(error);
+      done();
+    });
+  };
+
   test('reloads services and connections config on demand', done => {
     setupServicesAndConnectionsMocks();
     server
@@ -340,10 +347,7 @@ describe('Status Monitoring Server', () => {
             'reloadServices.json',
             'reloadConnections.json',
           );
-          axios.post(`${LOCAL_SERVER}/reload`).catch(error => {
-            fail(error);
-            done();
-          });
+          issueReloadRequest(done);
         });
       })
       .catch(error => {

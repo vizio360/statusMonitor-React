@@ -219,12 +219,10 @@ export default class Diagram extends React.Component<
     });
 
     let connections: any = this.jsPlumbInstance.getAllConnections();
-    connections = connections.map((c: Connection) => {
-      return {
-        sourceId: c.endpoints[0].getElement().id,
-        targetId: c.endpoints[1].getElement().id,
-      };
-    });
+    connections = connections.map((c: Connection) => ({
+      sourceId: c.endpoints[0].getElement().id,
+      targetId: c.endpoints[1].getElement().id,
+    }));
     fetch('/connections', {
       headers: {
         Accept: 'application/json',
@@ -238,9 +236,7 @@ export default class Diagram extends React.Component<
 
   createNode(service: IService) {
     let state: IServiceLastKnownState = this.state.lastKnownStates.find(
-      element => {
-        return service.id == element.serviceId;
-      },
+      element => service.id == element.serviceId,
     );
     let el: JSX.Element;
 
@@ -259,9 +255,9 @@ export default class Diagram extends React.Component<
 
   renderNodes(services: IService[]) {
     let id: number = 0;
-    let results: JSX.Element[] = services.map(service => {
-      return this.createNode(service);
-    });
+    let results: JSX.Element[] = services.map(service =>
+      this.createNode(service),
+    );
     return results;
   }
 
