@@ -61,7 +61,7 @@ class Node extends React.Component<INodeProps> {
     return img;
   }
 
-  shouldComponentUpdate(nextProps: INodeProps): boolean {
+  xshouldComponentUpdate(nextProps: INodeProps): boolean {
     return this.hasStatusChanged(
       this.props.serviceState,
       nextProps.serviceState,

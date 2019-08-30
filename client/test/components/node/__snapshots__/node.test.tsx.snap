@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Node renders a DB node 1`] = `
+exports[`Node renders a node 1`] = `
 <div
   className="node"
   id="1"

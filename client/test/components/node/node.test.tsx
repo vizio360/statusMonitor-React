@@ -37,7 +37,7 @@ describe('Node', () => {
     <Node key={service.id} service={service} serviceState={serviceState} />
   );
 
-  it('renders a DB node', () => {
+  it('renders a node', () => {
     let node = renderer.create(jsx);
     let tree = node.toJSON();
     expect(tree).toMatchSnapshot();

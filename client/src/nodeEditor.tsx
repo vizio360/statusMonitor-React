@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import {IService} from '@app/fetchData';
+import {IService} from '@dataTypes';
 import $ from 'jquery';
 
 interface IOnConfirm {
@@ -57,18 +57,12 @@ export default class NodeEditor extends React.Component<
 
   onOk(e: React.MouseEvent<HTMLElement>) {
     e.preventDefault();
-    this.props.onConfirm(this.state.service);
     $('#' + this.props.id).modal('hide');
+    this.props.onConfirm(this.state.service);
   }
 
-  componentDidUpdate() {
+  componentDidMount() {
     if (this.props.show) $('#' + this.props.id).modal('show');
-  }
-
-  componentWillReceiveProps(nextProps: INodeEditorProps) {
-    this.setState({
-      service: nextProps.node,
-    });
   }
 
   render() {

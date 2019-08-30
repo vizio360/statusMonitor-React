@@ -39,19 +39,7 @@ exports[`Diagram can be instatiated 1`] = `
             onClick={[Function]}
             type="button"
           >
-            Add Node
-          </button>
-        </li>
-        <li
-          className="nav-item"
-        >
-          <button
-            className="btn btn-primary mr-sm-2"
-            disabled={true}
-            onClick={[Function]}
-            type="button"
-          >
-            Save
+            Edit
           </button>
         </li>
       </ul>
@@ -335,19 +323,7 @@ exports[`Diagram reloads when a reload message is received 1`] = `
             onClick={[Function]}
             type="button"
           >
-            Add Node
-          </button>
-        </li>
-        <li
-          className="nav-item"
-        >
-          <button
-            className="btn btn-primary mr-sm-2"
-            disabled={true}
-            onClick={[Function]}
-            type="button"
-          >
-            Save
+            Edit
           </button>
         </li>
       </ul>
@@ -631,19 +607,7 @@ exports[`Diagram reloads when a reload message is received 2`] = `
             onClick={[Function]}
             type="button"
           >
-            Add Node
-          </button>
-        </li>
-        <li
-          className="nav-item"
-        >
-          <button
-            className="btn btn-primary mr-sm-2"
-            disabled={true}
-            onClick={[Function]}
-            type="button"
-          >
-            Save
+            Edit
           </button>
         </li>
       </ul>
@@ -885,19 +849,7 @@ exports[`Diagram updates when an update state is received 1`] = `
             onClick={[Function]}
             type="button"
           >
-            Add Node
-          </button>
-        </li>
-        <li
-          className="nav-item"
-        >
-          <button
-            className="btn btn-primary mr-sm-2"
-            disabled={true}
-            onClick={[Function]}
-            type="button"
-          >
-            Save
+            Edit
           </button>
         </li>
       </ul>
@@ -1181,19 +1133,7 @@ exports[`Diagram updates when an update state is received 2`] = `
             onClick={[Function]}
             type="button"
           >
-            Add Node
-          </button>
-        </li>
-        <li
-          className="nav-item"
-        >
-          <button
-            className="btn btn-primary mr-sm-2"
-            disabled={true}
-            onClick={[Function]}
-            type="button"
-          >
-            Save
+            Edit
           </button>
         </li>
       </ul>

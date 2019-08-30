@@ -84,6 +84,18 @@ describe('Status Monitor WebSocket Client', () => {
     expect(client.getServicesLastKnownState()).toEqual(lastKnownStatesMock);
   });
 
+  it('provides a clone of the services, connections and last known states', async () => {
+    await client.connect(serverUri);
+    expect(client.getServices()).not.toBe(client.getServices());
+    expect(client.getConnections()).not.toBe(client.getConnections());
+    expect(client.getServicesLastKnownState()).not.toBe(
+      client.getServicesLastKnownState(),
+    );
+    expect(client.getServices()[0].uiProps).not.toBe(
+      client.getServices()[0].uiProps,
+    );
+  });
+
   it('throws an error if trying to connect more than once', async () => {
     await client.connect(serverUri);
     expect(() => client.connect(serverUri)).toThrow();

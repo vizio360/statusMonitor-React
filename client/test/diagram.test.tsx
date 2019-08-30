@@ -1,4 +1,5 @@
 import React from 'react';
+import NavBar from '@app/navbar';
 
 //ignoring typescript errors as the jsPlumb mocks
 //export more symbols than the original jsPlumb
@@ -125,5 +126,15 @@ describe('Diagram', () => {
     expect(reset).toHaveBeenCalled();
     diagramJson = diagram.toJSON();
     expect(diagramJson).toMatchSnapshot();
+  });
+
+  it('resets itself if cancelling an edit', async () => {
+    let diagram = await createDiagramComponent();
+    let component = diagram.root;
+    let initSpy = jest.spyOn(Diagram.prototype, 'init');
+
+    let navBar = component.findByType(NavBar);
+    navBar.props.onCancel();
+    expect(initSpy).toHaveBeenCalled();
   });
 });

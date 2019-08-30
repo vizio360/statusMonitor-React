@@ -6,6 +6,7 @@ import {
   IConnection,
   IMessage,
 } from '@dataTypes';
+import _ from 'underscore';
 
 interface UpdateCallback {
   (service: IServiceLastKnownState): void;
@@ -123,15 +124,15 @@ class StatusMonitorClient implements IStatusMonitorClient {
   }
 
   public getServices(): IService[] {
-    return this._services;
+    return JSON.parse(JSON.stringify(this._services));
   }
 
   public getConnections(): IConnection[] {
-    return this._connections;
+    return JSON.parse(JSON.stringify(this._connections));
   }
 
   public getServicesLastKnownState(): IServiceLastKnownState[] {
-    return this._lastKnownStates;
+    return JSON.parse(JSON.stringify(this._lastKnownStates));
   }
 
   public onUpdate(callback: UpdateCallback) {

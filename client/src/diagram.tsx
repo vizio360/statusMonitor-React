@@ -8,8 +8,8 @@ import {
   ServiceType,
   IService,
   EmptyService,
+  Status,
 } from '@dataTypes';
-import serverImage from '../images/Home-Server-icon.png';
 import NavBar from '@app/navbar';
 import NodeEditor from '@app/nodeEditor';
 import {IStatusMonitorClient} from '@app/wsClient';
@@ -27,6 +27,7 @@ interface IDiagramState {
   services: IService[];
   lastKnownStates: IServiceLastKnownState[];
   dataChanged: boolean;
+  isEditing: boolean;
   amendNode: boolean;
   selectedNode: IService;
 }
@@ -51,6 +52,7 @@ export default class Diagram extends React.Component<
       services: [],
       lastKnownStates: [],
       dataChanged: false,
+      isEditing: false,
       amendNode: false,
       selectedNode: EmptyService,
     };
@@ -58,14 +60,15 @@ export default class Diagram extends React.Component<
     this.wsClient.onReload(this.onReloadReceived.bind(this));
     this.onDragStop = this.onDragStop.bind(this);
     this.onNodeDoubleClick = this.onNodeDoubleClick.bind(this);
+    this.onCancel = this.onCancel.bind(this);
+    this.onEdit = this.onEdit.bind(this);
     //this.save = this.save.bind(this);
-    //this.onAddNode = this.onAddNode.bind(this);
-    //this.onNodeChangeConfirm = this.onNodeChangeConfirm.bind(this);
+    this.onAddNode = this.onAddNode.bind(this);
+    this.onNodeChangeConfirm = this.onNodeChangeConfirm.bind(this);
     this.setupJsPlumb();
   }
 
   onReloadReceived() {
-    this.jsPlumbInstance.reset();
     this.init();
   }
 
@@ -83,6 +86,7 @@ export default class Diagram extends React.Component<
 
   onNodeChangeConfirm(service: IService) {
     let services: IService[] = this.state.services;
+    let lastKnownStates: IServiceLastKnownState[] = this.state.lastKnownStates;
     if (service.id) {
       let tmp: IService = services.find(s => s.id === service.id);
       let index: number = services.indexOf(tmp);
@@ -90,8 +94,30 @@ export default class Diagram extends React.Component<
     } else {
       service.id = '' + (services.length + 1);
       services.push(service);
+      const lastKnownState: IServiceLastKnownState = {
+        serviceId: service.id,
+        status: Status.HEALTHY,
+        responseBody: '',
+      };
+
+      lastKnownStates.push(lastKnownState);
     }
-    this.setState({services: services, dataChanged: true});
+    this.setState({
+      services: services,
+      dataChanged: true,
+      lastKnownStates: lastKnownStates,
+      amendNode: false,
+    });
+  }
+
+  onEdit() {
+    this.setState({
+      isEditing: true,
+    });
+  }
+
+  onCancel() {
+    this.init();
   }
 
   onAddNode() {
@@ -99,12 +125,15 @@ export default class Diagram extends React.Component<
   }
 
   init() {
+    let newServices = this.wsClient.getServices();
     this.setState({
-      services: this.wsClient.getServices(),
+      services: newServices,
       lastKnownStates: this.wsClient.getServicesLastKnownState(),
+      dataChanged: false,
+      isEditing: false,
+      amendNode: false,
+      selectedNode: EmptyService,
     });
-    this.createJsPlumbEndPoints(this.state.services);
-    this.createConnections(this.wsClient.getConnections());
   }
 
   async componentDidMount() {
@@ -127,6 +156,19 @@ export default class Diagram extends React.Component<
     return inEndPointOptions;
   }
 
+  componentDidUpdate() {
+    if (!this.state.isEditing) {
+      this.jsPlumbInstance.reset();
+      this.createJsPlumbEndPoints(this.state.services);
+      this.createConnections(this.wsClient.getConnections());
+    }
+    this.state.services.forEach((service: IService) => {
+      this._createEndPoints(service);
+      this.jsPlumbInstance.draggable(service.id, {stop: this.onDragStop});
+      this.jsPlumbInstance.setDraggable(service.id, this.state.isEditing);
+    });
+  }
+
   getSourceEndPoint(id: string) {
     let outEndPointOptions: EndpointOptions = {
       maxConnections: 10,
@@ -142,17 +184,20 @@ export default class Diagram extends React.Component<
     return outEndPointOptions;
   }
 
+  _createEndPoints(service: IService) {
+    this.jsPlumbInstance.addEndpoint(
+      service.id,
+      this.getSourceEndPoint(service.id),
+    );
+    this.jsPlumbInstance.addEndpoint(
+      service.id,
+      this.getTargetEndPoint(service.id),
+    );
+  }
+
   createJsPlumbEndPoints(services: IService[]) {
     services.forEach((service: IService) => {
-      this.jsPlumbInstance.addEndpoint(
-        service.id,
-        this.getSourceEndPoint(service.id),
-      );
-      this.jsPlumbInstance.addEndpoint(
-        service.id,
-        this.getTargetEndPoint(service.id),
-      );
-      this.jsPlumbInstance.draggable(service.id, {stop: this.onDragStop});
+      this._createEndPoints(service);
     });
   }
 
@@ -201,6 +246,7 @@ export default class Diagram extends React.Component<
   }
 
   onNodeDoubleClick(serviceId: string) {
+    console.log('state on dbkclick', this.state);
     let service: IService = this.state.services.find(
       service => service.id == serviceId,
     );
@@ -255,17 +301,20 @@ export default class Diagram extends React.Component<
 
   renderNodes(services: IService[]) {
     let id: number = 0;
-    let results: JSX.Element[] = services.map(service =>
-      this.createNode(service),
-    );
+    let results: JSX.Element[] = services.map(service => {
+      return this.createNode(service);
+    });
     return results;
   }
 
   render() {
+    console.log('state', this.state);
     return (
       <div>
         <NavBar
           dataChanged={this.state.dataChanged}
+          onEdit={this.onEdit}
+          onCancel={this.onCancel}
           onSave={this.save}
           onAddNode={this.onAddNode}
         />
@@ -274,6 +323,7 @@ export default class Diagram extends React.Component<
         </div>
         <NodeEditor
           id="nodeEditor"
+          key={this.state.selectedNode.id}
           show={this.state.amendNode}
           node={this.state.selectedNode}
           onConfirm={this.onNodeChangeConfirm}

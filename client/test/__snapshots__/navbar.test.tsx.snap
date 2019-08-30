@@ -1,0 +1,162 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Nav Bar exists editing if cancelled 1`] = `
+<DocumentFragment>
+  <nav
+    class="navbar navbar-expand-lg navbar-light bg-light"
+  >
+    <a
+      class="navbar-brand"
+      href="#"
+    >
+      Monitor
+    </a>
+    <button
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+      class="navbar-toggler"
+      data-target="#navbarSupportedContent"
+      data-toggle="collapse"
+      type="button"
+    >
+      <span
+        class="navbar-toggler-icon"
+      />
+    </button>
+    <div
+      class="collapse navbar-collapse"
+      id="navbarSupportedContent"
+    >
+      <ul
+        class="navbar-nav mr-auto"
+      >
+        <li
+          class="nav-item active"
+        >
+          <button
+            class="btn btn-primary mr-sm-2"
+            type="button"
+          >
+            Edit
+          </button>
+        </li>
+      </ul>
+    </div>
+  </nav>
+</DocumentFragment>
+`;
+
+exports[`Nav Bar initiliases correctly with the edit button only visible 1`] = `
+<nav
+  className="navbar navbar-expand-lg navbar-light bg-light"
+>
+  <a
+    className="navbar-brand"
+    href="#"
+  >
+    Monitor
+  </a>
+  <button
+    aria-controls="navbarSupportedContent"
+    aria-expanded="false"
+    aria-label="Toggle navigation"
+    className="navbar-toggler"
+    data-target="#navbarSupportedContent"
+    data-toggle="collapse"
+    type="button"
+  >
+    <span
+      className="navbar-toggler-icon"
+    />
+  </button>
+  <div
+    className="collapse navbar-collapse"
+    id="navbarSupportedContent"
+  >
+    <ul
+      className="navbar-nav mr-auto"
+    >
+      <li
+        className="nav-item active"
+      >
+        <button
+          className="btn btn-primary mr-sm-2"
+          onClick={[Function]}
+          type="button"
+        >
+          Edit
+        </button>
+      </li>
+    </ul>
+  </div>
+</nav>
+`;
+
+exports[`Nav Bar renders the editor menu when starting editing 1`] = `
+<DocumentFragment>
+  <nav
+    class="navbar navbar-expand-lg navbar-light bg-light"
+  >
+    <a
+      class="navbar-brand"
+      href="#"
+    >
+      Monitor
+    </a>
+    <button
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+      class="navbar-toggler"
+      data-target="#navbarSupportedContent"
+      data-toggle="collapse"
+      type="button"
+    >
+      <span
+        class="navbar-toggler-icon"
+      />
+    </button>
+    <div
+      class="collapse navbar-collapse"
+      id="navbarSupportedContent"
+    >
+      <ul
+        class="navbar-nav mr-auto"
+      >
+        <li
+          class="nav-item active"
+        >
+          <button
+            class="btn btn-primary mr-sm-2"
+            type="button"
+          >
+            Add Node
+          </button>
+        </li>
+        <li
+          class="nav-item"
+        >
+          <button
+            class="btn btn-primary mr-sm-2"
+            disabled=""
+            type="button"
+          >
+            Save
+          </button>
+        </li>
+        <li
+          class="nav-item"
+        >
+          <button
+            class="btn btn-primary mr-sm-2"
+            type="button"
+          >
+            Cancel
+          </button>
+        </li>
+      </ul>
+    </div>
+  </nav>
+</DocumentFragment>
+`;

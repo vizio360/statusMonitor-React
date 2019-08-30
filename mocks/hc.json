@@ -45,7 +45,7 @@
     {
       "id": "1",
       "name": "crm",
-      "status": "Healthy",
+      "status": "Unhealthy",
       "totalDuration": "00:00:03.7527019",
       "entries": {
         "rabbitMQ": {
