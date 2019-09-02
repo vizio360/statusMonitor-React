@@ -7,7 +7,7 @@ import {
   IConnection,
   ServiceType,
   IService,
-  EmptyService,
+  getEmptyService,
   Status,
 } from '@dataTypes';
 import NavBar from '@app/navbar';
@@ -26,6 +26,7 @@ import {Node} from '@app/components/node';
 interface IDiagramState {
   services: IService[];
   lastKnownStates: IServiceLastKnownState[];
+  connections: IConnection[];
   dataChanged: boolean;
   isEditing: boolean;
   amendNode: boolean;
@@ -51,10 +52,11 @@ export default class Diagram extends React.Component<
     this.state = {
       services: [],
       lastKnownStates: [],
+      connections: [],
       dataChanged: false,
       isEditing: false,
       amendNode: false,
-      selectedNode: EmptyService,
+      selectedNode: getEmptyService(),
     };
     this.wsClient.onUpdate(this.onUpdateReceived.bind(this));
     this.wsClient.onReload(this.onReloadReceived.bind(this));
@@ -64,7 +66,9 @@ export default class Diagram extends React.Component<
     this.onEdit = this.onEdit.bind(this);
     //this.save = this.save.bind(this);
     this.onAddNode = this.onAddNode.bind(this);
-    this.onNodeChangeConfirm = this.onNodeChangeConfirm.bind(this);
+    this.onNodeEditorConfirm = this.onNodeEditorConfirm.bind(this);
+    this.onNodeEditorCancel = this.onNodeEditorCancel.bind(this);
+    this.onNodeEditorDelete = this.onNodeEditorDelete.bind(this);
     this.setupJsPlumb();
   }
 
@@ -73,7 +77,9 @@ export default class Diagram extends React.Component<
   }
 
   onUpdateReceived(state: IServiceLastKnownState) {
-    let lastKnownStates: IServiceLastKnownState[] = this.state.lastKnownStates;
+    let lastKnownStates: IServiceLastKnownState[] = JSON.parse(
+      JSON.stringify(this.state.lastKnownStates),
+    );
     let tmp: IServiceLastKnownState = lastKnownStates.find(
       s => s.serviceId === state.serviceId,
     );
@@ -84,12 +90,24 @@ export default class Diagram extends React.Component<
     });
   }
 
-  onNodeChangeConfirm(service: IService) {
-    let services: IService[] = this.state.services;
-    let lastKnownStates: IServiceLastKnownState[] = this.state.lastKnownStates;
-    if (service.id) {
-      let tmp: IService = services.find(s => s.id === service.id);
-      let index: number = services.indexOf(tmp);
+  onNodeEditorCancel() {
+    this.setState({
+      amendNode: false,
+      selectedNode: getEmptyService(),
+    });
+  }
+
+  onNodeEditorDelete(service: IService) {}
+
+  onNodeEditorConfirm(service: IService) {
+    let services: IService[] = JSON.parse(JSON.stringify(this.state.services));
+    let lastKnownStates: IServiceLastKnownState[] = JSON.parse(
+      JSON.stringify(this.state.lastKnownStates),
+    );
+
+    let tmp: IService = services.find(s => s.id === service.id);
+    let index: number = services.indexOf(tmp);
+    if (index > -1) {
       services[index] = service;
     } else {
       service.id = '' + (services.length + 1);
@@ -121,18 +139,18 @@ export default class Diagram extends React.Component<
   }
 
   onAddNode() {
-    this.setState({amendNode: true, selectedNode: EmptyService});
+    this.setState({amendNode: true, selectedNode: getEmptyService()});
   }
 
   init() {
-    let newServices = this.wsClient.getServices();
     this.setState({
-      services: newServices,
+      services: this.wsClient.getServices(),
       lastKnownStates: this.wsClient.getServicesLastKnownState(),
+      connections: this.wsClient.getConnections(),
       dataChanged: false,
       isEditing: false,
       amendNode: false,
-      selectedNode: EmptyService,
+      selectedNode: getEmptyService(),
     });
   }
 
@@ -150,23 +168,11 @@ export default class Diagram extends React.Component<
       id: id + 'target',
       scope: 'dotEndPoint',
       reattachConnections: true,
+      connectionsDetachable: this.state.isEditing,
       parameters: {},
-      isTarget: true,
+      isTarget: this.state.isEditing,
     };
     return inEndPointOptions;
-  }
-
-  componentDidUpdate() {
-    if (!this.state.isEditing) {
-      this.jsPlumbInstance.reset();
-      this.createJsPlumbEndPoints(this.state.services);
-      this.createConnections(this.wsClient.getConnections());
-    }
-    this.state.services.forEach((service: IService) => {
-      this._createEndPoints(service);
-      this.jsPlumbInstance.draggable(service.id, {stop: this.onDragStop});
-      this.jsPlumbInstance.setDraggable(service.id, this.state.isEditing);
-    });
   }
 
   getSourceEndPoint(id: string) {
@@ -178,10 +184,55 @@ export default class Diagram extends React.Component<
       id: id + 'source',
       scope: 'dotEndPoint',
       reattachConnections: true,
+      connectionsDetachable: this.state.isEditing,
       parameters: {},
-      isSource: true,
+      isSource: this.state.isEditing,
     };
     return outEndPointOptions;
+  }
+
+  componentDidUpdate() {
+    this.jsPlumbInstance.reset();
+    this.jsPlumbInstance.bind('connection', (info, originalEvent) => {
+      if (originalEvent !== undefined) {
+        const conn: IConnection = {
+          sourceId: info.sourceId,
+          targetId: info.targetId,
+        };
+        let connections = JSON.parse(JSON.stringify(this.state.connections));
+        connections.push(conn);
+
+        this.setState(prevState => ({
+          connections: connections,
+          dataChanged: true,
+        }));
+      }
+    });
+    this.jsPlumbInstance.bind('connectionDetached', (info, originalEvent) => {
+      if (originalEvent !== undefined) {
+        let connections: IConnection[] = JSON.parse(
+          JSON.stringify(this.state.connections),
+        );
+        let conn = connections.find(connection => {
+          return (
+            connection.sourceId === info.sourceId &&
+            connection.targetId === info.targetId
+          );
+        });
+        let index = connections.indexOf(conn);
+        connections.splice(index, 1);
+        this.setState(prevState => ({
+          connections: connections,
+          dataChanged: true,
+        }));
+      }
+    });
+    this.createJsPlumbEndPoints(this.state.services);
+    this.createConnections(this.state.connections);
+    this.state.services.forEach((service: IService) => {
+      this.jsPlumbInstance.draggable(service.id, {stop: this.onDragStop});
+      this.jsPlumbInstance.setDraggable(service.id, this.state.isEditing);
+    });
   }
 
   _createEndPoints(service: IService) {
@@ -218,38 +269,32 @@ export default class Diagram extends React.Component<
       Anchors: ['Left', 'BottomRight'],
     };
     this.jsPlumbInstance = jsPlumb.getInstance(defaults);
-    this.jsPlumbInstance.setContainer('hello');
-    this.jsPlumbInstance.bind('connection', (info, originalEvent) => {
-      if (originalEvent !== undefined) this.setState({dataChanged: true});
-    });
-    this.jsPlumbInstance.bind('connectionDetached', (info, originalEvent) => {
-      if (originalEvent !== undefined) this.setState({dataChanged: true});
-    });
+    this.jsPlumbInstance.setContainer('jsPlumbDiagram');
   }
 
   onDragStop(params: DragEventCallbackOptions) {
     let pos: number[] = params.pos;
     let x: number = pos[0];
     let y: number = pos[1];
-    let serviceToUpdate: IService = this.state.services.find(
-      (element: IService) => {
-        return element.id === params.el.id;
-      },
-    );
-    serviceToUpdate.uiProps.top = y;
-    serviceToUpdate.uiProps.left = x;
+    let services = JSON.parse(JSON.stringify(this.state.services));
+    let serviceToUpdate: IService = services.find((element: IService) => {
+      return element.id === params.el.id;
+    });
+    const newUIProps = {
+      top: y,
+      left: x,
+    };
+    serviceToUpdate.uiProps = newUIProps;
     this.setState({
-      services: this.state.services,
+      services: services,
       dataChanged: true,
       amendNode: false,
     });
   }
 
   onNodeDoubleClick(serviceId: string) {
-    console.log('state on dbkclick', this.state);
-    let service: IService = this.state.services.find(
-      service => service.id == serviceId,
-    );
+    let services: IService[] = JSON.parse(JSON.stringify(this.state.services));
+    let service: IService = services.find(service => service.id == serviceId);
     this.setState({amendNode: true, selectedNode: service});
   }
 
@@ -308,7 +353,6 @@ export default class Diagram extends React.Component<
   }
 
   render() {
-    console.log('state', this.state);
     return (
       <div>
         <NavBar
@@ -318,15 +362,17 @@ export default class Diagram extends React.Component<
           onSave={this.save}
           onAddNode={this.onAddNode}
         />
-        <div id="hello" style={{position: 'absolute'}}>
+        <div id="jsPlumbDiagram" style={{position: 'absolute'}}>
           {this.renderNodes(this.state.services)}
         </div>
         <NodeEditor
           id="nodeEditor"
-          key={this.state.selectedNode.id}
+          key={Date.now()}
           show={this.state.amendNode}
           node={this.state.selectedNode}
-          onConfirm={this.onNodeChangeConfirm}
+          onConfirm={this.onNodeEditorConfirm}
+          onCancel={this.onNodeEditorCancel}
+          onDelete={this.onNodeEditorDelete}
         />
       </div>
     );

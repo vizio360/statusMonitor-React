@@ -6,6 +6,12 @@ import $ from 'jquery';
 interface IOnConfirm {
   (service: IService): void;
 }
+interface IOnDelete {
+  (service: IService): void;
+}
+interface ICallback {
+  (): void;
+}
 interface INodeEditorState {
   service: IService;
 }
@@ -14,6 +20,8 @@ interface INodeEditorProps {
   show: boolean;
   node: IService;
   onConfirm: IOnConfirm;
+  onCancel: ICallback;
+  onDelete: IOnDelete;
 }
 
 export default class NodeEditor extends React.Component<
@@ -22,7 +30,9 @@ export default class NodeEditor extends React.Component<
 > {
   constructor(props: INodeEditorProps) {
     super(props);
-    this.onOk = this.onOk.bind(this);
+    this.onConfirm = this.onConfirm.bind(this);
+    this.onCancel = this.onCancel.bind(this);
+    this.onDelete = this.onDelete.bind(this);
     this.handleInput = this.handleInput.bind(this);
     this.state = {service: this.props.node};
   }
@@ -55,10 +65,20 @@ export default class NodeEditor extends React.Component<
     this.setState({service: service});
   }
 
-  onOk(e: React.MouseEvent<HTMLElement>) {
+  onConfirm(e: React.MouseEvent<HTMLElement>) {
     e.preventDefault();
     $('#' + this.props.id).modal('hide');
     this.props.onConfirm(this.state.service);
+  }
+  onCancel(e: React.MouseEvent<HTMLElement>) {
+    e.preventDefault();
+    $('#' + this.props.id).modal('hide');
+    this.props.onCancel();
+  }
+  onDelete(e: React.MouseEvent<HTMLElement>) {
+    e.preventDefault();
+    $('#' + this.props.id).modal('hide');
+    this.props.onDelete(this.state.service);
   }
 
   componentDidMount() {
@@ -66,10 +86,13 @@ export default class NodeEditor extends React.Component<
   }
 
   render() {
+    const allowDeletion: boolean = this.state.service.id !== '';
     return (
       <div
         className="modal fade"
         id={this.props.id}
+        data-backdrop="static"
+        data-keyboard="false"
         tabIndex={-1}
         role="dialog"
         aria-labelledby="exampleModalLabel"
@@ -84,7 +107,8 @@ export default class NodeEditor extends React.Component<
                 type="button"
                 className="close"
                 data-dismiss="modal"
-                aria-label="Close">
+                aria-label="Close"
+                onClick={this.onCancel}>
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
@@ -147,6 +171,7 @@ export default class NodeEditor extends React.Component<
                     id="type"
                     onChange={this.handleInput}
                     value={this.state.service.type}>
+                    <option value="">-- Please select a type --</option>
                     <option value="CRM">CRM</option>
                     <option value="DB">DB</option>
                     <option value="API">API</option>
@@ -158,13 +183,22 @@ export default class NodeEditor extends React.Component<
               <button
                 type="button"
                 className="btn btn-secondary"
-                data-dismiss="modal">
+                data-dismiss="modal"
+                onClick={this.onCancel}>
                 Cancel
               </button>
               <button
                 type="button"
+                className="btn btn-danger"
+                data-dismiss="modal"
+                disabled={!allowDeletion}
+                onClick={this.onDelete}>
+                Delete
+              </button>
+              <button
+                type="button"
                 className="btn btn-primary"
-                onClick={this.onOk}>
+                onClick={this.onConfirm}>
                 Ok
               </button>
             </div>

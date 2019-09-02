@@ -19,8 +19,8 @@ export interface IService {
 }
 
 export interface IConnection {
-  sourceId: number;
-  targetId: number;
+  sourceId: string;
+  targetId: string;
 }
 
 export interface IServiceLastKnownState {
@@ -45,7 +45,13 @@ export interface INodeProperties {
   events: INodeEvents;
 }
 
-export const EmptyService: IService = {
+export function getEmptyService() {
+  let service = JSON.parse(JSON.stringify(EmptyService));
+  //service.id = Date.now();
+  return service;
+}
+
+const EmptyService: IService = {
   id: '',
   name: '',
   uri: '',
@@ -73,5 +79,9 @@ export enum Reply {
 
 export interface IMessage {
   reply: Reply;
-  content?: IService[] | IConnection[] | IServiceLastKnownState | IServiceLastKnownState[];
+  content?:
+    | IService[]
+    | IConnection[]
+    | IServiceLastKnownState
+    | IServiceLastKnownState[];
 }

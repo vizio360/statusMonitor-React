@@ -4544,10 +4544,10 @@ jsplumb-react@^0.0.27:
   dependencies:
     react-pan-and-zoom-hoc "1.1.11"
 
-jsplumb@^2.10.0:
-  version "2.11.2"
-  resolved "https://registry.yarnpkg.com/jsplumb/-/jsplumb-2.11.2.tgz#f8de737ea4b2551ebd95ca4b57dc096c3833e7dd"
-  integrity sha512-GyZE8l2JeZ0haOzHhsgykD8k1j5st1v2nNWaNNMqmRmGU43iuP9iBDAXDxmGNPp1t+4W++sT1SkbI8754YMtIg==
+jsplumb@2.11.1:
+  version "2.11.1"
+  resolved "https://registry.yarnpkg.com/jsplumb/-/jsplumb-2.11.1.tgz#63596545ba94b72f16cee3eaca2e35656dc1eea8"
+  integrity sha512-8sXC1zvwkO93ZkdKhSYBqJgAeMusQvgO76q8DQkVlS8DVm08s6x6RR8wJDnQypnCb+q/lo8eUyJI8clEVERjfw==
 
 jsprim@^1.2.2:
   version "1.4.1"

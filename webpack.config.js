@@ -2,6 +2,7 @@ const path = require('path');
 const HWP = require('html-webpack-plugin');
 module.exports = {
   entry: './client/src/index.tsx',
+  devtool: 'source-map',
   output: {
     filename: 'main.js',
     path: path.resolve(__dirname, 'dist'),
