@@ -179,11 +179,27 @@ describe('Diagram', () => {
     let diagram = await createDiagramComponent();
     let component = diagram.root;
     let node = component.findAllByType(Node)[0];
-    node.props.events.onDoubleClick(servicesMock[0].id);
+    node.props.events.onDoubleClick(node.props.service.id);
     let diagramJson = diagram.toJSON();
     expect(diagramJson).toMatchSnapshot();
     let nodeEditor = component.findByType(NodeEditor);
     nodeEditor.props.onCancel();
+    diagramJson = diagram.toJSON();
+    expect(diagramJson).toMatchSnapshot();
+  });
+
+  it('deletes a node', async () => {
+    let diagram = await createDiagramComponent();
+    let component = diagram.root;
+    let diagramJson = diagram.toJSON();
+    expect(diagramJson).toMatchSnapshot();
+
+    let node = component.findAllByType(Node)[1];
+    node.props.events.onDoubleClick(node.props.service.id);
+
+    let nodeEditor = component.findByType(NodeEditor);
+    nodeEditor.props.onDelete(nodeEditor.props.node);
+
     diagramJson = diagram.toJSON();
     expect(diagramJson).toMatchSnapshot();
   });

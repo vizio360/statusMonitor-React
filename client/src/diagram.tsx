@@ -79,16 +79,14 @@ export default class Diagram extends React.Component<
   }
 
   onUpdateReceived(state: IServiceLastKnownState) {
-    let lastKnownStates: IServiceLastKnownState[] = clone(
-      this.state.lastKnownStates,
-    );
-    let tmp: IServiceLastKnownState = lastKnownStates.find(
+    let stateClone: IDiagramState = clone(this.state);
+    let tmp: IServiceLastKnownState = stateClone.lastKnownStates.find(
       s => s.serviceId === state.serviceId,
     );
-    let index: number = lastKnownStates.indexOf(tmp);
-    lastKnownStates[index] = state;
+    let index: number = stateClone.lastKnownStates.indexOf(tmp);
+    stateClone.lastKnownStates[index] = state;
     this.setState({
-      lastKnownStates: lastKnownStates,
+      lastKnownStates: stateClone.lastKnownStates,
     });
   }
 
@@ -99,14 +97,32 @@ export default class Diagram extends React.Component<
     });
   }
 
-  //TODO
-  onNodeEditorDelete(service: IService) {}
+  onNodeEditorDelete(service: IService) {
+    let stateClone: IDiagramState = clone(this.state);
+    let connections: IConnection[] = stateClone.connections;
+    let lastKnownStates: IServiceLastKnownState[] = stateClone.lastKnownStates;
+    let services: IService[] = stateClone.services;
+    connections = connections.filter(
+      conn => !(conn.sourceId == service.id || conn.targetId == service.id),
+    );
+    services = services.filter(s => s.id != service.id);
+    lastKnownStates = lastKnownStates.filter(
+      state => state.serviceId != service.id,
+    );
+    this.setState({
+      services: services,
+      connections: connections,
+      lastKnownStates: lastKnownStates,
+      amendNode: false,
+      dataChanged: true,
+      selectedNode: getEmptyService(),
+    });
+  }
 
   onNodeEditorConfirm(service: IService) {
-    let services: IService[] = clone(this.state.services);
-    let lastKnownStates: IServiceLastKnownState[] = clone(
-      this.state.lastKnownStates,
-    );
+    let stateClone: IDiagramState = clone(this.state);
+    let services: IService[] = stateClone.services;
+    let lastKnownStates: IServiceLastKnownState[] = stateClone.lastKnownStates;
 
     let tmp: IService = services.find(s => s.id === service.id);
     let index: number = services.indexOf(tmp);
