@@ -12,6 +12,7 @@
       "@app/*": ["client/src/*"],
       "@server/*": ["server/src/*"],
       "@dataTypes": ["lib/types/dataTypes"],
+      "@utils/*": ["lib/utils/*"],
       "@mocks/*": ["mocks/*"]
     }
   }

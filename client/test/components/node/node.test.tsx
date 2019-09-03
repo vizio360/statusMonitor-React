@@ -43,7 +43,7 @@ describe('Node', () => {
     expect(tree).toMatchSnapshot();
   });
 
-  it('updates a node if service status changes', () => {
+  it('re-renders a node if service status changes', () => {
     let node = renderer.create(jsx);
     let tree = node.toJSON();
     expect(tree).toMatchSnapshot();
@@ -58,6 +58,28 @@ describe('Node', () => {
         key={service.id}
         service={service}
         serviceState={serviceStateUpdated}
+      />
+    );
+    node.update(jsxUpdate);
+    tree = node.toJSON();
+    expect(tree).toMatchSnapshot();
+  });
+
+  it('re-renders a node if service ui properties change', () => {
+    let node = renderer.create(jsx);
+    let tree = node.toJSON();
+    expect(tree).toMatchSnapshot();
+
+    let updatedService: IService = JSON.parse(JSON.stringify(service));
+    updatedService.uiProps = {
+      top: 500,
+      left: 600,
+    };
+    let jsxUpdate = (
+      <Node
+        key={service.id}
+        service={updatedService}
+        serviceState={serviceState}
       />
     );
     node.update(jsxUpdate);

@@ -5,6 +5,7 @@ export const draggable = jest.fn();
 export const getEndpoints = jest.fn().mockReturnValue(['source', 'target']);
 export const connect = jest.fn();
 export const reset = jest.fn();
+export const setDraggable = jest.fn();
 const obj = {
   bind: bind,
   setContainer: setContainer,
@@ -13,6 +14,7 @@ const obj = {
   getEndpoints: getEndpoints,
   connect: connect,
   reset: reset,
+  setDraggable: setDraggable,
 };
 
 export const getInstance = jest.fn().mockImplementation(() => {

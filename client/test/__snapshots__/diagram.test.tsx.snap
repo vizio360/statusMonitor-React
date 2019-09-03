@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Diagram can be instatiated 1`] = `
+exports[`Diagram adds a new node on node editor confirmation 1`] = `
 <div>
   <nav
     className="navbar navbar-expand-lg navbar-light bg-light"
@@ -46,7 +46,7 @@ exports[`Diagram can be instatiated 1`] = `
     </div>
   </nav>
   <div
-    id="hello"
+    id="jsPlumbDiagram"
     style={
       Object {
         "position": "absolute",
@@ -121,6 +121,8 @@ exports[`Diagram can be instatiated 1`] = `
     aria-hidden="true"
     aria-labelledby="exampleModalLabel"
     className="modal fade"
+    data-backdrop="static"
+    data-keyboard="false"
     id="nodeEditor"
     role="dialog"
     tabIndex={-1}
@@ -145,6 +147,7 @@ exports[`Diagram can be instatiated 1`] = `
             aria-label="Close"
             className="close"
             data-dismiss="modal"
+            onClick={[Function]}
             type="button"
           >
             <span
@@ -242,6 +245,11 @@ exports[`Diagram can be instatiated 1`] = `
                 value="EMPTY"
               >
                 <option
+                  value=""
+                >
+                  -- Please select a type --
+                </option>
+                <option
                   value="CRM"
                 >
                   CRM
@@ -266,9 +274,1248 @@ exports[`Diagram can be instatiated 1`] = `
           <button
             className="btn btn-secondary"
             data-dismiss="modal"
+            onClick={[Function]}
             type="button"
           >
             Cancel
+          </button>
+          <button
+            className="btn btn-danger"
+            data-dismiss="modal"
+            disabled={true}
+            onClick={[Function]}
+            type="button"
+          >
+            Delete
+          </button>
+          <button
+            className="btn btn-primary"
+            onClick={[Function]}
+            type="button"
+          >
+            Ok
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Diagram adds a new node on node editor confirmation 2`] = `
+<div>
+  <nav
+    className="navbar navbar-expand-lg navbar-light bg-light"
+  >
+    <a
+      className="navbar-brand"
+      href="#"
+    >
+      Monitor
+    </a>
+    <button
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+      className="navbar-toggler"
+      data-target="#navbarSupportedContent"
+      data-toggle="collapse"
+      type="button"
+    >
+      <span
+        className="navbar-toggler-icon"
+      />
+    </button>
+    <div
+      className="collapse navbar-collapse"
+      id="navbarSupportedContent"
+    >
+      <ul
+        className="navbar-nav mr-auto"
+      >
+        <li
+          className="nav-item active"
+        >
+          <button
+            className="btn btn-primary mr-sm-2"
+            onClick={[Function]}
+            type="button"
+          >
+            Edit
+          </button>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <div
+    id="jsPlumbDiagram"
+    style={
+      Object {
+        "position": "absolute",
+      }
+    }
+  >
+    <div
+      className="node"
+      id="1"
+      onDoubleClick={[Function]}
+      style={
+        Object {
+          "left": 7,
+          "top": 68,
+        }
+      }
+    >
+      <img
+        height="100%"
+        src="test-file-stub"
+        width="100%"
+      />
+      
+      <p>
+        serviceTest
+      </p>
+    </div>
+    <div
+      className="node"
+      id="2"
+      onDoubleClick={[Function]}
+      style={
+        Object {
+          "left": 712,
+          "top": 441,
+        }
+      }
+    >
+      <img
+        height="100%"
+        src="test-file-stub"
+        width="100%"
+      />
+      
+      <p>
+        CRM
+      </p>
+    </div>
+    <div
+      className="node"
+      id="3"
+      onDoubleClick={[Function]}
+      style={
+        Object {
+          "left": 218,
+          "top": 75,
+        }
+      }
+    >
+      <img
+        height="100%"
+        src="test-file-stub"
+        width="100%"
+      />
+      
+      <p>
+        DataHub
+      </p>
+    </div>
+    <div
+      className="node"
+      id="4"
+      onDoubleClick={[Function]}
+      style={
+        Object {
+          "left": 15,
+          "top": 10,
+        }
+      }
+    >
+      <img
+        height="100%"
+        src="test-file-stub"
+        width="100%"
+      />
+      
+      <p>
+        newService
+      </p>
+    </div>
+  </div>
+  <div
+    aria-hidden="true"
+    aria-labelledby="exampleModalLabel"
+    className="modal fade"
+    data-backdrop="static"
+    data-keyboard="false"
+    id="nodeEditor"
+    role="dialog"
+    tabIndex={-1}
+  >
+    <div
+      className="modal-dialog"
+      role="document"
+    >
+      <div
+        className="modal-content"
+      >
+        <div
+          className="modal-header"
+        >
+          <h5
+            className="modal-title"
+            id="exampleModalLabel"
+          >
+            Add Node
+          </h5>
+          <button
+            aria-label="Close"
+            className="close"
+            data-dismiss="modal"
+            onClick={[Function]}
+            type="button"
+          >
+            <span
+              aria-hidden="true"
+            >
+              ×
+            </span>
+          </button>
+        </div>
+        <div
+          className="modal-body"
+        >
+          <form>
+            <div
+              className="form-group"
+            >
+              <label
+                className="col-form-label"
+                htmlFor="name"
+              >
+                Name:
+              </label>
+              <input
+                className="form-control"
+                id="name"
+                onChange={[Function]}
+                type="text"
+                value=""
+              />
+            </div>
+            <div
+              className="form-group"
+            >
+              <label
+                className="col-form-label"
+                htmlFor="uri"
+              >
+                Uri:
+              </label>
+              <input
+                className="form-control"
+                id="uri"
+                onChange={[Function]}
+                type="text"
+                value=""
+              />
+            </div>
+            <div
+              className="form-group"
+            >
+              <label
+                className="col-form-label"
+                htmlFor="timeout"
+              >
+                Timeout:
+              </label>
+              <input
+                className="form-control"
+                id="timeout"
+                onChange={[Function]}
+                type="text"
+                value={20}
+              />
+            </div>
+            <div
+              className="form-group"
+            >
+              <label
+                className="col-form-label"
+                htmlFor="categories"
+              >
+                Categories:
+              </label>
+              <input
+                className="form-control"
+                id="categories"
+                onChange={[Function]}
+                type="text"
+                value={Array []}
+              />
+            </div>
+            <div
+              className="form-group"
+            >
+              <label
+                className="col-form-label"
+                htmlFor="type"
+              >
+                Type:
+              </label>
+              <select
+                className="form-control"
+                id="type"
+                onChange={[Function]}
+                value="EMPTY"
+              >
+                <option
+                  value=""
+                >
+                  -- Please select a type --
+                </option>
+                <option
+                  value="CRM"
+                >
+                  CRM
+                </option>
+                <option
+                  value="DB"
+                >
+                  DB
+                </option>
+                <option
+                  value="API"
+                >
+                  API
+                </option>
+              </select>
+            </div>
+          </form>
+        </div>
+        <div
+          className="modal-footer"
+        >
+          <button
+            className="btn btn-secondary"
+            data-dismiss="modal"
+            onClick={[Function]}
+            type="button"
+          >
+            Cancel
+          </button>
+          <button
+            className="btn btn-danger"
+            data-dismiss="modal"
+            disabled={true}
+            onClick={[Function]}
+            type="button"
+          >
+            Delete
+          </button>
+          <button
+            className="btn btn-primary"
+            onClick={[Function]}
+            type="button"
+          >
+            Ok
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Diagram can be instatiated 1`] = `
+<div>
+  <nav
+    className="navbar navbar-expand-lg navbar-light bg-light"
+  >
+    <a
+      className="navbar-brand"
+      href="#"
+    >
+      Monitor
+    </a>
+    <button
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+      className="navbar-toggler"
+      data-target="#navbarSupportedContent"
+      data-toggle="collapse"
+      type="button"
+    >
+      <span
+        className="navbar-toggler-icon"
+      />
+    </button>
+    <div
+      className="collapse navbar-collapse"
+      id="navbarSupportedContent"
+    >
+      <ul
+        className="navbar-nav mr-auto"
+      >
+        <li
+          className="nav-item active"
+        >
+          <button
+            className="btn btn-primary mr-sm-2"
+            onClick={[Function]}
+            type="button"
+          >
+            Edit
+          </button>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <div
+    id="jsPlumbDiagram"
+    style={
+      Object {
+        "position": "absolute",
+      }
+    }
+  >
+    <div
+      className="node"
+      id="1"
+      onDoubleClick={[Function]}
+      style={
+        Object {
+          "left": 7,
+          "top": 68,
+        }
+      }
+    >
+      <img
+        height="100%"
+        src="test-file-stub"
+        width="100%"
+      />
+      
+      <p>
+        serviceTest
+      </p>
+    </div>
+    <div
+      className="node"
+      id="2"
+      onDoubleClick={[Function]}
+      style={
+        Object {
+          "left": 712,
+          "top": 441,
+        }
+      }
+    >
+      <img
+        height="100%"
+        src="test-file-stub"
+        width="100%"
+      />
+      
+      <p>
+        CRM
+      </p>
+    </div>
+    <div
+      className="node"
+      id="3"
+      onDoubleClick={[Function]}
+      style={
+        Object {
+          "left": 218,
+          "top": 75,
+        }
+      }
+    >
+      <img
+        height="100%"
+        src="test-file-stub"
+        width="100%"
+      />
+      
+      <p>
+        DataHub
+      </p>
+    </div>
+  </div>
+  <div
+    aria-hidden="true"
+    aria-labelledby="exampleModalLabel"
+    className="modal fade"
+    data-backdrop="static"
+    data-keyboard="false"
+    id="nodeEditor"
+    role="dialog"
+    tabIndex={-1}
+  >
+    <div
+      className="modal-dialog"
+      role="document"
+    >
+      <div
+        className="modal-content"
+      >
+        <div
+          className="modal-header"
+        >
+          <h5
+            className="modal-title"
+            id="exampleModalLabel"
+          >
+            Add Node
+          </h5>
+          <button
+            aria-label="Close"
+            className="close"
+            data-dismiss="modal"
+            onClick={[Function]}
+            type="button"
+          >
+            <span
+              aria-hidden="true"
+            >
+              ×
+            </span>
+          </button>
+        </div>
+        <div
+          className="modal-body"
+        >
+          <form>
+            <div
+              className="form-group"
+            >
+              <label
+                className="col-form-label"
+                htmlFor="name"
+              >
+                Name:
+              </label>
+              <input
+                className="form-control"
+                id="name"
+                onChange={[Function]}
+                type="text"
+                value=""
+              />
+            </div>
+            <div
+              className="form-group"
+            >
+              <label
+                className="col-form-label"
+                htmlFor="uri"
+              >
+                Uri:
+              </label>
+              <input
+                className="form-control"
+                id="uri"
+                onChange={[Function]}
+                type="text"
+                value=""
+              />
+            </div>
+            <div
+              className="form-group"
+            >
+              <label
+                className="col-form-label"
+                htmlFor="timeout"
+              >
+                Timeout:
+              </label>
+              <input
+                className="form-control"
+                id="timeout"
+                onChange={[Function]}
+                type="text"
+                value={20}
+              />
+            </div>
+            <div
+              className="form-group"
+            >
+              <label
+                className="col-form-label"
+                htmlFor="categories"
+              >
+                Categories:
+              </label>
+              <input
+                className="form-control"
+                id="categories"
+                onChange={[Function]}
+                type="text"
+                value={Array []}
+              />
+            </div>
+            <div
+              className="form-group"
+            >
+              <label
+                className="col-form-label"
+                htmlFor="type"
+              >
+                Type:
+              </label>
+              <select
+                className="form-control"
+                id="type"
+                onChange={[Function]}
+                value="EMPTY"
+              >
+                <option
+                  value=""
+                >
+                  -- Please select a type --
+                </option>
+                <option
+                  value="CRM"
+                >
+                  CRM
+                </option>
+                <option
+                  value="DB"
+                >
+                  DB
+                </option>
+                <option
+                  value="API"
+                >
+                  API
+                </option>
+              </select>
+            </div>
+          </form>
+        </div>
+        <div
+          className="modal-footer"
+        >
+          <button
+            className="btn btn-secondary"
+            data-dismiss="modal"
+            onClick={[Function]}
+            type="button"
+          >
+            Cancel
+          </button>
+          <button
+            className="btn btn-danger"
+            data-dismiss="modal"
+            disabled={true}
+            onClick={[Function]}
+            type="button"
+          >
+            Delete
+          </button>
+          <button
+            className="btn btn-primary"
+            onClick={[Function]}
+            type="button"
+          >
+            Ok
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Diagram cancels the node editor modal 1`] = `
+<div>
+  <nav
+    className="navbar navbar-expand-lg navbar-light bg-light"
+  >
+    <a
+      className="navbar-brand"
+      href="#"
+    >
+      Monitor
+    </a>
+    <button
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+      className="navbar-toggler"
+      data-target="#navbarSupportedContent"
+      data-toggle="collapse"
+      type="button"
+    >
+      <span
+        className="navbar-toggler-icon"
+      />
+    </button>
+    <div
+      className="collapse navbar-collapse"
+      id="navbarSupportedContent"
+    >
+      <ul
+        className="navbar-nav mr-auto"
+      >
+        <li
+          className="nav-item active"
+        >
+          <button
+            className="btn btn-primary mr-sm-2"
+            onClick={[Function]}
+            type="button"
+          >
+            Edit
+          </button>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <div
+    id="jsPlumbDiagram"
+    style={
+      Object {
+        "position": "absolute",
+      }
+    }
+  >
+    <div
+      className="node"
+      id="1"
+      onDoubleClick={[Function]}
+      style={
+        Object {
+          "left": 7,
+          "top": 68,
+        }
+      }
+    >
+      <img
+        height="100%"
+        src="test-file-stub"
+        width="100%"
+      />
+      
+      <p>
+        serviceTest
+      </p>
+    </div>
+    <div
+      className="node"
+      id="2"
+      onDoubleClick={[Function]}
+      style={
+        Object {
+          "left": 712,
+          "top": 441,
+        }
+      }
+    >
+      <img
+        height="100%"
+        src="test-file-stub"
+        width="100%"
+      />
+      
+      <p>
+        CRM
+      </p>
+    </div>
+    <div
+      className="node"
+      id="3"
+      onDoubleClick={[Function]}
+      style={
+        Object {
+          "left": 218,
+          "top": 75,
+        }
+      }
+    >
+      <img
+        height="100%"
+        src="test-file-stub"
+        width="100%"
+      />
+      
+      <p>
+        DataHub
+      </p>
+    </div>
+  </div>
+  <div
+    aria-hidden="true"
+    aria-labelledby="exampleModalLabel"
+    className="modal fade"
+    data-backdrop="static"
+    data-keyboard="false"
+    id="nodeEditor"
+    role="dialog"
+    tabIndex={-1}
+  >
+    <div
+      className="modal-dialog"
+      role="document"
+    >
+      <div
+        className="modal-content"
+      >
+        <div
+          className="modal-header"
+        >
+          <h5
+            className="modal-title"
+            id="exampleModalLabel"
+          >
+            Edit Node
+          </h5>
+          <button
+            aria-label="Close"
+            className="close"
+            data-dismiss="modal"
+            onClick={[Function]}
+            type="button"
+          >
+            <span
+              aria-hidden="true"
+            >
+              ×
+            </span>
+          </button>
+        </div>
+        <div
+          className="modal-body"
+        >
+          <form>
+            <div
+              className="form-group"
+            >
+              <label
+                className="col-form-label"
+                htmlFor="name"
+              >
+                Name:
+              </label>
+              <input
+                className="form-control"
+                id="name"
+                onChange={[Function]}
+                type="text"
+                value="serviceTest"
+              />
+            </div>
+            <div
+              className="form-group"
+            >
+              <label
+                className="col-form-label"
+                htmlFor="uri"
+              >
+                Uri:
+              </label>
+              <input
+                className="form-control"
+                id="uri"
+                onChange={[Function]}
+                type="text"
+                value="http://service1/healthcheck"
+              />
+            </div>
+            <div
+              className="form-group"
+            >
+              <label
+                className="col-form-label"
+                htmlFor="timeout"
+              >
+                Timeout:
+              </label>
+              <input
+                className="form-control"
+                id="timeout"
+                onChange={[Function]}
+                type="text"
+                value={0.5}
+              />
+            </div>
+            <div
+              className="form-group"
+            >
+              <label
+                className="col-form-label"
+                htmlFor="categories"
+              >
+                Categories:
+              </label>
+              <input
+                className="form-control"
+                id="categories"
+                onChange={[Function]}
+                type="text"
+                value={Array []}
+              />
+            </div>
+            <div
+              className="form-group"
+            >
+              <label
+                className="col-form-label"
+                htmlFor="type"
+              >
+                Type:
+              </label>
+              <select
+                className="form-control"
+                id="type"
+                onChange={[Function]}
+                value="DB"
+              >
+                <option
+                  value=""
+                >
+                  -- Please select a type --
+                </option>
+                <option
+                  value="CRM"
+                >
+                  CRM
+                </option>
+                <option
+                  value="DB"
+                >
+                  DB
+                </option>
+                <option
+                  value="API"
+                >
+                  API
+                </option>
+              </select>
+            </div>
+          </form>
+        </div>
+        <div
+          className="modal-footer"
+        >
+          <button
+            className="btn btn-secondary"
+            data-dismiss="modal"
+            onClick={[Function]}
+            type="button"
+          >
+            Cancel
+          </button>
+          <button
+            className="btn btn-danger"
+            data-dismiss="modal"
+            disabled={false}
+            onClick={[Function]}
+            type="button"
+          >
+            Delete
+          </button>
+          <button
+            className="btn btn-primary"
+            onClick={[Function]}
+            type="button"
+          >
+            Ok
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Diagram cancels the node editor modal 2`] = `
+<div>
+  <nav
+    className="navbar navbar-expand-lg navbar-light bg-light"
+  >
+    <a
+      className="navbar-brand"
+      href="#"
+    >
+      Monitor
+    </a>
+    <button
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+      className="navbar-toggler"
+      data-target="#navbarSupportedContent"
+      data-toggle="collapse"
+      type="button"
+    >
+      <span
+        className="navbar-toggler-icon"
+      />
+    </button>
+    <div
+      className="collapse navbar-collapse"
+      id="navbarSupportedContent"
+    >
+      <ul
+        className="navbar-nav mr-auto"
+      >
+        <li
+          className="nav-item active"
+        >
+          <button
+            className="btn btn-primary mr-sm-2"
+            onClick={[Function]}
+            type="button"
+          >
+            Edit
+          </button>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <div
+    id="jsPlumbDiagram"
+    style={
+      Object {
+        "position": "absolute",
+      }
+    }
+  >
+    <div
+      className="node"
+      id="1"
+      onDoubleClick={[Function]}
+      style={
+        Object {
+          "left": 7,
+          "top": 68,
+        }
+      }
+    >
+      <img
+        height="100%"
+        src="test-file-stub"
+        width="100%"
+      />
+      
+      <p>
+        serviceTest
+      </p>
+    </div>
+    <div
+      className="node"
+      id="2"
+      onDoubleClick={[Function]}
+      style={
+        Object {
+          "left": 712,
+          "top": 441,
+        }
+      }
+    >
+      <img
+        height="100%"
+        src="test-file-stub"
+        width="100%"
+      />
+      
+      <p>
+        CRM
+      </p>
+    </div>
+    <div
+      className="node"
+      id="3"
+      onDoubleClick={[Function]}
+      style={
+        Object {
+          "left": 218,
+          "top": 75,
+        }
+      }
+    >
+      <img
+        height="100%"
+        src="test-file-stub"
+        width="100%"
+      />
+      
+      <p>
+        DataHub
+      </p>
+    </div>
+  </div>
+  <div
+    aria-hidden="true"
+    aria-labelledby="exampleModalLabel"
+    className="modal fade"
+    data-backdrop="static"
+    data-keyboard="false"
+    id="nodeEditor"
+    role="dialog"
+    tabIndex={-1}
+  >
+    <div
+      className="modal-dialog"
+      role="document"
+    >
+      <div
+        className="modal-content"
+      >
+        <div
+          className="modal-header"
+        >
+          <h5
+            className="modal-title"
+            id="exampleModalLabel"
+          >
+            Add Node
+          </h5>
+          <button
+            aria-label="Close"
+            className="close"
+            data-dismiss="modal"
+            onClick={[Function]}
+            type="button"
+          >
+            <span
+              aria-hidden="true"
+            >
+              ×
+            </span>
+          </button>
+        </div>
+        <div
+          className="modal-body"
+        >
+          <form>
+            <div
+              className="form-group"
+            >
+              <label
+                className="col-form-label"
+                htmlFor="name"
+              >
+                Name:
+              </label>
+              <input
+                className="form-control"
+                id="name"
+                onChange={[Function]}
+                type="text"
+                value=""
+              />
+            </div>
+            <div
+              className="form-group"
+            >
+              <label
+                className="col-form-label"
+                htmlFor="uri"
+              >
+                Uri:
+              </label>
+              <input
+                className="form-control"
+                id="uri"
+                onChange={[Function]}
+                type="text"
+                value=""
+              />
+            </div>
+            <div
+              className="form-group"
+            >
+              <label
+                className="col-form-label"
+                htmlFor="timeout"
+              >
+                Timeout:
+              </label>
+              <input
+                className="form-control"
+                id="timeout"
+                onChange={[Function]}
+                type="text"
+                value={20}
+              />
+            </div>
+            <div
+              className="form-group"
+            >
+              <label
+                className="col-form-label"
+                htmlFor="categories"
+              >
+                Categories:
+              </label>
+              <input
+                className="form-control"
+                id="categories"
+                onChange={[Function]}
+                type="text"
+                value={Array []}
+              />
+            </div>
+            <div
+              className="form-group"
+            >
+              <label
+                className="col-form-label"
+                htmlFor="type"
+              >
+                Type:
+              </label>
+              <select
+                className="form-control"
+                id="type"
+                onChange={[Function]}
+                value="EMPTY"
+              >
+                <option
+                  value=""
+                >
+                  -- Please select a type --
+                </option>
+                <option
+                  value="CRM"
+                >
+                  CRM
+                </option>
+                <option
+                  value="DB"
+                >
+                  DB
+                </option>
+                <option
+                  value="API"
+                >
+                  API
+                </option>
+              </select>
+            </div>
+          </form>
+        </div>
+        <div
+          className="modal-footer"
+        >
+          <button
+            className="btn btn-secondary"
+            data-dismiss="modal"
+            onClick={[Function]}
+            type="button"
+          >
+            Cancel
+          </button>
+          <button
+            className="btn btn-danger"
+            data-dismiss="modal"
+            disabled={true}
+            onClick={[Function]}
+            type="button"
+          >
+            Delete
           </button>
           <button
             className="btn btn-primary"
@@ -330,7 +1577,7 @@ exports[`Diagram reloads when a reload message is received 1`] = `
     </div>
   </nav>
   <div
-    id="hello"
+    id="jsPlumbDiagram"
     style={
       Object {
         "position": "absolute",
@@ -405,6 +1652,8 @@ exports[`Diagram reloads when a reload message is received 1`] = `
     aria-hidden="true"
     aria-labelledby="exampleModalLabel"
     className="modal fade"
+    data-backdrop="static"
+    data-keyboard="false"
     id="nodeEditor"
     role="dialog"
     tabIndex={-1}
@@ -429,6 +1678,7 @@ exports[`Diagram reloads when a reload message is received 1`] = `
             aria-label="Close"
             className="close"
             data-dismiss="modal"
+            onClick={[Function]}
             type="button"
           >
             <span
@@ -526,6 +1776,11 @@ exports[`Diagram reloads when a reload message is received 1`] = `
                 value="EMPTY"
               >
                 <option
+                  value=""
+                >
+                  -- Please select a type --
+                </option>
+                <option
                   value="CRM"
                 >
                   CRM
@@ -550,9 +1805,19 @@ exports[`Diagram reloads when a reload message is received 1`] = `
           <button
             className="btn btn-secondary"
             data-dismiss="modal"
+            onClick={[Function]}
             type="button"
           >
             Cancel
+          </button>
+          <button
+            className="btn btn-danger"
+            data-dismiss="modal"
+            disabled={true}
+            onClick={[Function]}
+            type="button"
+          >
+            Delete
           </button>
           <button
             className="btn btn-primary"
@@ -614,7 +1879,7 @@ exports[`Diagram reloads when a reload message is received 2`] = `
     </div>
   </nav>
   <div
-    id="hello"
+    id="jsPlumbDiagram"
     style={
       Object {
         "position": "absolute",
@@ -647,6 +1912,8 @@ exports[`Diagram reloads when a reload message is received 2`] = `
     aria-hidden="true"
     aria-labelledby="exampleModalLabel"
     className="modal fade"
+    data-backdrop="static"
+    data-keyboard="false"
     id="nodeEditor"
     role="dialog"
     tabIndex={-1}
@@ -671,6 +1938,7 @@ exports[`Diagram reloads when a reload message is received 2`] = `
             aria-label="Close"
             className="close"
             data-dismiss="modal"
+            onClick={[Function]}
             type="button"
           >
             <span
@@ -768,6 +2036,11 @@ exports[`Diagram reloads when a reload message is received 2`] = `
                 value="EMPTY"
               >
                 <option
+                  value=""
+                >
+                  -- Please select a type --
+                </option>
+                <option
                   value="CRM"
                 >
                   CRM
@@ -792,9 +2065,19 @@ exports[`Diagram reloads when a reload message is received 2`] = `
           <button
             className="btn btn-secondary"
             data-dismiss="modal"
+            onClick={[Function]}
             type="button"
           >
             Cancel
+          </button>
+          <button
+            className="btn btn-danger"
+            data-dismiss="modal"
+            disabled={true}
+            onClick={[Function]}
+            type="button"
+          >
+            Delete
           </button>
           <button
             className="btn btn-primary"
@@ -810,7 +2093,7 @@ exports[`Diagram reloads when a reload message is received 2`] = `
 </div>
 `;
 
-exports[`Diagram updates when an update state is received 1`] = `
+exports[`Diagram resets itself if cancelling an edit 1`] = `
 <div>
   <nav
     className="navbar navbar-expand-lg navbar-light bg-light"
@@ -856,7 +2139,7 @@ exports[`Diagram updates when an update state is received 1`] = `
     </div>
   </nav>
   <div
-    id="hello"
+    id="jsPlumbDiagram"
     style={
       Object {
         "position": "absolute",
@@ -931,6 +2214,8 @@ exports[`Diagram updates when an update state is received 1`] = `
     aria-hidden="true"
     aria-labelledby="exampleModalLabel"
     className="modal fade"
+    data-backdrop="static"
+    data-keyboard="false"
     id="nodeEditor"
     role="dialog"
     tabIndex={-1}
@@ -955,6 +2240,7 @@ exports[`Diagram updates when an update state is received 1`] = `
             aria-label="Close"
             className="close"
             data-dismiss="modal"
+            onClick={[Function]}
             type="button"
           >
             <span
@@ -1052,6 +2338,11 @@ exports[`Diagram updates when an update state is received 1`] = `
                 value="EMPTY"
               >
                 <option
+                  value=""
+                >
+                  -- Please select a type --
+                </option>
+                <option
                   value="CRM"
                 >
                   CRM
@@ -1076,9 +2367,321 @@ exports[`Diagram updates when an update state is received 1`] = `
           <button
             className="btn btn-secondary"
             data-dismiss="modal"
+            onClick={[Function]}
             type="button"
           >
             Cancel
+          </button>
+          <button
+            className="btn btn-danger"
+            data-dismiss="modal"
+            disabled={true}
+            onClick={[Function]}
+            type="button"
+          >
+            Delete
+          </button>
+          <button
+            className="btn btn-primary"
+            onClick={[Function]}
+            type="button"
+          >
+            Ok
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Diagram updates when an update state is received 1`] = `
+<div>
+  <nav
+    className="navbar navbar-expand-lg navbar-light bg-light"
+  >
+    <a
+      className="navbar-brand"
+      href="#"
+    >
+      Monitor
+    </a>
+    <button
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+      className="navbar-toggler"
+      data-target="#navbarSupportedContent"
+      data-toggle="collapse"
+      type="button"
+    >
+      <span
+        className="navbar-toggler-icon"
+      />
+    </button>
+    <div
+      className="collapse navbar-collapse"
+      id="navbarSupportedContent"
+    >
+      <ul
+        className="navbar-nav mr-auto"
+      >
+        <li
+          className="nav-item active"
+        >
+          <button
+            className="btn btn-primary mr-sm-2"
+            onClick={[Function]}
+            type="button"
+          >
+            Edit
+          </button>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <div
+    id="jsPlumbDiagram"
+    style={
+      Object {
+        "position": "absolute",
+      }
+    }
+  >
+    <div
+      className="node"
+      id="1"
+      onDoubleClick={[Function]}
+      style={
+        Object {
+          "left": 7,
+          "top": 68,
+        }
+      }
+    >
+      <img
+        height="100%"
+        src="test-file-stub"
+        width="100%"
+      />
+      
+      <p>
+        serviceTest
+      </p>
+    </div>
+    <div
+      className="node"
+      id="2"
+      onDoubleClick={[Function]}
+      style={
+        Object {
+          "left": 712,
+          "top": 441,
+        }
+      }
+    >
+      <img
+        height="100%"
+        src="test-file-stub"
+        width="100%"
+      />
+      
+      <p>
+        CRM
+      </p>
+    </div>
+    <div
+      className="node"
+      id="3"
+      onDoubleClick={[Function]}
+      style={
+        Object {
+          "left": 218,
+          "top": 75,
+        }
+      }
+    >
+      <img
+        height="100%"
+        src="test-file-stub"
+        width="100%"
+      />
+      
+      <p>
+        DataHub
+      </p>
+    </div>
+  </div>
+  <div
+    aria-hidden="true"
+    aria-labelledby="exampleModalLabel"
+    className="modal fade"
+    data-backdrop="static"
+    data-keyboard="false"
+    id="nodeEditor"
+    role="dialog"
+    tabIndex={-1}
+  >
+    <div
+      className="modal-dialog"
+      role="document"
+    >
+      <div
+        className="modal-content"
+      >
+        <div
+          className="modal-header"
+        >
+          <h5
+            className="modal-title"
+            id="exampleModalLabel"
+          >
+            Add Node
+          </h5>
+          <button
+            aria-label="Close"
+            className="close"
+            data-dismiss="modal"
+            onClick={[Function]}
+            type="button"
+          >
+            <span
+              aria-hidden="true"
+            >
+              ×
+            </span>
+          </button>
+        </div>
+        <div
+          className="modal-body"
+        >
+          <form>
+            <div
+              className="form-group"
+            >
+              <label
+                className="col-form-label"
+                htmlFor="name"
+              >
+                Name:
+              </label>
+              <input
+                className="form-control"
+                id="name"
+                onChange={[Function]}
+                type="text"
+                value=""
+              />
+            </div>
+            <div
+              className="form-group"
+            >
+              <label
+                className="col-form-label"
+                htmlFor="uri"
+              >
+                Uri:
+              </label>
+              <input
+                className="form-control"
+                id="uri"
+                onChange={[Function]}
+                type="text"
+                value=""
+              />
+            </div>
+            <div
+              className="form-group"
+            >
+              <label
+                className="col-form-label"
+                htmlFor="timeout"
+              >
+                Timeout:
+              </label>
+              <input
+                className="form-control"
+                id="timeout"
+                onChange={[Function]}
+                type="text"
+                value={20}
+              />
+            </div>
+            <div
+              className="form-group"
+            >
+              <label
+                className="col-form-label"
+                htmlFor="categories"
+              >
+                Categories:
+              </label>
+              <input
+                className="form-control"
+                id="categories"
+                onChange={[Function]}
+                type="text"
+                value={Array []}
+              />
+            </div>
+            <div
+              className="form-group"
+            >
+              <label
+                className="col-form-label"
+                htmlFor="type"
+              >
+                Type:
+              </label>
+              <select
+                className="form-control"
+                id="type"
+                onChange={[Function]}
+                value="EMPTY"
+              >
+                <option
+                  value=""
+                >
+                  -- Please select a type --
+                </option>
+                <option
+                  value="CRM"
+                >
+                  CRM
+                </option>
+                <option
+                  value="DB"
+                >
+                  DB
+                </option>
+                <option
+                  value="API"
+                >
+                  API
+                </option>
+              </select>
+            </div>
+          </form>
+        </div>
+        <div
+          className="modal-footer"
+        >
+          <button
+            className="btn btn-secondary"
+            data-dismiss="modal"
+            onClick={[Function]}
+            type="button"
+          >
+            Cancel
+          </button>
+          <button
+            className="btn btn-danger"
+            data-dismiss="modal"
+            disabled={true}
+            onClick={[Function]}
+            type="button"
+          >
+            Delete
           </button>
           <button
             className="btn btn-primary"
@@ -1140,7 +2743,7 @@ exports[`Diagram updates when an update state is received 2`] = `
     </div>
   </nav>
   <div
-    id="hello"
+    id="jsPlumbDiagram"
     style={
       Object {
         "position": "absolute",
@@ -1220,6 +2823,8 @@ exports[`Diagram updates when an update state is received 2`] = `
     aria-hidden="true"
     aria-labelledby="exampleModalLabel"
     className="modal fade"
+    data-backdrop="static"
+    data-keyboard="false"
     id="nodeEditor"
     role="dialog"
     tabIndex={-1}
@@ -1244,6 +2849,7 @@ exports[`Diagram updates when an update state is received 2`] = `
             aria-label="Close"
             className="close"
             data-dismiss="modal"
+            onClick={[Function]}
             type="button"
           >
             <span
@@ -1341,6 +2947,11 @@ exports[`Diagram updates when an update state is received 2`] = `
                 value="EMPTY"
               >
                 <option
+                  value=""
+                >
+                  -- Please select a type --
+                </option>
+                <option
                   value="CRM"
                 >
                   CRM
@@ -1365,9 +2976,19 @@ exports[`Diagram updates when an update state is received 2`] = `
           <button
             className="btn btn-secondary"
             data-dismiss="modal"
+            onClick={[Function]}
             type="button"
           >
             Cancel
+          </button>
+          <button
+            className="btn btn-danger"
+            data-dismiss="modal"
+            disabled={true}
+            onClick={[Function]}
+            type="button"
+          >
+            Delete
           </button>
           <button
             className="btn btn-primary"

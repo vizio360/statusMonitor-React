@@ -38,11 +38,14 @@ class Node extends React.Component<INodeProps> {
       this.nodeEvents.onDoubleClick(this.props.service.id);
   }
 
-  hasStatusChanged(
-    serviceStateA: IServiceLastKnownState,
-    serviceStateB: IServiceLastKnownState,
-  ): boolean {
-    return serviceStateA.status != serviceStateB.status;
+  hasNodeChanged(nextProps: INodeProps): boolean {
+    let uiProps = this.props.service.uiProps;
+    let newUIProps = nextProps.service.uiProps;
+    return (
+      nextProps.serviceState.status != this.props.serviceState.status ||
+      uiProps.top != newUIProps.top ||
+      uiProps.left != newUIProps.left
+    );
   }
 
   getNodeTypeImage(serviceType: ServiceType) {
@@ -61,11 +64,8 @@ class Node extends React.Component<INodeProps> {
     return img;
   }
 
-  xshouldComponentUpdate(nextProps: INodeProps): boolean {
-    return this.hasStatusChanged(
-      this.props.serviceState,
-      nextProps.serviceState,
-    );
+  shouldComponentUpdate(nextProps: INodeProps): boolean {
+    return this.hasNodeChanged(nextProps);
   }
 
   render() {

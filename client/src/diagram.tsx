@@ -10,6 +10,7 @@ import {
   getEmptyService,
   Status,
 } from '@dataTypes';
+import {clone} from '@utils/clone';
 import NavBar from '@app/navbar';
 import NodeEditor from '@app/nodeEditor';
 import {IStatusMonitorClient} from '@app/wsClient';
@@ -37,6 +38,7 @@ interface IDiagramProps {
   wsClient: IStatusMonitorClient;
 }
 
+//TODO
 //this needs to be read from a config file
 const SERVER_URI: string = 'ws://localhost:3333/channel';
 
@@ -77,8 +79,8 @@ export default class Diagram extends React.Component<
   }
 
   onUpdateReceived(state: IServiceLastKnownState) {
-    let lastKnownStates: IServiceLastKnownState[] = JSON.parse(
-      JSON.stringify(this.state.lastKnownStates),
+    let lastKnownStates: IServiceLastKnownState[] = clone(
+      this.state.lastKnownStates,
     );
     let tmp: IServiceLastKnownState = lastKnownStates.find(
       s => s.serviceId === state.serviceId,
@@ -97,12 +99,13 @@ export default class Diagram extends React.Component<
     });
   }
 
+  //TODO
   onNodeEditorDelete(service: IService) {}
 
   onNodeEditorConfirm(service: IService) {
-    let services: IService[] = JSON.parse(JSON.stringify(this.state.services));
-    let lastKnownStates: IServiceLastKnownState[] = JSON.parse(
-      JSON.stringify(this.state.lastKnownStates),
+    let services: IService[] = clone(this.state.services);
+    let lastKnownStates: IServiceLastKnownState[] = clone(
+      this.state.lastKnownStates,
     );
 
     let tmp: IService = services.find(s => s.id === service.id);
@@ -191,40 +194,45 @@ export default class Diagram extends React.Component<
     return outEndPointOptions;
   }
 
+  addNewConnection(sourceId: string, targetId: string) {
+    const conn: IConnection = {
+      sourceId: sourceId,
+      targetId: targetId,
+    };
+    let connections = clone(this.state.connections);
+    connections.push(conn);
+
+    this.setState(prevState => ({
+      connections: connections,
+      dataChanged: true,
+    }));
+  }
+
+  deleteNewConnection(sourceId: string, targetId: string) {
+    let connections: IConnection[] = clone(this.state.connections);
+    let conn = connections.find(connection => {
+      return (
+        connection.sourceId === sourceId && connection.targetId === targetId
+      );
+    });
+    let index = connections.indexOf(conn);
+    connections.splice(index, 1);
+    this.setState(prevState => ({
+      connections: connections,
+      dataChanged: true,
+    }));
+  }
+
   componentDidUpdate() {
     this.jsPlumbInstance.reset();
     this.jsPlumbInstance.bind('connection', (info, originalEvent) => {
       if (originalEvent !== undefined) {
-        const conn: IConnection = {
-          sourceId: info.sourceId,
-          targetId: info.targetId,
-        };
-        let connections = JSON.parse(JSON.stringify(this.state.connections));
-        connections.push(conn);
-
-        this.setState(prevState => ({
-          connections: connections,
-          dataChanged: true,
-        }));
+        this.addNewConnection(info.sourceId, info.targetId);
       }
     });
     this.jsPlumbInstance.bind('connectionDetached', (info, originalEvent) => {
       if (originalEvent !== undefined) {
-        let connections: IConnection[] = JSON.parse(
-          JSON.stringify(this.state.connections),
-        );
-        let conn = connections.find(connection => {
-          return (
-            connection.sourceId === info.sourceId &&
-            connection.targetId === info.targetId
-          );
-        });
-        let index = connections.indexOf(conn);
-        connections.splice(index, 1);
-        this.setState(prevState => ({
-          connections: connections,
-          dataChanged: true,
-        }));
+        this.deleteNewConnection(info.sourceId, info.targetId);
       }
     });
     this.createJsPlumbEndPoints(this.state.services);
@@ -276,7 +284,7 @@ export default class Diagram extends React.Component<
     let pos: number[] = params.pos;
     let x: number = pos[0];
     let y: number = pos[1];
-    let services = JSON.parse(JSON.stringify(this.state.services));
+    let services = clone(this.state.services);
     let serviceToUpdate: IService = services.find((element: IService) => {
       return element.id === params.el.id;
     });
@@ -293,11 +301,12 @@ export default class Diagram extends React.Component<
   }
 
   onNodeDoubleClick(serviceId: string) {
-    let services: IService[] = JSON.parse(JSON.stringify(this.state.services));
+    let services: IService[] = clone(this.state.services);
     let service: IService = services.find(service => service.id == serviceId);
     this.setState({amendNode: true, selectedNode: service});
   }
 
+  //TODO
   save() {
     return;
     fetch('/services', {
@@ -367,7 +376,7 @@ export default class Diagram extends React.Component<
         </div>
         <NodeEditor
           id="nodeEditor"
-          key={Date.now()}
+          key={Date.now()} //forcing react to remount this component
           show={this.state.amendNode}
           node={this.state.selectedNode}
           onConfirm={this.onNodeEditorConfirm}

@@ -67,17 +67,14 @@ export default class NodeEditor extends React.Component<
 
   onConfirm(e: React.MouseEvent<HTMLElement>) {
     e.preventDefault();
-    $('#' + this.props.id).modal('hide');
     this.props.onConfirm(this.state.service);
   }
   onCancel(e: React.MouseEvent<HTMLElement>) {
     e.preventDefault();
-    $('#' + this.props.id).modal('hide');
     this.props.onCancel();
   }
   onDelete(e: React.MouseEvent<HTMLElement>) {
     e.preventDefault();
-    $('#' + this.props.id).modal('hide');
     this.props.onDelete(this.state.service);
   }
 
