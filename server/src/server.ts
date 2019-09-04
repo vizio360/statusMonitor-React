@@ -1,5 +1,6 @@
 import express from 'express';
 import http from 'http';
+import httpProxy from 'http-proxy';
 import path from 'path';
 import fs from 'fs';
 import WebSocket from 'ws';
@@ -36,6 +37,7 @@ class StatusMonitoringServer {
   connections: IConnection[] = [];
   private configApiUrl: string;
   private port: number;
+  private proxyServer: httpProxy;
 
   constructor() {
     this.app = express();
@@ -50,6 +52,16 @@ class StatusMonitoringServer {
     this.listen(listeningPort);
     this.setupWebSockets();
     this.setupRestAPI();
+  }
+
+  private setupProxy(target: string) {
+    this.proxyServer = httpProxy.createProxyServer({target: target});
+    this.app.post(ConfigPaths.SERVICES, (req, res) => {
+      this.proxyServer.web(req, res);
+    });
+    this.app.post(ConfigPaths.CONNECTIONS, (req, res) => {
+      this.proxyServer.web(req, res);
+    });
   }
 
   private setupRestAPI() {
@@ -79,6 +91,7 @@ class StatusMonitoringServer {
 
   public start(configApiUrl: string): Promise<any> {
     this.configApiUrl = configApiUrl;
+    this.setupProxy(configApiUrl);
     this.clearAnyRunningTimeouts();
     return axios
       .all([

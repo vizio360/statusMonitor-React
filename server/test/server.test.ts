@@ -22,13 +22,23 @@ describe('Status Monitoring Server', () => {
     return JSON.parse(content);
   };
 
-  let setupMockConfigAPI = function(
+  let setupMockConfigAPI_GET = function(
     resource: string,
     statusCode: number,
     responseBody: object,
   ) {
     nock(CONFIG_URI)
       .get(resource)
+      .reply(statusCode, responseBody);
+  };
+
+  let setupMockConfigAPI_POST = function(
+    resource: string,
+    statusCode: number,
+    responseBody: object,
+  ) {
+    nock(CONFIG_URI)
+      .post(resource)
       .reply(statusCode, responseBody);
   };
 
@@ -54,13 +64,13 @@ describe('Status Monitoring Server', () => {
     servicesFile: string = 'services.json',
     connectionsFile: string = 'connections.json',
   ) => {
-    setupMockConfigAPI(
+    setupMockConfigAPI_GET(
       '/services',
       servicesStatus,
       getFileContentAsJSON(`./mocks/${servicesFile}`),
     );
 
-    setupMockConfigAPI(
+    setupMockConfigAPI_GET(
       '/connections',
       connectionsStatus,
       getFileContentAsJSON(`./mocks/${connectionsFile}`),
@@ -354,5 +364,35 @@ describe('Status Monitoring Server', () => {
         fail(error);
         done();
       });
+  });
+
+  test('forwards services post requests to config server', done => {
+    setupServicesAndConnectionsMocks();
+    setupMockConfigAPI_POST('/services', 201, {});
+    server.start(CONFIG_URI).then(result => {
+      axios
+        .post(`${LOCAL_SERVER}/services`)
+        .catch(error => {
+          fail(error);
+        })
+        .finally(() => {
+          done();
+        });
+    });
+  });
+
+  test('forwards connections post requests to config server', done => {
+    setupServicesAndConnectionsMocks();
+    setupMockConfigAPI_POST('/connections', 201, {});
+    server.start(CONFIG_URI).then(result => {
+      axios
+        .post(`${LOCAL_SERVER}/connections`)
+        .catch(error => {
+          fail(error);
+        })
+        .finally(() => {
+          done();
+        });
+    });
   });
 });
