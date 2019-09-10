@@ -86,25 +86,4 @@ describe('Node', () => {
     tree = node.toJSON();
     expect(tree).toMatchSnapshot();
   });
-
-  it('does not re-render if node service status did not change', () => {
-    let node = renderer.create(jsx);
-
-    const serviceStateUpdated: IServiceLastKnownState = {
-      serviceId: '1',
-      status: Status.HEALTHY,
-      responseBody: 'some json body',
-    };
-
-    const renderSpy = jest.spyOn(Node.prototype, 'render');
-    let jsxUpdate = (
-      <Node
-        key={service.id}
-        service={service}
-        serviceState={serviceStateUpdated}
-      />
-    );
-    node.update(jsxUpdate);
-    expect(renderSpy).not.toHaveBeenCalled();
-  });
 });

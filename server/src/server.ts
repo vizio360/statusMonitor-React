@@ -2,7 +2,6 @@ import express from 'express';
 import http from 'http';
 import httpProxy from 'http-proxy';
 import path from 'path';
-import fs from 'fs';
 import WebSocket from 'ws';
 import {URL} from 'url';
 import bodyParser from 'body-parser';
@@ -44,7 +43,6 @@ class StatusMonitoringServer {
     const expWS = expressWS(this.app);
     this.websocketServer = expWS.getWss();
     this.appws = expWS.app;
-    this.app.use(bodyParser.json());
     this.app.use(express.static(path.join(__dirname, '../../dist')));
   }
 
@@ -55,13 +53,11 @@ class StatusMonitoringServer {
   }
 
   private setupProxy(target: string) {
-    this.proxyServer = httpProxy.createProxyServer({target: target});
-    this.app.post(ConfigPaths.SERVICES, (req, res) => {
-      this.proxyServer.web(req, res);
+    this.proxyServer = httpProxy.createProxyServer();
+    this.app.post('/config', (req, res) => {
+      this.proxyServer.web(req, res, {target: target});
     });
-    this.app.post(ConfigPaths.CONNECTIONS, (req, res) => {
-      this.proxyServer.web(req, res);
-    });
+    this.app.use(bodyParser.json());
   }
 
   private setupRestAPI() {
@@ -166,6 +162,8 @@ class StatusMonitoringServer {
   }
 
   private setupWatchdogs(services: IService[]): void {
+    //TODO unit test this reset of servicesStatus
+    this.servicesStatus = [];
     services.forEach(service => {
       const statusReport: IServiceLastKnownState = {
         serviceId: service.id,

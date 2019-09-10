@@ -66,7 +66,7 @@ export default class Diagram extends React.Component<
     this.onNodeDoubleClick = this.onNodeDoubleClick.bind(this);
     this.onCancel = this.onCancel.bind(this);
     this.onEdit = this.onEdit.bind(this);
-    //this.save = this.save.bind(this);
+    this.save = this.save.bind(this);
     this.onAddNode = this.onAddNode.bind(this);
     this.onNodeEditorConfirm = this.onNodeEditorConfirm.bind(this);
     this.onNodeEditorCancel = this.onNodeEditorCancel.bind(this);
@@ -128,6 +128,11 @@ export default class Diagram extends React.Component<
     let index: number = services.indexOf(tmp);
     if (index > -1) {
       services[index] = service;
+      let tmpKnownState: IServiceLastKnownState = lastKnownStates.find(
+        s => s.serviceId === service.id,
+      );
+      tmpKnownState.status = Status.HEALTHY;
+      tmpKnownState.responseBody = '';
     } else {
       service.id = '' + (services.length + 1);
       services.push(service);
@@ -144,6 +149,7 @@ export default class Diagram extends React.Component<
       dataChanged: true,
       lastKnownStates: lastKnownStates,
       amendNode: false,
+      selectedNode: getEmptyService(),
     });
   }
 
@@ -322,32 +328,27 @@ export default class Diagram extends React.Component<
     this.setState({amendNode: true, selectedNode: service});
   }
 
-  //TODO
   save() {
-    return;
-    fetch('/services', {
+    fetch('/config', {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
       method: 'POST',
-      body: JSON.stringify({services: this.state.services}),
+      body: JSON.stringify({
+        services: this.state.services,
+        connections: this.state.connections,
+      }),
+    }).then(() => {
+      this.setState(
+        {isEditing: false, amendNode: false, dataChanged: false},
+        () => {
+          setTimeout(() => {
+            fetch('/reload', {method: 'POST'});
+          }, 500);
+        },
+      );
     });
-
-    let connections: any = this.jsPlumbInstance.getAllConnections();
-    connections = connections.map((c: Connection) => ({
-      sourceId: c.endpoints[0].getElement().id,
-      targetId: c.endpoints[1].getElement().id,
-    }));
-    fetch('/connections', {
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      method: 'POST',
-      body: JSON.stringify({connections: connections}),
-    });
-    this.setState({amendNode: false, dataChanged: false});
   }
 
   createNode(service: IService) {
@@ -377,9 +378,19 @@ export default class Diagram extends React.Component<
     return results;
   }
 
+  private getNodeEditorKey(): string {
+    let selectedNodeId: string = this.state.selectedNode.id;
+    if (selectedNodeId == '')
+      selectedNodeId = '' + (this.state.services.length + 1);
+    return selectedNodeId;
+  }
+
   render() {
     return (
       <div>
+        <div id="jsPlumbDiagram" style={{position: 'absolute'}}>
+          {this.renderNodes(this.state.services)}
+        </div>
         <NavBar
           dataChanged={this.state.dataChanged}
           onEdit={this.onEdit}
@@ -387,12 +398,9 @@ export default class Diagram extends React.Component<
           onSave={this.save}
           onAddNode={this.onAddNode}
         />
-        <div id="jsPlumbDiagram" style={{position: 'absolute'}}>
-          {this.renderNodes(this.state.services)}
-        </div>
         <NodeEditor
           id="nodeEditor"
-          key={Date.now()} //forcing react to remount this component
+          key={this.getNodeEditorKey()} //forcing react to remount this component
           show={this.state.amendNode}
           node={this.state.selectedNode}
           onConfirm={this.onNodeEditorConfirm}

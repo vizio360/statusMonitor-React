@@ -366,27 +366,12 @@ describe('Status Monitoring Server', () => {
       });
   });
 
-  test('forwards services post requests to config server', done => {
+  test('forwards config post requests to config server', done => {
     setupServicesAndConnectionsMocks();
-    setupMockConfigAPI_POST('/services', 201, {});
+    setupMockConfigAPI_POST('/config', 200, {});
     server.start(CONFIG_URI).then(result => {
       axios
-        .post(`${LOCAL_SERVER}/services`)
-        .catch(error => {
-          fail(error);
-        })
-        .finally(() => {
-          done();
-        });
-    });
-  });
-
-  test('forwards connections post requests to config server', done => {
-    setupServicesAndConnectionsMocks();
-    setupMockConfigAPI_POST('/connections', 201, {});
-    server.start(CONFIG_URI).then(result => {
-      axios
-        .post(`${LOCAL_SERVER}/connections`)
+        .post(`${LOCAL_SERVER}/config`)
         .catch(error => {
           fail(error);
         })

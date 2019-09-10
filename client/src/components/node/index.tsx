@@ -38,16 +38,6 @@ class Node extends React.Component<INodeProps> {
       this.nodeEvents.onDoubleClick(this.props.service.id);
   }
 
-  hasNodeChanged(nextProps: INodeProps): boolean {
-    let uiProps = this.props.service.uiProps;
-    let newUIProps = nextProps.service.uiProps;
-    return (
-      nextProps.serviceState.status != this.props.serviceState.status ||
-      uiProps.top != newUIProps.top ||
-      uiProps.left != newUIProps.left
-    );
-  }
-
   getNodeTypeImage(serviceType: ServiceType) {
     let img: string;
     switch (serviceType) {
@@ -62,10 +52,6 @@ class Node extends React.Component<INodeProps> {
         break;
     }
     return img;
-  }
-
-  shouldComponentUpdate(nextProps: INodeProps): boolean {
-    return this.hasNodeChanged(nextProps);
   }
 
   render() {

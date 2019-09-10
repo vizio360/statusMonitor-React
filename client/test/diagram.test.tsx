@@ -203,4 +203,20 @@ describe('Diagram', () => {
     diagramJson = diagram.toJSON();
     expect(diagramJson).toMatchSnapshot();
   });
+
+  it('sends the config to the server on save', async () => {
+    fetchMock.mockResponses(['', {status: 200}], ['', {status: 200}]);
+    let diagram = await createDiagramComponent();
+    let component = diagram.root;
+    let navBar = component.findByType(NavBar);
+    navBar.props.onSave();
+    //NOT IDEAL but only way I could test a timeout after a fetch
+    const timeout = () => {
+      return new Promise(resolve => setTimeout(resolve, 600));
+    };
+    await timeout();
+    expect(fetchMock.mock.calls.length).toEqual(2);
+    expect(fetchMock.mock.calls[0][0]).toEqual('/config');
+    expect(fetchMock.mock.calls[1][0]).toEqual('/reload');
+  });
 });

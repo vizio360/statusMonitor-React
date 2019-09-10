@@ -6,7 +6,6 @@ import {
   IConnection,
   IMessage,
 } from '@dataTypes';
-import _ from 'underscore';
 
 interface UpdateCallback {
   (service: IServiceLastKnownState): void;
@@ -29,7 +28,6 @@ interface IStatusMonitorClient {
 
 class StatusMonitorClient implements IStatusMonitorClient {
   ws: WebSocket;
-
   _services: IService[];
   _connections: IConnection[];
   _lastKnownStates: IServiceLastKnownState[];

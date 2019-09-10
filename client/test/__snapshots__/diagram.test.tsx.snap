@@ -2,49 +2,6 @@
 
 exports[`Diagram adds a new node on node editor confirmation 1`] = `
 <div>
-  <nav
-    className="navbar navbar-expand-lg navbar-light bg-light"
-  >
-    <a
-      className="navbar-brand"
-      href="#"
-    >
-      Monitor
-    </a>
-    <button
-      aria-controls="navbarSupportedContent"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-      className="navbar-toggler"
-      data-target="#navbarSupportedContent"
-      data-toggle="collapse"
-      type="button"
-    >
-      <span
-        className="navbar-toggler-icon"
-      />
-    </button>
-    <div
-      className="collapse navbar-collapse"
-      id="navbarSupportedContent"
-    >
-      <ul
-        className="navbar-nav mr-auto"
-      >
-        <li
-          className="nav-item active"
-        >
-          <button
-            className="btn btn-primary mr-sm-2"
-            onClick={[Function]}
-            type="button"
-          >
-            Edit
-          </button>
-        </li>
-      </ul>
-    </div>
-  </nav>
   <div
     id="jsPlumbDiagram"
     style={
@@ -117,6 +74,49 @@ exports[`Diagram adds a new node on node editor confirmation 1`] = `
       </p>
     </div>
   </div>
+  <nav
+    className="navbar navbar-expand-lg navbar-light bg-light"
+  >
+    <a
+      className="navbar-brand"
+      href="#"
+    >
+      Monitor
+    </a>
+    <button
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+      className="navbar-toggler"
+      data-target="#navbarSupportedContent"
+      data-toggle="collapse"
+      type="button"
+    >
+      <span
+        className="navbar-toggler-icon"
+      />
+    </button>
+    <div
+      className="collapse navbar-collapse"
+      id="navbarSupportedContent"
+    >
+      <ul
+        className="navbar-nav mr-auto"
+      >
+        <li
+          className="nav-item active"
+        >
+          <button
+            className="btn btn-primary mr-sm-2"
+            onClick={[Function]}
+            type="button"
+          >
+            Edit
+          </button>
+        </li>
+      </ul>
+    </div>
+  </nav>
   <div
     aria-hidden="true"
     aria-labelledby="exampleModalLabel"
@@ -304,49 +304,6 @@ exports[`Diagram adds a new node on node editor confirmation 1`] = `
 
 exports[`Diagram adds a new node on node editor confirmation 2`] = `
 <div>
-  <nav
-    className="navbar navbar-expand-lg navbar-light bg-light"
-  >
-    <a
-      className="navbar-brand"
-      href="#"
-    >
-      Monitor
-    </a>
-    <button
-      aria-controls="navbarSupportedContent"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-      className="navbar-toggler"
-      data-target="#navbarSupportedContent"
-      data-toggle="collapse"
-      type="button"
-    >
-      <span
-        className="navbar-toggler-icon"
-      />
-    </button>
-    <div
-      className="collapse navbar-collapse"
-      id="navbarSupportedContent"
-    >
-      <ul
-        className="navbar-nav mr-auto"
-      >
-        <li
-          className="nav-item active"
-        >
-          <button
-            className="btn btn-primary mr-sm-2"
-            onClick={[Function]}
-            type="button"
-          >
-            Edit
-          </button>
-        </li>
-      </ul>
-    </div>
-  </nav>
   <div
     id="jsPlumbDiagram"
     style={
@@ -440,6 +397,49 @@ exports[`Diagram adds a new node on node editor confirmation 2`] = `
       </p>
     </div>
   </div>
+  <nav
+    className="navbar navbar-expand-lg navbar-light bg-light"
+  >
+    <a
+      className="navbar-brand"
+      href="#"
+    >
+      Monitor
+    </a>
+    <button
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+      className="navbar-toggler"
+      data-target="#navbarSupportedContent"
+      data-toggle="collapse"
+      type="button"
+    >
+      <span
+        className="navbar-toggler-icon"
+      />
+    </button>
+    <div
+      className="collapse navbar-collapse"
+      id="navbarSupportedContent"
+    >
+      <ul
+        className="navbar-nav mr-auto"
+      >
+        <li
+          className="nav-item active"
+        >
+          <button
+            className="btn btn-primary mr-sm-2"
+            onClick={[Function]}
+            type="button"
+          >
+            Edit
+          </button>
+        </li>
+      </ul>
+    </div>
+  </nav>
   <div
     aria-hidden="true"
     aria-labelledby="exampleModalLabel"
@@ -627,49 +627,6 @@ exports[`Diagram adds a new node on node editor confirmation 2`] = `
 
 exports[`Diagram can be instatiated 1`] = `
 <div>
-  <nav
-    className="navbar navbar-expand-lg navbar-light bg-light"
-  >
-    <a
-      className="navbar-brand"
-      href="#"
-    >
-      Monitor
-    </a>
-    <button
-      aria-controls="navbarSupportedContent"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-      className="navbar-toggler"
-      data-target="#navbarSupportedContent"
-      data-toggle="collapse"
-      type="button"
-    >
-      <span
-        className="navbar-toggler-icon"
-      />
-    </button>
-    <div
-      className="collapse navbar-collapse"
-      id="navbarSupportedContent"
-    >
-      <ul
-        className="navbar-nav mr-auto"
-      >
-        <li
-          className="nav-item active"
-        >
-          <button
-            className="btn btn-primary mr-sm-2"
-            onClick={[Function]}
-            type="button"
-          >
-            Edit
-          </button>
-        </li>
-      </ul>
-    </div>
-  </nav>
   <div
     id="jsPlumbDiagram"
     style={
@@ -742,6 +699,49 @@ exports[`Diagram can be instatiated 1`] = `
       </p>
     </div>
   </div>
+  <nav
+    className="navbar navbar-expand-lg navbar-light bg-light"
+  >
+    <a
+      className="navbar-brand"
+      href="#"
+    >
+      Monitor
+    </a>
+    <button
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+      className="navbar-toggler"
+      data-target="#navbarSupportedContent"
+      data-toggle="collapse"
+      type="button"
+    >
+      <span
+        className="navbar-toggler-icon"
+      />
+    </button>
+    <div
+      className="collapse navbar-collapse"
+      id="navbarSupportedContent"
+    >
+      <ul
+        className="navbar-nav mr-auto"
+      >
+        <li
+          className="nav-item active"
+        >
+          <button
+            className="btn btn-primary mr-sm-2"
+            onClick={[Function]}
+            type="button"
+          >
+            Edit
+          </button>
+        </li>
+      </ul>
+    </div>
+  </nav>
   <div
     aria-hidden="true"
     aria-labelledby="exampleModalLabel"
@@ -929,49 +929,6 @@ exports[`Diagram can be instatiated 1`] = `
 
 exports[`Diagram cancels the node editor modal 1`] = `
 <div>
-  <nav
-    className="navbar navbar-expand-lg navbar-light bg-light"
-  >
-    <a
-      className="navbar-brand"
-      href="#"
-    >
-      Monitor
-    </a>
-    <button
-      aria-controls="navbarSupportedContent"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-      className="navbar-toggler"
-      data-target="#navbarSupportedContent"
-      data-toggle="collapse"
-      type="button"
-    >
-      <span
-        className="navbar-toggler-icon"
-      />
-    </button>
-    <div
-      className="collapse navbar-collapse"
-      id="navbarSupportedContent"
-    >
-      <ul
-        className="navbar-nav mr-auto"
-      >
-        <li
-          className="nav-item active"
-        >
-          <button
-            className="btn btn-primary mr-sm-2"
-            onClick={[Function]}
-            type="button"
-          >
-            Edit
-          </button>
-        </li>
-      </ul>
-    </div>
-  </nav>
   <div
     id="jsPlumbDiagram"
     style={
@@ -1044,6 +1001,49 @@ exports[`Diagram cancels the node editor modal 1`] = `
       </p>
     </div>
   </div>
+  <nav
+    className="navbar navbar-expand-lg navbar-light bg-light"
+  >
+    <a
+      className="navbar-brand"
+      href="#"
+    >
+      Monitor
+    </a>
+    <button
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+      className="navbar-toggler"
+      data-target="#navbarSupportedContent"
+      data-toggle="collapse"
+      type="button"
+    >
+      <span
+        className="navbar-toggler-icon"
+      />
+    </button>
+    <div
+      className="collapse navbar-collapse"
+      id="navbarSupportedContent"
+    >
+      <ul
+        className="navbar-nav mr-auto"
+      >
+        <li
+          className="nav-item active"
+        >
+          <button
+            className="btn btn-primary mr-sm-2"
+            onClick={[Function]}
+            type="button"
+          >
+            Edit
+          </button>
+        </li>
+      </ul>
+    </div>
+  </nav>
   <div
     aria-hidden="true"
     aria-labelledby="exampleModalLabel"
@@ -1231,49 +1231,6 @@ exports[`Diagram cancels the node editor modal 1`] = `
 
 exports[`Diagram cancels the node editor modal 2`] = `
 <div>
-  <nav
-    className="navbar navbar-expand-lg navbar-light bg-light"
-  >
-    <a
-      className="navbar-brand"
-      href="#"
-    >
-      Monitor
-    </a>
-    <button
-      aria-controls="navbarSupportedContent"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-      className="navbar-toggler"
-      data-target="#navbarSupportedContent"
-      data-toggle="collapse"
-      type="button"
-    >
-      <span
-        className="navbar-toggler-icon"
-      />
-    </button>
-    <div
-      className="collapse navbar-collapse"
-      id="navbarSupportedContent"
-    >
-      <ul
-        className="navbar-nav mr-auto"
-      >
-        <li
-          className="nav-item active"
-        >
-          <button
-            className="btn btn-primary mr-sm-2"
-            onClick={[Function]}
-            type="button"
-          >
-            Edit
-          </button>
-        </li>
-      </ul>
-    </div>
-  </nav>
   <div
     id="jsPlumbDiagram"
     style={
@@ -1346,6 +1303,49 @@ exports[`Diagram cancels the node editor modal 2`] = `
       </p>
     </div>
   </div>
+  <nav
+    className="navbar navbar-expand-lg navbar-light bg-light"
+  >
+    <a
+      className="navbar-brand"
+      href="#"
+    >
+      Monitor
+    </a>
+    <button
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+      className="navbar-toggler"
+      data-target="#navbarSupportedContent"
+      data-toggle="collapse"
+      type="button"
+    >
+      <span
+        className="navbar-toggler-icon"
+      />
+    </button>
+    <div
+      className="collapse navbar-collapse"
+      id="navbarSupportedContent"
+    >
+      <ul
+        className="navbar-nav mr-auto"
+      >
+        <li
+          className="nav-item active"
+        >
+          <button
+            className="btn btn-primary mr-sm-2"
+            onClick={[Function]}
+            type="button"
+          >
+            Edit
+          </button>
+        </li>
+      </ul>
+    </div>
+  </nav>
   <div
     aria-hidden="true"
     aria-labelledby="exampleModalLabel"
@@ -1533,49 +1533,6 @@ exports[`Diagram cancels the node editor modal 2`] = `
 
 exports[`Diagram deletes a node 1`] = `
 <div>
-  <nav
-    className="navbar navbar-expand-lg navbar-light bg-light"
-  >
-    <a
-      className="navbar-brand"
-      href="#"
-    >
-      Monitor
-    </a>
-    <button
-      aria-controls="navbarSupportedContent"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-      className="navbar-toggler"
-      data-target="#navbarSupportedContent"
-      data-toggle="collapse"
-      type="button"
-    >
-      <span
-        className="navbar-toggler-icon"
-      />
-    </button>
-    <div
-      className="collapse navbar-collapse"
-      id="navbarSupportedContent"
-    >
-      <ul
-        className="navbar-nav mr-auto"
-      >
-        <li
-          className="nav-item active"
-        >
-          <button
-            className="btn btn-primary mr-sm-2"
-            onClick={[Function]}
-            type="button"
-          >
-            Edit
-          </button>
-        </li>
-      </ul>
-    </div>
-  </nav>
   <div
     id="jsPlumbDiagram"
     style={
@@ -1648,6 +1605,49 @@ exports[`Diagram deletes a node 1`] = `
       </p>
     </div>
   </div>
+  <nav
+    className="navbar navbar-expand-lg navbar-light bg-light"
+  >
+    <a
+      className="navbar-brand"
+      href="#"
+    >
+      Monitor
+    </a>
+    <button
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+      className="navbar-toggler"
+      data-target="#navbarSupportedContent"
+      data-toggle="collapse"
+      type="button"
+    >
+      <span
+        className="navbar-toggler-icon"
+      />
+    </button>
+    <div
+      className="collapse navbar-collapse"
+      id="navbarSupportedContent"
+    >
+      <ul
+        className="navbar-nav mr-auto"
+      >
+        <li
+          className="nav-item active"
+        >
+          <button
+            className="btn btn-primary mr-sm-2"
+            onClick={[Function]}
+            type="button"
+          >
+            Edit
+          </button>
+        </li>
+      </ul>
+    </div>
+  </nav>
   <div
     aria-hidden="true"
     aria-labelledby="exampleModalLabel"
@@ -1835,49 +1835,6 @@ exports[`Diagram deletes a node 1`] = `
 
 exports[`Diagram deletes a node 2`] = `
 <div>
-  <nav
-    className="navbar navbar-expand-lg navbar-light bg-light"
-  >
-    <a
-      className="navbar-brand"
-      href="#"
-    >
-      Monitor
-    </a>
-    <button
-      aria-controls="navbarSupportedContent"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-      className="navbar-toggler"
-      data-target="#navbarSupportedContent"
-      data-toggle="collapse"
-      type="button"
-    >
-      <span
-        className="navbar-toggler-icon"
-      />
-    </button>
-    <div
-      className="collapse navbar-collapse"
-      id="navbarSupportedContent"
-    >
-      <ul
-        className="navbar-nav mr-auto"
-      >
-        <li
-          className="nav-item active"
-        >
-          <button
-            className="btn btn-primary mr-sm-2"
-            onClick={[Function]}
-            type="button"
-          >
-            Edit
-          </button>
-        </li>
-      </ul>
-    </div>
-  </nav>
   <div
     id="jsPlumbDiagram"
     style={
@@ -1929,6 +1886,49 @@ exports[`Diagram deletes a node 2`] = `
       </p>
     </div>
   </div>
+  <nav
+    className="navbar navbar-expand-lg navbar-light bg-light"
+  >
+    <a
+      className="navbar-brand"
+      href="#"
+    >
+      Monitor
+    </a>
+    <button
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+      className="navbar-toggler"
+      data-target="#navbarSupportedContent"
+      data-toggle="collapse"
+      type="button"
+    >
+      <span
+        className="navbar-toggler-icon"
+      />
+    </button>
+    <div
+      className="collapse navbar-collapse"
+      id="navbarSupportedContent"
+    >
+      <ul
+        className="navbar-nav mr-auto"
+      >
+        <li
+          className="nav-item active"
+        >
+          <button
+            className="btn btn-primary mr-sm-2"
+            onClick={[Function]}
+            type="button"
+          >
+            Edit
+          </button>
+        </li>
+      </ul>
+    </div>
+  </nav>
   <div
     aria-hidden="true"
     aria-labelledby="exampleModalLabel"
@@ -2116,49 +2116,6 @@ exports[`Diagram deletes a node 2`] = `
 
 exports[`Diagram reloads when a reload message is received 1`] = `
 <div>
-  <nav
-    className="navbar navbar-expand-lg navbar-light bg-light"
-  >
-    <a
-      className="navbar-brand"
-      href="#"
-    >
-      Monitor
-    </a>
-    <button
-      aria-controls="navbarSupportedContent"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-      className="navbar-toggler"
-      data-target="#navbarSupportedContent"
-      data-toggle="collapse"
-      type="button"
-    >
-      <span
-        className="navbar-toggler-icon"
-      />
-    </button>
-    <div
-      className="collapse navbar-collapse"
-      id="navbarSupportedContent"
-    >
-      <ul
-        className="navbar-nav mr-auto"
-      >
-        <li
-          className="nav-item active"
-        >
-          <button
-            className="btn btn-primary mr-sm-2"
-            onClick={[Function]}
-            type="button"
-          >
-            Edit
-          </button>
-        </li>
-      </ul>
-    </div>
-  </nav>
   <div
     id="jsPlumbDiagram"
     style={
@@ -2231,6 +2188,49 @@ exports[`Diagram reloads when a reload message is received 1`] = `
       </p>
     </div>
   </div>
+  <nav
+    className="navbar navbar-expand-lg navbar-light bg-light"
+  >
+    <a
+      className="navbar-brand"
+      href="#"
+    >
+      Monitor
+    </a>
+    <button
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+      className="navbar-toggler"
+      data-target="#navbarSupportedContent"
+      data-toggle="collapse"
+      type="button"
+    >
+      <span
+        className="navbar-toggler-icon"
+      />
+    </button>
+    <div
+      className="collapse navbar-collapse"
+      id="navbarSupportedContent"
+    >
+      <ul
+        className="navbar-nav mr-auto"
+      >
+        <li
+          className="nav-item active"
+        >
+          <button
+            className="btn btn-primary mr-sm-2"
+            onClick={[Function]}
+            type="button"
+          >
+            Edit
+          </button>
+        </li>
+      </ul>
+    </div>
+  </nav>
   <div
     aria-hidden="true"
     aria-labelledby="exampleModalLabel"
@@ -2418,6 +2418,36 @@ exports[`Diagram reloads when a reload message is received 1`] = `
 
 exports[`Diagram reloads when a reload message is received 2`] = `
 <div>
+  <div
+    id="jsPlumbDiagram"
+    style={
+      Object {
+        "position": "absolute",
+      }
+    }
+  >
+    <div
+      className="node"
+      id="3"
+      onDoubleClick={[Function]}
+      style={
+        Object {
+          "left": 218,
+          "top": 75,
+        }
+      }
+    >
+      <img
+        height="100%"
+        src="test-file-stub"
+        width="100%"
+      />
+      
+      <p>
+        DataHub
+      </p>
+    </div>
+  </div>
   <nav
     className="navbar navbar-expand-lg navbar-light bg-light"
   >
@@ -2461,36 +2491,6 @@ exports[`Diagram reloads when a reload message is received 2`] = `
       </ul>
     </div>
   </nav>
-  <div
-    id="jsPlumbDiagram"
-    style={
-      Object {
-        "position": "absolute",
-      }
-    }
-  >
-    <div
-      className="node"
-      id="3"
-      onDoubleClick={[Function]}
-      style={
-        Object {
-          "left": 218,
-          "top": 75,
-        }
-      }
-    >
-      <img
-        height="100%"
-        src="test-file-stub"
-        width="100%"
-      />
-      
-      <p>
-        DataHub
-      </p>
-    </div>
-  </div>
   <div
     aria-hidden="true"
     aria-labelledby="exampleModalLabel"
@@ -2678,49 +2678,6 @@ exports[`Diagram reloads when a reload message is received 2`] = `
 
 exports[`Diagram resets itself if cancelling an edit 1`] = `
 <div>
-  <nav
-    className="navbar navbar-expand-lg navbar-light bg-light"
-  >
-    <a
-      className="navbar-brand"
-      href="#"
-    >
-      Monitor
-    </a>
-    <button
-      aria-controls="navbarSupportedContent"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-      className="navbar-toggler"
-      data-target="#navbarSupportedContent"
-      data-toggle="collapse"
-      type="button"
-    >
-      <span
-        className="navbar-toggler-icon"
-      />
-    </button>
-    <div
-      className="collapse navbar-collapse"
-      id="navbarSupportedContent"
-    >
-      <ul
-        className="navbar-nav mr-auto"
-      >
-        <li
-          className="nav-item active"
-        >
-          <button
-            className="btn btn-primary mr-sm-2"
-            onClick={[Function]}
-            type="button"
-          >
-            Edit
-          </button>
-        </li>
-      </ul>
-    </div>
-  </nav>
   <div
     id="jsPlumbDiagram"
     style={
@@ -2793,6 +2750,49 @@ exports[`Diagram resets itself if cancelling an edit 1`] = `
       </p>
     </div>
   </div>
+  <nav
+    className="navbar navbar-expand-lg navbar-light bg-light"
+  >
+    <a
+      className="navbar-brand"
+      href="#"
+    >
+      Monitor
+    </a>
+    <button
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+      className="navbar-toggler"
+      data-target="#navbarSupportedContent"
+      data-toggle="collapse"
+      type="button"
+    >
+      <span
+        className="navbar-toggler-icon"
+      />
+    </button>
+    <div
+      className="collapse navbar-collapse"
+      id="navbarSupportedContent"
+    >
+      <ul
+        className="navbar-nav mr-auto"
+      >
+        <li
+          className="nav-item active"
+        >
+          <button
+            className="btn btn-primary mr-sm-2"
+            onClick={[Function]}
+            type="button"
+          >
+            Edit
+          </button>
+        </li>
+      </ul>
+    </div>
+  </nav>
   <div
     aria-hidden="true"
     aria-labelledby="exampleModalLabel"
@@ -2980,49 +2980,6 @@ exports[`Diagram resets itself if cancelling an edit 1`] = `
 
 exports[`Diagram updates when an update state is received 1`] = `
 <div>
-  <nav
-    className="navbar navbar-expand-lg navbar-light bg-light"
-  >
-    <a
-      className="navbar-brand"
-      href="#"
-    >
-      Monitor
-    </a>
-    <button
-      aria-controls="navbarSupportedContent"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-      className="navbar-toggler"
-      data-target="#navbarSupportedContent"
-      data-toggle="collapse"
-      type="button"
-    >
-      <span
-        className="navbar-toggler-icon"
-      />
-    </button>
-    <div
-      className="collapse navbar-collapse"
-      id="navbarSupportedContent"
-    >
-      <ul
-        className="navbar-nav mr-auto"
-      >
-        <li
-          className="nav-item active"
-        >
-          <button
-            className="btn btn-primary mr-sm-2"
-            onClick={[Function]}
-            type="button"
-          >
-            Edit
-          </button>
-        </li>
-      </ul>
-    </div>
-  </nav>
   <div
     id="jsPlumbDiagram"
     style={
@@ -3095,6 +3052,49 @@ exports[`Diagram updates when an update state is received 1`] = `
       </p>
     </div>
   </div>
+  <nav
+    className="navbar navbar-expand-lg navbar-light bg-light"
+  >
+    <a
+      className="navbar-brand"
+      href="#"
+    >
+      Monitor
+    </a>
+    <button
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+      className="navbar-toggler"
+      data-target="#navbarSupportedContent"
+      data-toggle="collapse"
+      type="button"
+    >
+      <span
+        className="navbar-toggler-icon"
+      />
+    </button>
+    <div
+      className="collapse navbar-collapse"
+      id="navbarSupportedContent"
+    >
+      <ul
+        className="navbar-nav mr-auto"
+      >
+        <li
+          className="nav-item active"
+        >
+          <button
+            className="btn btn-primary mr-sm-2"
+            onClick={[Function]}
+            type="button"
+          >
+            Edit
+          </button>
+        </li>
+      </ul>
+    </div>
+  </nav>
   <div
     aria-hidden="true"
     aria-labelledby="exampleModalLabel"
@@ -3282,49 +3282,6 @@ exports[`Diagram updates when an update state is received 1`] = `
 
 exports[`Diagram updates when an update state is received 2`] = `
 <div>
-  <nav
-    className="navbar navbar-expand-lg navbar-light bg-light"
-  >
-    <a
-      className="navbar-brand"
-      href="#"
-    >
-      Monitor
-    </a>
-    <button
-      aria-controls="navbarSupportedContent"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-      className="navbar-toggler"
-      data-target="#navbarSupportedContent"
-      data-toggle="collapse"
-      type="button"
-    >
-      <span
-        className="navbar-toggler-icon"
-      />
-    </button>
-    <div
-      className="collapse navbar-collapse"
-      id="navbarSupportedContent"
-    >
-      <ul
-        className="navbar-nav mr-auto"
-      >
-        <li
-          className="nav-item active"
-        >
-          <button
-            className="btn btn-primary mr-sm-2"
-            onClick={[Function]}
-            type="button"
-          >
-            Edit
-          </button>
-        </li>
-      </ul>
-    </div>
-  </nav>
   <div
     id="jsPlumbDiagram"
     style={
@@ -3402,6 +3359,49 @@ exports[`Diagram updates when an update state is received 2`] = `
       </p>
     </div>
   </div>
+  <nav
+    className="navbar navbar-expand-lg navbar-light bg-light"
+  >
+    <a
+      className="navbar-brand"
+      href="#"
+    >
+      Monitor
+    </a>
+    <button
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+      className="navbar-toggler"
+      data-target="#navbarSupportedContent"
+      data-toggle="collapse"
+      type="button"
+    >
+      <span
+        className="navbar-toggler-icon"
+      />
+    </button>
+    <div
+      className="collapse navbar-collapse"
+      id="navbarSupportedContent"
+    >
+      <ul
+        className="navbar-nav mr-auto"
+      >
+        <li
+          className="nav-item active"
+        >
+          <button
+            className="btn btn-primary mr-sm-2"
+            onClick={[Function]}
+            type="button"
+          >
+            Edit
+          </button>
+        </li>
+      </ul>
+    </div>
+  </nav>
   <div
     aria-hidden="true"
     aria-labelledby="exampleModalLabel"

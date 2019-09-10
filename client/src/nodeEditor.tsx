@@ -87,6 +87,10 @@ export default class NodeEditor extends React.Component<
   componentDidMount() {
     if (this.props.show) $('#' + this.props.id).modal('show');
   }
+  componentDidUpdate() {
+
+    if (this.props.show) $('#' + this.props.id).modal('show');
+  }
 
   render() {
     const allowDeletion: boolean = this.state.service.id !== '';
