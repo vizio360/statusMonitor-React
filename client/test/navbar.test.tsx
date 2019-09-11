@@ -29,32 +29,31 @@ describe('Nav Bar', () => {
   });
 
   it('renders the editor menu when starting editing', () => {
-    const {getByText, asFragment} = renderNavBar();
-    fireEvent.click(getByText('Edit'));
+    const {getByText, asFragment} = renderNavBar({
+      dataChanged: false,
+      editing: true,
+    });
     expect(asFragment()).toMatchSnapshot();
   });
 
-  it('exists editing if cancelled', () => {
+  it('renders the edit button if not editing', () => {
     const {getByText, asFragment} = renderNavBar();
-    fireEvent.click(getByText('Edit'));
-    fireEvent.click(getByText('Cancel'));
     expect(asFragment()).toMatchSnapshot();
   });
 
   it('disables the Save button if in edit mode and no changes have been made', () => {
-    const onEditCB = jest.fn();
-    const {getByText, asFragment} = renderNavBar();
-    fireEvent.click(getByText('Edit'));
+    const {getByText, asFragment} = renderNavBar({
+      dataChanged: false,
+      editing: true,
+    });
     expect(getByText('Save')).toBeDisabled();
   });
 
   it('enables the Save button is in edit mode and changes have been made', () => {
-    const onEditCB = jest.fn();
     const {getByText, asFragment} = renderNavBar({
       dataChanged: true,
-      editing: false,
+      editing: true,
     });
-    fireEvent.click(getByText('Edit'));
     expect(getByText('Save')).toBeEnabled();
   });
 
@@ -73,10 +72,9 @@ describe('Nav Bar', () => {
     const onCancelCB = jest.fn();
     const {getByText, asFragment} = renderNavBar({
       dataChanged: false,
-      editing: false,
+      editing: true,
       onCancel: onCancelCB,
     });
-    fireEvent.click(getByText('Edit'));
     fireEvent.click(getByText('Cancel'));
     expect(onCancelCB).toHaveBeenCalled();
   });
@@ -85,10 +83,9 @@ describe('Nav Bar', () => {
     const onSaveCB = jest.fn();
     const {getByText, asFragment} = renderNavBar({
       dataChanged: true,
-      editing: false,
+      editing: true,
       onSave: onSaveCB,
     });
-    fireEvent.click(getByText('Edit'));
     fireEvent.click(getByText('Save'));
     expect(onSaveCB).toHaveBeenCalled();
   });
@@ -97,10 +94,9 @@ describe('Nav Bar', () => {
     const onAddNodeCB = jest.fn();
     const {getByText, asFragment} = renderNavBar({
       dataChanged: false,
-      editing: false,
+      editing: true,
       onAddNode: onAddNodeCB,
     });
-    fireEvent.click(getByText('Edit'));
     fireEvent.click(getByText('Add Node'));
     expect(onAddNodeCB).toHaveBeenCalled();
   });

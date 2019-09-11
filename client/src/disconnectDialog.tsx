@@ -5,6 +5,7 @@ interface IDisconnectDialogProps {
   visible: boolean;
   onReconnect(): void;
 }
+
 export default function DisconnectDialog(props: IDisconnectDialogProps) {
   useEffect(() => {
     if (props.visible) {

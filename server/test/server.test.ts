@@ -368,7 +368,7 @@ describe('Status Monitoring Server', () => {
 
   test('forwards config post requests to config server', done => {
     setupServicesAndConnectionsMocks();
-    setupMockConfigAPI_POST('/config', 200, {});
+    setupMockConfigAPI_POST('/config', 204, {});
     server.start(CONFIG_URI).then(result => {
       axios
         .post(`${LOCAL_SERVER}/config`)
