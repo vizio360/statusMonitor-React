@@ -13,6 +13,7 @@ import {
 import {clone} from '@utils/clone';
 import NavBar from '@app/navbar';
 import NodeEditor from '@app/nodeEditor';
+import DisconnectDialog from '@app/disconnectDialog';
 import {IStatusMonitorClient} from '@app/wsClient';
 import {
   Connection,
@@ -32,6 +33,7 @@ interface IDiagramState {
   isEditing: boolean;
   amendNode: boolean;
   selectedNode: IService;
+  connected: boolean;
 }
 
 interface IDiagramProps {
@@ -59,23 +61,42 @@ export default class Diagram extends React.Component<
       isEditing: false,
       amendNode: false,
       selectedNode: getEmptyService(),
+      connected: true,
     };
     this.wsClient.onUpdate(this.onUpdateReceived.bind(this));
     this.wsClient.onReload(this.onReloadReceived.bind(this));
+    this.wsClient.onDisconnect(this.onDisconnect.bind(this));
     this.onDragStop = this.onDragStop.bind(this);
     this.onNodeDoubleClick = this.onNodeDoubleClick.bind(this);
     this.onCancel = this.onCancel.bind(this);
     this.onEdit = this.onEdit.bind(this);
     this.save = this.save.bind(this);
     this.onAddNode = this.onAddNode.bind(this);
+    this.onReconnect = this.onReconnect.bind(this);
     this.onNodeEditorConfirm = this.onNodeEditorConfirm.bind(this);
     this.onNodeEditorCancel = this.onNodeEditorCancel.bind(this);
     this.onNodeEditorDelete = this.onNodeEditorDelete.bind(this);
     this.setupJsPlumb();
   }
 
+  onReconnect() {
+    this.setState({connected: true});
+    this.wsClient
+      .connect(SERVER_URI)
+      .then(() => {
+        this.init();
+      })
+      .catch(() => {
+        this.setState({connected: false});
+      });
+  }
+
   onReloadReceived() {
     this.init();
+  }
+
+  onDisconnect() {
+    this.setState({connected: false});
   }
 
   onUpdateReceived(state: IServiceLastKnownState) {
@@ -175,6 +196,7 @@ export default class Diagram extends React.Component<
       dataChanged: false,
       isEditing: false,
       amendNode: false,
+      connected: true,
       selectedNode: getEmptyService(),
     });
   }
@@ -392,6 +414,7 @@ export default class Diagram extends React.Component<
           {this.renderNodes(this.state.services)}
         </div>
         <NavBar
+          editing={this.state.isEditing}
           dataChanged={this.state.dataChanged}
           onEdit={this.onEdit}
           onCancel={this.onCancel}
@@ -406,6 +429,10 @@ export default class Diagram extends React.Component<
           onConfirm={this.onNodeEditorConfirm}
           onCancel={this.onNodeEditorCancel}
           onDelete={this.onNodeEditorDelete}
+        />
+        <DisconnectDialog
+          visible={!this.state.connected}
+          onReconnect={this.onReconnect}
         />
       </div>
     );

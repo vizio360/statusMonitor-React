@@ -16,6 +16,8 @@ interface ErrorCallback {
 interface ReloadCallback {
   (): void;
 }
+type DisconnectCallback = ReloadCallback;
+
 interface IStatusMonitorClient {
   getServices(): IService[];
   getConnections(): IConnection[];
@@ -24,6 +26,7 @@ interface IStatusMonitorClient {
   onUpdate(callback: UpdateCallback): void;
   onError(callback: ErrorCallback): void;
   onReload(callback: ReloadCallback): void;
+  onDisconnect(callback: DisconnectCallback): void;
 }
 
 class StatusMonitorClient implements IStatusMonitorClient {
@@ -39,6 +42,7 @@ class StatusMonitorClient implements IStatusMonitorClient {
   reloaded: boolean;
   updateListeners: UpdateCallback[];
   reloadListeners: ReloadCallback[];
+  disconnectListeners: DisconnectCallback[];
   errorListeners: ErrorCallback[];
 
   private constructor() {
@@ -46,6 +50,7 @@ class StatusMonitorClient implements IStatusMonitorClient {
     this.reloaded = false;
     this.updateListeners = [];
     this.reloadListeners = [];
+    this.disconnectListeners = [];
     this.errorListeners = [];
   }
 
@@ -56,6 +61,12 @@ class StatusMonitorClient implements IStatusMonitorClient {
     this.gotServices = false;
     this.gotLastKnownStates = false;
     this.ws = new WebSocket(uri);
+    this.ws.onclose = event => {
+      this.disconnectListeners.forEach((callback: DisconnectCallback) => {
+        this.connected = false;
+        callback();
+      });
+    };
     this.ws.onmessage = event => {
       const msg: IMessage = JSON.parse(event.data);
       switch (msg.reply) {
@@ -142,7 +153,9 @@ class StatusMonitorClient implements IStatusMonitorClient {
   public onReload(callback: ReloadCallback) {
     this.reloadListeners.push(callback);
   }
-
+  public onDisconnect(callback: DisconnectCallback) {
+    this.disconnectListeners.push(callback);
+  }
   static getInstance(): IStatusMonitorClient {
     return new StatusMonitorClient();
   }

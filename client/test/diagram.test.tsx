@@ -57,6 +57,7 @@ describe('Diagram', () => {
     onUpdate: jest.fn().mockImplementation(cb => {}),
     onReload: jest.fn().mockImplementation(cb => {}),
     onError: jest.fn().mockImplementation(cb => {}),
+    onDisconnect: jest.fn().mockImplementation(cb => {}),
   };
 
   let createDiagramComponent = async () => {

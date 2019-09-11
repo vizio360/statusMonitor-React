@@ -147,4 +147,14 @@ describe('Status Monitor WebSocket Client', () => {
       done();
     });
   });
+
+  it('emits a disconnected event if connectction to server is lost', done => {
+    sendUpdateWhileConnecting = true;
+    client.onDisconnect(() => {
+      done();
+    });
+    client.connect(serverUri).then(() => {
+      ws.close();
+    });
+  });
 });

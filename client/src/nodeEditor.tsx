@@ -88,7 +88,6 @@ export default class NodeEditor extends React.Component<
     if (this.props.show) $('#' + this.props.id).modal('show');
   }
   componentDidUpdate() {
-
     if (this.props.show) $('#' + this.props.id).modal('show');
   }
 

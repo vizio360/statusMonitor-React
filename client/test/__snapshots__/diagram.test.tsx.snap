@@ -299,6 +299,51 @@ exports[`Diagram adds a new node on node editor confirmation 1`] = `
       </div>
     </div>
   </div>
+  <div
+    className="modal"
+    data-backdrop="static"
+    data-keyboard="false"
+    id="disconnectedDialog"
+    role="dialog"
+    tabIndex={-1}
+  >
+    <div
+      className="modal-dialog"
+      role="document"
+    >
+      <div
+        className="modal-content"
+      >
+        <div
+          className="modal-header"
+        >
+          <h5
+            className="modal-title"
+          >
+            Modal title
+          </h5>
+        </div>
+        <div
+          className="modal-body"
+        >
+          <p>
+            Connection lost!
+          </p>
+        </div>
+        <div
+          className="modal-footer"
+        >
+          <button
+            className="btn btn-primary"
+            onClick={[Function]}
+            type="button"
+          >
+            Reconnect
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 `;
 
@@ -622,6 +667,51 @@ exports[`Diagram adds a new node on node editor confirmation 2`] = `
       </div>
     </div>
   </div>
+  <div
+    className="modal"
+    data-backdrop="static"
+    data-keyboard="false"
+    id="disconnectedDialog"
+    role="dialog"
+    tabIndex={-1}
+  >
+    <div
+      className="modal-dialog"
+      role="document"
+    >
+      <div
+        className="modal-content"
+      >
+        <div
+          className="modal-header"
+        >
+          <h5
+            className="modal-title"
+          >
+            Modal title
+          </h5>
+        </div>
+        <div
+          className="modal-body"
+        >
+          <p>
+            Connection lost!
+          </p>
+        </div>
+        <div
+          className="modal-footer"
+        >
+          <button
+            className="btn btn-primary"
+            onClick={[Function]}
+            type="button"
+          >
+            Reconnect
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 `;
 
@@ -919,6 +1009,51 @@ exports[`Diagram can be instatiated 1`] = `
             type="button"
           >
             Ok
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    className="modal"
+    data-backdrop="static"
+    data-keyboard="false"
+    id="disconnectedDialog"
+    role="dialog"
+    tabIndex={-1}
+  >
+    <div
+      className="modal-dialog"
+      role="document"
+    >
+      <div
+        className="modal-content"
+      >
+        <div
+          className="modal-header"
+        >
+          <h5
+            className="modal-title"
+          >
+            Modal title
+          </h5>
+        </div>
+        <div
+          className="modal-body"
+        >
+          <p>
+            Connection lost!
+          </p>
+        </div>
+        <div
+          className="modal-footer"
+        >
+          <button
+            className="btn btn-primary"
+            onClick={[Function]}
+            type="button"
+          >
+            Reconnect
           </button>
         </div>
       </div>
@@ -1226,6 +1361,51 @@ exports[`Diagram cancels the node editor modal 1`] = `
       </div>
     </div>
   </div>
+  <div
+    className="modal"
+    data-backdrop="static"
+    data-keyboard="false"
+    id="disconnectedDialog"
+    role="dialog"
+    tabIndex={-1}
+  >
+    <div
+      className="modal-dialog"
+      role="document"
+    >
+      <div
+        className="modal-content"
+      >
+        <div
+          className="modal-header"
+        >
+          <h5
+            className="modal-title"
+          >
+            Modal title
+          </h5>
+        </div>
+        <div
+          className="modal-body"
+        >
+          <p>
+            Connection lost!
+          </p>
+        </div>
+        <div
+          className="modal-footer"
+        >
+          <button
+            className="btn btn-primary"
+            onClick={[Function]}
+            type="button"
+          >
+            Reconnect
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 `;
 
@@ -1523,6 +1703,51 @@ exports[`Diagram cancels the node editor modal 2`] = `
             type="button"
           >
             Ok
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    className="modal"
+    data-backdrop="static"
+    data-keyboard="false"
+    id="disconnectedDialog"
+    role="dialog"
+    tabIndex={-1}
+  >
+    <div
+      className="modal-dialog"
+      role="document"
+    >
+      <div
+        className="modal-content"
+      >
+        <div
+          className="modal-header"
+        >
+          <h5
+            className="modal-title"
+          >
+            Modal title
+          </h5>
+        </div>
+        <div
+          className="modal-body"
+        >
+          <p>
+            Connection lost!
+          </p>
+        </div>
+        <div
+          className="modal-footer"
+        >
+          <button
+            className="btn btn-primary"
+            onClick={[Function]}
+            type="button"
+          >
+            Reconnect
           </button>
         </div>
       </div>
@@ -1830,6 +2055,51 @@ exports[`Diagram deletes a node 1`] = `
       </div>
     </div>
   </div>
+  <div
+    className="modal"
+    data-backdrop="static"
+    data-keyboard="false"
+    id="disconnectedDialog"
+    role="dialog"
+    tabIndex={-1}
+  >
+    <div
+      className="modal-dialog"
+      role="document"
+    >
+      <div
+        className="modal-content"
+      >
+        <div
+          className="modal-header"
+        >
+          <h5
+            className="modal-title"
+          >
+            Modal title
+          </h5>
+        </div>
+        <div
+          className="modal-body"
+        >
+          <p>
+            Connection lost!
+          </p>
+        </div>
+        <div
+          className="modal-footer"
+        >
+          <button
+            className="btn btn-primary"
+            onClick={[Function]}
+            type="button"
+          >
+            Reconnect
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 `;
 
@@ -2106,6 +2376,51 @@ exports[`Diagram deletes a node 2`] = `
             type="button"
           >
             Ok
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    className="modal"
+    data-backdrop="static"
+    data-keyboard="false"
+    id="disconnectedDialog"
+    role="dialog"
+    tabIndex={-1}
+  >
+    <div
+      className="modal-dialog"
+      role="document"
+    >
+      <div
+        className="modal-content"
+      >
+        <div
+          className="modal-header"
+        >
+          <h5
+            className="modal-title"
+          >
+            Modal title
+          </h5>
+        </div>
+        <div
+          className="modal-body"
+        >
+          <p>
+            Connection lost!
+          </p>
+        </div>
+        <div
+          className="modal-footer"
+        >
+          <button
+            className="btn btn-primary"
+            onClick={[Function]}
+            type="button"
+          >
+            Reconnect
           </button>
         </div>
       </div>
@@ -2413,6 +2728,51 @@ exports[`Diagram reloads when a reload message is received 1`] = `
       </div>
     </div>
   </div>
+  <div
+    className="modal"
+    data-backdrop="static"
+    data-keyboard="false"
+    id="disconnectedDialog"
+    role="dialog"
+    tabIndex={-1}
+  >
+    <div
+      className="modal-dialog"
+      role="document"
+    >
+      <div
+        className="modal-content"
+      >
+        <div
+          className="modal-header"
+        >
+          <h5
+            className="modal-title"
+          >
+            Modal title
+          </h5>
+        </div>
+        <div
+          className="modal-body"
+        >
+          <p>
+            Connection lost!
+          </p>
+        </div>
+        <div
+          className="modal-footer"
+        >
+          <button
+            className="btn btn-primary"
+            onClick={[Function]}
+            type="button"
+          >
+            Reconnect
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 `;
 
@@ -2668,6 +3028,51 @@ exports[`Diagram reloads when a reload message is received 2`] = `
             type="button"
           >
             Ok
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    className="modal"
+    data-backdrop="static"
+    data-keyboard="false"
+    id="disconnectedDialog"
+    role="dialog"
+    tabIndex={-1}
+  >
+    <div
+      className="modal-dialog"
+      role="document"
+    >
+      <div
+        className="modal-content"
+      >
+        <div
+          className="modal-header"
+        >
+          <h5
+            className="modal-title"
+          >
+            Modal title
+          </h5>
+        </div>
+        <div
+          className="modal-body"
+        >
+          <p>
+            Connection lost!
+          </p>
+        </div>
+        <div
+          className="modal-footer"
+        >
+          <button
+            className="btn btn-primary"
+            onClick={[Function]}
+            type="button"
+          >
+            Reconnect
           </button>
         </div>
       </div>
@@ -2975,6 +3380,51 @@ exports[`Diagram resets itself if cancelling an edit 1`] = `
       </div>
     </div>
   </div>
+  <div
+    className="modal"
+    data-backdrop="static"
+    data-keyboard="false"
+    id="disconnectedDialog"
+    role="dialog"
+    tabIndex={-1}
+  >
+    <div
+      className="modal-dialog"
+      role="document"
+    >
+      <div
+        className="modal-content"
+      >
+        <div
+          className="modal-header"
+        >
+          <h5
+            className="modal-title"
+          >
+            Modal title
+          </h5>
+        </div>
+        <div
+          className="modal-body"
+        >
+          <p>
+            Connection lost!
+          </p>
+        </div>
+        <div
+          className="modal-footer"
+        >
+          <button
+            className="btn btn-primary"
+            onClick={[Function]}
+            type="button"
+          >
+            Reconnect
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 `;
 
@@ -3272,6 +3722,51 @@ exports[`Diagram updates when an update state is received 1`] = `
             type="button"
           >
             Ok
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    className="modal"
+    data-backdrop="static"
+    data-keyboard="false"
+    id="disconnectedDialog"
+    role="dialog"
+    tabIndex={-1}
+  >
+    <div
+      className="modal-dialog"
+      role="document"
+    >
+      <div
+        className="modal-content"
+      >
+        <div
+          className="modal-header"
+        >
+          <h5
+            className="modal-title"
+          >
+            Modal title
+          </h5>
+        </div>
+        <div
+          className="modal-body"
+        >
+          <p>
+            Connection lost!
+          </p>
+        </div>
+        <div
+          className="modal-footer"
+        >
+          <button
+            className="btn btn-primary"
+            onClick={[Function]}
+            type="button"
+          >
+            Reconnect
           </button>
         </div>
       </div>
@@ -3579,6 +4074,51 @@ exports[`Diagram updates when an update state is received 2`] = `
             type="button"
           >
             Ok
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    className="modal"
+    data-backdrop="static"
+    data-keyboard="false"
+    id="disconnectedDialog"
+    role="dialog"
+    tabIndex={-1}
+  >
+    <div
+      className="modal-dialog"
+      role="document"
+    >
+      <div
+        className="modal-content"
+      >
+        <div
+          className="modal-header"
+        >
+          <h5
+            className="modal-title"
+          >
+            Modal title
+          </h5>
+        </div>
+        <div
+          className="modal-body"
+        >
+          <p>
+            Connection lost!
+          </p>
+        </div>
+        <div
+          className="modal-footer"
+        >
+          <button
+            className="btn btn-primary"
+            onClick={[Function]}
+            type="button"
+          >
+            Reconnect
           </button>
         </div>
       </div>

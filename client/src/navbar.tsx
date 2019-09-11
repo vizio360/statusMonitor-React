@@ -1,22 +1,21 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
-interface ICallback {
-  (): void;
-}
-
-interface INavBarProps {
+export interface INavBarProps {
+  editing: boolean;
   dataChanged: boolean;
-  onEdit?: ICallback;
-  onCancel?: ICallback;
-  onSave?: ICallback;
-  onAddNode?: ICallback;
+  onEdit?(): void;
+  onCancel?(): void;
+  onSave?(): void;
+  onAddNode?(): void;
 }
 
 interface INavBarState {
   isEditing: boolean;
 }
-
+//TODO
+//Refactor to not use state but just properties
+//there is no need to keep state in this component
 export default class NavBar extends React.Component<
   INavBarProps,
   INavBarState
@@ -24,7 +23,7 @@ export default class NavBar extends React.Component<
   constructor(props: INavBarProps) {
     super(props);
     this.state = {
-      isEditing: false,
+      isEditing: props.editing,
     };
     this.onSave = this.onSave.bind(this);
     this.addNode = this.addNode.bind(this);

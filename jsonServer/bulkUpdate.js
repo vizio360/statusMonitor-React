@@ -9,7 +9,7 @@ module.exports = (req, res, next) => {
       if (err) {
         console.log(err);
       } else {
-        res.sendStatus(200);
+        res.sendStatus(204);
       }
     });
   } else {
