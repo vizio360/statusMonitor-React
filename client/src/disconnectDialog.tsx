@@ -8,7 +8,10 @@ interface IDisconnectDialogProps {
 
 export default function DisconnectDialog(props: IDisconnectDialogProps) {
   useEffect(() => {
+    console.log('disconnect dialog useEffect', props);
+
     if (props.visible) {
+      console.log('making dialog visible');
       $('#disconnectedDialog').modal('show');
     }
   });
@@ -29,7 +32,7 @@ export default function DisconnectDialog(props: IDisconnectDialogProps) {
       <div className="modal-dialog" role="document">
         <div className="modal-content">
           <div className="modal-header">
-            <h5 className="modal-title">Modal title</h5>
+            <h5 className="modal-title">WHOOOOPPSS!!!</h5>
           </div>
           <div className="modal-body">
             <p>Connection lost!</p>

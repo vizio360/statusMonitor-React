@@ -96,6 +96,7 @@ export default class Diagram extends React.Component<
   }
 
   onDisconnect() {
+    console.log('setting state to disconnect');
     this.setState({connected: false});
   }
 
@@ -285,6 +286,8 @@ export default class Diagram extends React.Component<
       this.jsPlumbInstance.draggable(service.id, {stop: this.onDragStop});
       this.jsPlumbInstance.setDraggable(service.id, this.state.isEditing);
     });
+
+    console.log('didUpdate: connected', this.state.connected);
   }
 
   _createEndPoints(service: IService) {
@@ -408,6 +411,7 @@ export default class Diagram extends React.Component<
   }
 
   render() {
+    console.log('render connected', this.state.connected);
     return (
       <div>
         <div id="jsPlumbDiagram" style={{position: 'absolute'}}>
