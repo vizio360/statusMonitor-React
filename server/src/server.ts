@@ -1,45 +1,28 @@
 import express from 'express';
 import http from 'http';
+import httpProxy from 'http-proxy';
 import path from 'path';
-import fs from 'fs';
 import WebSocket from 'ws';
 import {URL} from 'url';
 import bodyParser from 'body-parser';
 import expressWS from 'express-ws';
 import axios from 'axios';
-import * as DataTypes from '@dataTypes';
+import {
+  Command,
+  IMessage,
+  Reply,
+  IService,
+  IServiceLastKnownState,
+  IConnection,
+  Status,
+} from '@dataTypes';
 import ObjectMatcher from '@server/ObjectMatcher';
 import _ from 'underscore';
 const enableDestroy = require('server-destroy');
 
-enum Reply {
-  SERVICES = 'SERVICES',
-  CONNECTIONS = 'CONNECTIONS',
-  UPDATE = 'UPDATE',
-  CURRENT_STATES = 'CURRENT_STATES',
-  RELOADED = 'RELOADED',
-  RELOAD_ERROR = 'RELOAD_ERROR',
-  NOT_RECOGNIZED = 'COMMAND NOT RECOGNIZED',
-}
-
-enum Command {
-  GET_SERVICES = 'GET_SERVICES',
-  GET_CONNECTIONS = 'GET_CONNECTIONS',
-  GET_CURRENT_STATES = 'GET_CURRENT_STATES',
-}
-
 enum ConfigPaths {
   SERVICES = '/services',
   CONNECTIONS = '/connections',
-}
-
-interface IMessage {
-  reply: Reply;
-  content?:
-    | DataTypes.IService[]
-    | DataTypes.IConnection[]
-    | DataTypes.IServiceStatus
-    | DataTypes.IServiceStatus[];
 }
 
 class StatusMonitoringServer {
@@ -47,19 +30,19 @@ class StatusMonitoringServer {
   serverInstance: any;
   appws: expressWS.Application;
   websocketServer: WebSocket.Server;
-  services: DataTypes.IService[] = [];
-  servicesStatus: DataTypes.IServiceStatus[] = [];
+  services: IService[] = [];
+  servicesStatus: IServiceLastKnownState[] = [];
   timeouts: {[serviceId: string]: NodeJS.Timer} = {};
-  connections: DataTypes.IConnection[] = [];
+  connections: IConnection[] = [];
   private configApiUrl: string;
   private port: number;
+  private proxyServer: httpProxy;
 
   constructor() {
     this.app = express();
     const expWS = expressWS(this.app);
     this.websocketServer = expWS.getWss();
     this.appws = expWS.app;
-    this.app.use(bodyParser.json());
     this.app.use(express.static(path.join(__dirname, '../../dist')));
   }
 
@@ -67,6 +50,14 @@ class StatusMonitoringServer {
     this.listen(listeningPort);
     this.setupWebSockets();
     this.setupRestAPI();
+  }
+
+  private setupProxy(target: string) {
+    this.proxyServer = httpProxy.createProxyServer();
+    this.app.post('/config', (req, res) => {
+      this.proxyServer.web(req, res, {target: target});
+    });
+    this.app.use(bodyParser.json());
   }
 
   private setupRestAPI() {
@@ -84,7 +75,7 @@ class StatusMonitoringServer {
           };
           this.broadcastMessage(msg);
         });
-      res.send(200);
+      res.sendStatus(200);
     });
   }
 
@@ -96,6 +87,7 @@ class StatusMonitoringServer {
 
   public start(configApiUrl: string): Promise<any> {
     this.configApiUrl = configApiUrl;
+    this.setupProxy(configApiUrl);
     this.clearAnyRunningTimeouts();
     return axios
       .all([
@@ -109,25 +101,25 @@ class StatusMonitoringServer {
       });
   }
 
-  public getServicesStatus(): DataTypes.IServiceStatus[] {
+  public getServicesStatus(): IServiceLastKnownState[] {
     return _.map(this.servicesStatus, _.clone);
   }
 
-  public getServicesStatusById(id: string): DataTypes.IServiceStatus {
+  public getServicesStatusById(id: string): IServiceLastKnownState {
     const index: number = _.findIndex(this.servicesStatus, {serviceId: id});
     return Object.assign({}, this.servicesStatus[index]);
   }
 
   private notifyIfServiceStatusUpdated(
     serviceId: string,
-    newStatus: DataTypes.Status,
+    newStatus: Status,
     responseBody: string,
   ) {
-    const ss: DataTypes.IServiceStatus = _.findWhere(this.servicesStatus, {
+    const ss: IServiceLastKnownState = _.findWhere(this.servicesStatus, {
       serviceId: serviceId,
     });
     if (ss.status != newStatus) {
-      const statusReport: DataTypes.IServiceStatus = {
+      const statusReport: IServiceLastKnownState = {
         serviceId: serviceId,
         status: newStatus,
         responseBody: responseBody,
@@ -144,24 +136,21 @@ class StatusMonitoringServer {
     }
   }
 
-  private pollHealthcheck(service: DataTypes.IService): void {
+  private pollHealthcheck(service: IService): void {
     let t: NodeJS.Timer = setTimeout(() => {
       axios
         .get(service.uri)
         .then(response => {
           const responseBody = response.data;
-          const state: DataTypes.Status = ObjectMatcher(
-            responseBody,
-            service.matcher,
-          )
-            ? DataTypes.Status.HEALTHY
-            : DataTypes.Status.UNHEALTHY;
+          const state: Status = ObjectMatcher(responseBody, service.matcher)
+            ? Status.HEALTHY
+            : Status.UNHEALTHY;
           this.notifyIfServiceStatusUpdated(service.id, state, responseBody);
         })
         .catch(error => {
           this.notifyIfServiceStatusUpdated(
             service.id,
-            DataTypes.Status.UNHEALTHY,
+            Status.UNHEALTHY,
             error,
           );
         })
@@ -172,11 +161,13 @@ class StatusMonitoringServer {
     this.timeouts[service.id] = t;
   }
 
-  private setupWatchdogs(services: DataTypes.IService[]): void {
+  private setupWatchdogs(services: IService[]): void {
+    //TODO unit test this reset of servicesStatus
+    this.servicesStatus = [];
     services.forEach(service => {
-      const statusReport: DataTypes.IServiceStatus = {
+      const statusReport: IServiceLastKnownState = {
         serviceId: service.id,
-        status: DataTypes.Status.HEALTHY,
+        status: Status.HEALTHY,
         responseBody: 'NOT YET VERIFIED',
       };
       this.servicesStatus.push(statusReport);

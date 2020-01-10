@@ -1,115 +1,72 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import {
-  DragEventCallbackOptions,
-  EndpointOptions,
-  Defaults,
-  jsPlumb,
-  jsPlumbInstance,
-} from 'jsPlumb';
 import './node.css';
 import fireImage from '@images/fire.gif';
+import {
+  Status,
+  ServiceType,
+  IService,
+  IServiceLastKnownState,
+} from '@dataTypes';
+
+import crmImage from '@images/crm.png';
+import dbImage from '@images/db.png';
+import apiImage from '@images/api.png';
 
 interface INodeEvents {
-  stopDrag: (params: DragEventCallbackOptions) => void;
   onDoubleClick: (id: string) => void;
 }
 
 interface INodeProps {
-  jsPlumb: jsPlumbInstance;
-  image: any;
-  name: string;
-  id: string;
-  status: NodeStatus;
+  service: IService;
+  serviceState: IServiceLastKnownState;
   className?: string;
   events?: INodeEvents;
-  uiProps: {top: number; left: number};
-}
-
-enum NodeStatus {
-  HEALTHY,
-  UNHEALTHY,
-}
-
-enum NodeType {
-  CRM = 'CRM',
-  API = 'API',
-  DB = 'DB',
 }
 
 class Node extends React.Component<INodeProps> {
-  jsPlumb: jsPlumbInstance;
   nodeEvents: INodeEvents;
 
   constructor(props: INodeProps) {
     super(props);
-    this.jsPlumb = props.jsPlumb;
     this.nodeEvents = props.events;
-    this.onDragStop = this.onDragStop.bind(this);
     this.onDoubleClick = this.onDoubleClick.bind(this);
-  }
-
-  getTargetEndPoint(id: string) {
-    let inEndPointOptions: EndpointOptions = {
-      maxConnections: 10,
-      anchor: 'Top',
-      paintStyle: {fill: '#F00'},
-      type: 'Dot',
-      id: id + 'target',
-      scope: 'dotEndPoint',
-      reattachConnections: true,
-      parameters: {},
-      isTarget: true,
-    };
-    return inEndPointOptions;
-  }
-
-  getSourceEndPoint(id: string) {
-    let outEndPointOptions: EndpointOptions = {
-      maxConnections: 10,
-      anchor: 'Bottom',
-      paintStyle: {fill: '#00F'},
-      type: 'Dot',
-      id: id + 'source',
-      scope: 'dotEndPoint',
-      reattachConnections: true,
-      parameters: {},
-      isSource: true,
-    };
-    return outEndPointOptions;
-  }
-
-  onDragStop(params: DragEventCallbackOptions) {
-    if (this.nodeEvents && this.nodeEvents.stopDrag)
-      this.nodeEvents.stopDrag(params);
   }
 
   onDoubleClick(e: React.MouseEvent<HTMLElement>) {
     if (this.nodeEvents && this.nodeEvents.onDoubleClick)
-      this.nodeEvents.onDoubleClick(this.props.id);
+      this.nodeEvents.onDoubleClick(this.props.service.id);
   }
 
-  componentDidMount() {
-    this.jsPlumb.addEndpoint(
-      this.props.id,
-      this.getSourceEndPoint(this.props.id),
-    );
-    this.jsPlumb.addEndpoint(
-      this.props.id,
-      this.getTargetEndPoint(this.props.id),
-    );
-    this.jsPlumb.draggable(this.props.id, {stop: this.onDragStop});
+  getNodeTypeImage(serviceType: ServiceType) {
+    let img: string;
+    switch (serviceType) {
+      case ServiceType.DB:
+        img = dbImage;
+        break;
+      case ServiceType.API:
+        img = apiImage;
+        break;
+      case ServiceType.CRM:
+        img = crmImage;
+        break;
+    }
+    return img;
   }
 
   render() {
     return (
       <div
-        id={this.props.id}
+        id={this.props.service.id}
         className={this.props.className ? this.props.className : 'node'}
-        style={this.props.uiProps}
+        style={this.props.service.uiProps}
         onDoubleClick={this.onDoubleClick}>
-        <img src={this.props.image} width="100%" height="100%" />
-        {this.props.status !== NodeStatus.HEALTHY ? (
+        <img
+          src={this.getNodeTypeImage(this.props.service.type)}
+          width="100%"
+          height="100%"
+        />
+        {this.props.serviceState.status !== Status.HEALTHY ? (
           <img
             className="nodeOverlay"
             src={fireImage}
@@ -119,10 +76,10 @@ class Node extends React.Component<INodeProps> {
         ) : (
           ''
         )}
-        <p>{this.props.name}</p>
+        <p>{this.props.service.name}</p>
       </div>
     );
   }
 }
 
-export {Node, NodeStatus, NodeType, INodeEvents};
+export {Node, INodeEvents};

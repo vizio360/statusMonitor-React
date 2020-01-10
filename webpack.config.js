@@ -2,6 +2,7 @@ const path = require('path');
 const HWP = require('html-webpack-plugin');
 module.exports = {
   entry: './client/src/index.tsx',
+  devtool: 'source-map',
   output: {
     filename: 'main.js',
     path: path.resolve(__dirname, 'dist'),
@@ -27,6 +28,7 @@ module.exports = {
     extensions: ['.ts', '.tsx', '.js'],
     alias: {
       '@dataTypes': path.resolve(__dirname, 'lib/types/dataTypes.ts'),
+      '@utils': path.resolve(__dirname, 'lib/utils'),
       '@app': path.resolve(__dirname, 'client/src/'),
       '@images': path.resolve(__dirname, 'images'),
     },

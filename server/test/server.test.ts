@@ -22,13 +22,23 @@ describe('Status Monitoring Server', () => {
     return JSON.parse(content);
   };
 
-  let setupMockConfigAPI = function(
+  let setupMockConfigAPI_GET = function(
     resource: string,
     statusCode: number,
     responseBody: object,
   ) {
     nock(CONFIG_URI)
       .get(resource)
+      .reply(statusCode, responseBody);
+  };
+
+  let setupMockConfigAPI_POST = function(
+    resource: string,
+    statusCode: number,
+    responseBody: object,
+  ) {
+    nock(CONFIG_URI)
+      .post(resource)
       .reply(statusCode, responseBody);
   };
 
@@ -54,13 +64,13 @@ describe('Status Monitoring Server', () => {
     servicesFile: string = 'services.json',
     connectionsFile: string = 'connections.json',
   ) => {
-    setupMockConfigAPI(
+    setupMockConfigAPI_GET(
       '/services',
       servicesStatus,
       getFileContentAsJSON(`./mocks/${servicesFile}`),
     );
 
-    setupMockConfigAPI(
+    setupMockConfigAPI_GET(
       '/connections',
       connectionsStatus,
       getFileContentAsJSON(`./mocks/${connectionsFile}`),
@@ -253,7 +263,7 @@ describe('Status Monitoring Server', () => {
         wsc1.onMessage = data => {
           let msg: IMessage = JSON.parse(data);
           if (msg.reply == 'UPDATE') {
-            const content: DataTypes.IServiceStatus = msg.content as DataTypes.IServiceStatus;
+            const content: DataTypes.IServiceLastKnownState = msg.content as DataTypes.IServiceLastKnownState;
             expect(content.status).toBe(DataTypes.Status.UNHEALTHY);
             expect(server.getServicesStatusById(firstService.id)).toEqual(
               content,
@@ -288,7 +298,7 @@ describe('Status Monitoring Server', () => {
         wsc1.onMessage = data => {
           let msg: IMessage = JSON.parse(data);
           if (msg.reply == 'UPDATE') {
-            const content: DataTypes.IServiceStatus = msg.content as DataTypes.IServiceStatus;
+            const content: DataTypes.IServiceLastKnownState = msg.content as DataTypes.IServiceLastKnownState;
             expect(content.status).toBe(DataTypes.Status.UNHEALTHY);
             expect(server.getServicesStatusById(firstService.id)).toEqual(
               content,
@@ -321,6 +331,13 @@ describe('Status Monitoring Server', () => {
     expect(servicesStatus).not.toBe(firstService);
   });
 
+  const issueReloadRequest = (done: any) => {
+    axios.post(`${LOCAL_SERVER}/reload`).catch(error => {
+      fail(error);
+      done();
+    });
+  };
+
   test('reloads services and connections config on demand', done => {
     setupServicesAndConnectionsMocks();
     server
@@ -329,7 +346,6 @@ describe('Status Monitoring Server', () => {
         const wsc1: WebSocketClient = new WebSocketClient();
         wsc1.onMessage = data => {
           let msg: IMessage = JSON.parse(data);
-          console.log(msg);
           if (msg.reply == 'RELOADED') {
             done();
           }
@@ -341,15 +357,27 @@ describe('Status Monitoring Server', () => {
             'reloadServices.json',
             'reloadConnections.json',
           );
-          axios.post(`${LOCAL_SERVER}/reload`).catch(error => {
-            fail(error);
-            done();
-          });
+          issueReloadRequest(done);
         });
       })
       .catch(error => {
         fail(error);
         done();
       });
+  });
+
+  test('forwards config post requests to config server', done => {
+    setupServicesAndConnectionsMocks();
+    setupMockConfigAPI_POST('/config', 204, {});
+    server.start(CONFIG_URI).then(result => {
+      axios
+        .post(`${LOCAL_SERVER}/config`)
+        .catch(error => {
+          fail(error);
+        })
+        .finally(() => {
+          done();
+        });
+    });
   });
 });
