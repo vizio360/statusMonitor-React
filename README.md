@@ -15,7 +15,7 @@ yarn build --watch
 ts-node -r tsconfig-paths/register server/src/runner.ts
 
 #mock apis server
-json-server --watch mocks/hc.json
+json-server -w jsonServer/config.json --middlewares jsonServer/bulkUpdate.js
 
 # Status Monitor
 
