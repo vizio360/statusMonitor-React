@@ -57,7 +57,7 @@
     "http-proxy": "^1.17.0",
     "jest-fetch-mock": "^2.1.2",
     "jest-websocket-mock": "^1.5.0",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.0",
     "jsplumb": "2.11.1",
     "jsplumb-react": "^0.0.27",
     "mock-socket": "^9.0.0",
