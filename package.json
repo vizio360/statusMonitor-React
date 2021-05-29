@@ -23,7 +23,7 @@
     "typescript": "^3.5.3",
     "underscore": "^1.9.1",
     "uuid": "^3.3.0",
-    "ws": "^7.1.0"
+    "ws": "^7.4.6"
   },
   "scripts": {
     "start": "webpack-dev-server --mode development --open --hot",
